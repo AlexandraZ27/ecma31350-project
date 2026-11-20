@@ -1,0 +1,415 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\setlist{nosep,leftmargin=*}
+
+\title{Dantzig-Selector IV:\\Revisiting \emph{Immigration, Crime, and Crime (Mis)Perceptions}}
+\author{Alex Zhao, Alexandra Zhou, Oscar Barnes, Yuao Zhou}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% =====================================================================================
+\section{The paper in brief}
+
+Ajzenman, Dominguez and Undurraga (2023, \emph{AEJ: Applied}) ask whether immigration
+raises crime, and whether it raises \emph{fear} of crime. Chile is a useful setting: its
+foreign-born population more than doubled in the 2010s, driven largely by arrivals from
+Peru, Haiti, and Venezuela. Crime is measured with Chile's national victimization survey
+(ENUSC), which records self-reported victimization and crime perceptions and so avoids
+relying on police reports. Immigration is measured with residence permits by
+municipality.
+
+The main design compares changes between 2008 and 2017 across $N = 101$ municipalities.
+The regressor of interest is the change in the log immigrant-to-population ratio, so each
+coefficient is the effect of \emph{doubling} a municipality's immigrant share, in
+percentage points. Immigrants choose where to live, so OLS may be biased. The authors
+instrument with a shift-share (Bartik) instrument:
+\[
+  Z^{B}_m = \sum_{k=1}^{11} \theta^{k}_{m,2008} \times \Delta \ln \mathrm{MIGR}^{k},
+\]
+where $\theta^{k}_{m,2008}$ is nationality $k$'s share of municipality $m$'s immigrants in
+2008, and $\Delta \ln \mathrm{MIGR}^{k}$ is the growth of nationality $k$'s emigrant stock
+in destination countries \emph{other than Chile} (UN bilateral data, 11 countries). The
+intuition is that new migrants follow earlier migrants from the same country (the
+shares), and that origin-country push factors (the shifts) are unrelated to local
+conditions in Chile. The headline finding is that immigration has no detectable effect on
+victimization but significantly raises crime-related concerns and preventive behavior: a
+widening ``crime-perception gap.''
+
+% =====================================================================================
+\section{What we did}
+
+Goldsmith-Pinkham, Sorkin and Swift (2020) show that a Bartik estimator is equivalent to
+using the 11 shares as instruments with weights fixed by the shifts, so identification
+rests on the shares. We therefore drop the fixed weights, treat the 11 country shares as
+\emph{separate} candidate instruments, and let the Dantzig selector choose among them in
+the first stage. Let $\tilde{D}_m$ and $\tilde{\theta}_m$ denote the endogenous variable and
+the shares after partialling out the controls (intercept, average age, share male), with
+each share standardized. The first stage solves
+\[
+  \hat{\pi} = \arg\min_{\pi \in \mathbb{R}^{11}} \|\pi\|_1
+  \quad \text{s.t.} \quad
+  \max_{k}\left|\frac{1}{N}\sum_{m=1}^{N} \tilde{\theta}_{mk}\left(\tilde{D}_m - \tilde{\theta}_m'\pi\right)\right| \le \lambda .
+\]
+Partialling out the controls is equivalent to leaving them unpenalized. We set
+\[
+  \lambda = \hat{\sigma}\sqrt{\frac{2\log p}{N}} = 0.3445 \times \sqrt{\frac{2 \log 11}{101}} = 0.0751,
+\]
+the version of Candès and Tao's $\sigma\sqrt{2\log p}$ (stated for unit-norm columns) that
+applies to this averaged constraint with standardized instruments. Here
+$\hat{\sigma}$ is the residual standard deviation of an unpenalized OLS first stage on all
+11 shares, which is feasible because $p = 11$ is small relative to $N$. We do not tune
+$\lambda$ by cross-validation at this stage.
+
+Each table below reports five estimators:
+\begin{enumerate}
+  \item \textbf{OLS}, as in the paper.
+  \item \textbf{2SLS Bartik}: the paper's estimator, with one combined instrument.
+  \item \textbf{2SLS all shares}: all 11 shares as instruments, with no selection.
+  \item \textbf{Post-DS 2SLS}: 2SLS using only the shares the Dantzig selector keeps.
+  \item \textbf{DS-fit IV}: just-identified IV using the Dantzig first-stage fitted value
+        $\tilde{\theta}_m'\hat{\pi}$ as the single instrument.
+\end{enumerate}
+
+\paragraph{Validation.} Our code reproduces the paper's design exactly. The shares times
+the shifts rebuild the paper's instrument (maximum absolute difference
+$2.9 \times 10^{-8}$). The Bartik first stage gives the published $F = 17.35$ and partial
+$R^2 = 0.104$, and the OLS and Bartik 2SLS point estimates in Tables~\ref{tab:concerns}
+to~\ref{tab:victim} match the published Tables VI to IX.
+
+% =====================================================================================
+\section{First stage: which instruments matter?}
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{threeparttable}
+\caption{First stage: Dantzig selection among the 11 country shares}
+\label{tab:first}
+\begin{tabular}{lcc}
+\toprule
+\multicolumn{3}{l}{\emph{Panel A: Dantzig coefficients on standardized 2008 shares}}\\
+\midrule
+Country & Dantzig coefficient & Rotemberg weight in paper's Bartik \\
+\midrule
+Argentina & $-0.1214$ & --- \\
+Bolivia   & 0         & 0.484 \\
+Brazil    & 0         & 0.009 \\
+China     & $\phantom{-}0.0084$ & 0.087 \\
+Colombia  & 0         & --- \\
+Ecuador   & 0         & 0.092 \\
+Haiti     & 0         & --- \\
+Peru      & 0         & 2.225 \\
+Spain     & 0         & --- \\
+USA       & 0         & --- \\
+Venezuela & $-0.0209$ & --- \\
+\midrule
+\multicolumn{3}{l}{\emph{Panel B: Strength of each instrument set}}\\
+\midrule
+Instrument set & Robust first-stage $F$ & Partial $R^2$ \\
+\midrule
+Bartik (1 instrument, paper)        & 17.35 & 0.104 \\
+All 11 shares                        & \phantom{1}7.48 & 0.373 \\
+Dantzig-selected (3 shares)          & 13.81 & 0.321 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item Notes: Panel A reports the Dantzig first-stage coefficients, in units of the
+endogenous variable (log change in the immigrant-to-population ratio) per standard
+deviation of each share, after partialling out the controls. $\lambda = 0.0751$. Rotemberg
+weights are from the paper, which reports only the top five; --- means not reported. Panel
+B reports heteroskedasticity-robust (HC1) Wald $F$-statistics for the excluded
+instruments. $N = 101$.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+Two findings stand out in Table~\ref{tab:first}.
+
+\emph{The fixed Bartik weights discard most of the predictive information in the shares.}
+Used separately, the shares explain 37\% of the residual variation in immigration growth,
+against about 10\% for the Bartik combination. The Dantzig selector keeps most of this
+(32\%) with only three instruments, so its $F$-statistic (13.81) is close to the Bartik's.
+Using all 11 shares without selection gives a weak first stage ($F = 7.48$). That raises
+the textbook concern that many weak instruments bias 2SLS toward OLS, which is the main
+reason to select.
+
+\emph{The selected instruments are not the ones driving the paper's estimate.} The paper's
+Bartik estimate relies overwhelmingly on the Peruvian share (Rotemberg weight 2.2), and its
+pre-trend checks focus on Peru. The Dantzig selector instead keeps Argentina, Venezuela,
+and China, and drops Peru. Argentina has the largest coefficient, and it is negative:
+municipalities where Argentines made up more of the 2008 immigrant population saw
+\emph{slower} immigrant growth afterward. Because shares are compositional, one reading is
+that a high Argentine share stands in for a low share of the fast-growing groups. We would
+not over-interpret the exact set chosen, however. When instruments are correlated, $\ell_1$
+methods pick among them somewhat arbitrarily, which motivates trying the elastic net next.
+The more important implication is that our estimates are identified by different
+variation than the paper's, and the paper's pre-trend evidence does not directly cover it.
+
+% =====================================================================================
+\section{Second-stage results}
+
+All tables share the same layout: the coefficient, the robust standard error in
+parentheses, and the $p$-value in brackets. ``Mean'' is the outcome's sample mean across
+all years, in percent.
+
+% ---------------------------------------------------------------- Table VI
+\begin{table}[htbp]
+\centering
+\small
+\begin{threeparttable}
+\caption{Crime-related concerns (paper's Table VI)}
+\label{tab:concerns}
+\begin{tabular}{lcccccc}
+\toprule
+ & & \multicolumn{2}{c}{Paper's design} & \multicolumn{3}{c}{Shares as separate instruments}\\
+\cmidrule(lr){3-4}\cmidrule(lr){5-7}
+Outcome & Mean & OLS & 2SLS Bartik & 2SLS all & Post-DS 2SLS & DS-fit IV \\
+\midrule
+Crime is a top-two national problem & 36.1 & 4.08 & 18.61 & 8.18 & 8.84 & 9.65 \\
+ & & (1.68) & (6.79) & (3.37) & (3.88) & (4.36) \\
+ & & [0.017] & [0.006] & [0.015] & [0.023] & [0.027] \\
+\addlinespace
+Crime is a top-two issue affecting me & 34.9 & 5.39 & 14.94 & 8.43 & 9.32 & 11.40 \\
+ & & (2.00) & (7.00) & (4.31) & (4.73) & (5.05) \\
+ & & [0.008] & [0.033] & [0.050] & [0.049] & [0.024] \\
+\addlinespace
+Crime affects my quality of life & 63.2 & 6.72 & 16.07 & 9.95 & 11.12 & 13.73 \\
+ & & (2.09) & (6.67) & (3.92) & (4.25) & (4.69) \\
+ & & [0.002] & [0.016] & [0.011] & [0.009] & [0.003] \\
+\addlinespace
+Feels unsafe & 17.4 & 6.27 & 4.79 & 6.81 & 6.28 & 6.59 \\
+ & & (1.93) & (6.49) & (3.15) & (3.49) & (3.86) \\
+ & & [0.002] & [0.460] & [0.031] & [0.072] & [0.088] \\
+\addlinespace
+Expects to be a victim & 43.8 & 6.59 & 16.91 & 15.44 & 15.03 & 16.98 \\
+ & & (2.61) & (8.92) & (4.67) & (4.95) & (5.30) \\
+ & & [0.013] & [0.058] & [0.001] & [0.002] & [0.001] \\
+\addlinespace
+Summary index (first principal component) & 39.4 & 5.84 & 13.58 & 9.40 & 9.64 & 10.97 \\
+ & & (1.52) & (5.32) & (2.79) & (3.22) & (3.65) \\
+ & & [0.000] & [0.011] & [0.001] & [0.003] & [0.003] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item Notes: $N = 101$ municipalities; 2008--2017 long differences. Coefficients are the
+effect of doubling the immigrant share of the population, in percentage points. Controls:
+intercept, municipality average age and share male in 2017. OLS: HC1 standard errors and
+$t$ $p$-values. IV columns: HC0 standard errors and normal $p$-values (as in the paper's
+\texttt{ivreg2}). Post-DS 2SLS standard errors treat the selected instruments as fixed.
+Variables: \texttt{del\_problema3}, \texttt{del\_afecta3}, \texttt{del\_calvida3},
+\texttt{del\_inseg5}, \texttt{del\_vict}, \texttt{pc\_19}.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\paragraph{Crime-related concerns.} The paper's central result survives: immigration
+significantly raises crime-related concerns under every estimator. The effects are smaller,
+though. The post-Dantzig estimates are roughly 50--70\% of the Bartik estimates; for
+example, the summary index rises by 9.6 rather than 13.6 percentage points when the
+immigrant share doubles (mean 39.4). The standard errors fall by about 30--45\%, so
+precision improves even as the magnitudes shrink. ``Expects to be a victim,'' only
+marginally significant in the paper, becomes clearly significant.
+
+The estimates now sit between OLS and the Bartik 2SLS, which has two possible readings.
+The Bartik estimates may have been noisy and somewhat inflated. Alternatively, the
+overidentified estimators may be pulled toward OLS by many-instrument bias. The DS-fit IV
+helps distinguish these. It is just-identified, so it is not subject to that bias, yet it
+gives similar or slightly larger numbers (10.97 for the index). That suggests the gap from
+the Bartik estimate is not purely a many-instrument artifact.
+
+% ---------------------------------------------------------------- Table VII
+\begin{table}[htbp]
+\centering
+\small
+\begin{threeparttable}
+\caption{Beliefs about crime trends (paper's Table VII)}
+\label{tab:beliefs}
+\begin{tabular}{lcccccc}
+\toprule
+ & & \multicolumn{2}{c}{Paper's design} & \multicolumn{3}{c}{Shares as separate instruments}\\
+\cmidrule(lr){3-4}\cmidrule(lr){5-7}
+Outcome & Mean & OLS & 2SLS Bartik & 2SLS all & Post-DS 2SLS & DS-fit IV \\
+\midrule
+Crime rising in my neighborhood & 42.1 & 9.75 & 13.44 & 8.90 & 8.70 & 9.64 \\
+ & & (2.57) & (8.27) & (4.74) & (5.09) & (5.43) \\
+ & & [0.000] & [0.104] & [0.060] & [0.087] & [0.076] \\
+\addlinespace
+Crime rising in my municipality & 64.9 & 6.94 & 8.74 & 6.70 & 6.62 & 5.63 \\
+ & & (2.38) & (8.65) & (4.24) & (4.80) & (5.20) \\
+ & & [0.004] & [0.312] & [0.114] & [0.168] & [0.278] \\
+\addlinespace
+Crime rising in the country & 78.9 & 2.73 & 1.71 & 2.25 & 0.78 & $-0.36$ \\
+ & & (1.19) & (4.82) & (2.06) & (2.25) & (2.54) \\
+ & & [0.023] & [0.722] & [0.274] & [0.730] & [0.886] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item Notes: See Table~\ref{tab:concerns}. Variables: \texttt{del\_tend\_barrio},
+\texttt{del\_tend\_com}, \texttt{del\_tend\_pais}.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\paragraph{Beliefs about crime trends.} As in the paper, the IV estimates are positive for
+local beliefs but not significant at conventional levels. The neighborhood-level estimate
+is marginal ($p \approx 0.06$--$0.09$) under all three share-based estimators. Effects are
+largest for the neighborhood and shrink toward zero for the country as a whole, consistent
+with immigration shaping perceptions of one's \emph{local} environment.
+
+% ---------------------------------------------------------------- Table VIII
+\begin{table}[htbp]
+\centering
+\small
+\begin{threeparttable}
+\caption{Crime-preventive behavior (paper's Table VIII)}
+\label{tab:prevent}
+\begin{tabular}{lcccccc}
+\toprule
+ & & \multicolumn{2}{c}{Paper's design} & \multicolumn{3}{c}{Shares as separate instruments}\\
+\cmidrule(lr){3-4}\cmidrule(lr){5-7}
+Outcome & Mean & OLS & 2SLS Bartik & 2SLS all & Post-DS 2SLS & DS-fit IV \\
+\midrule
+Invests in home security (index) & 22.8 & 1.84 & 10.03 & 6.41 & 6.86 & 6.67 \\
+ & & (1.09) & (4.70) & (2.32) & (2.61) & (2.78) \\
+ & & [0.093] & [0.033] & [0.006] & [0.009] & [0.016] \\
+\addlinespace
+Coordinates with neighbors (index) & 13.2 & 0.80 & 12.44 & 5.72 & 6.77 & 8.09 \\
+ & & (0.95) & (4.06) & (1.67) & (1.98) & (2.25) \\
+ & & [0.399] & [0.002] & [0.001] & [0.001] & [0.000] \\
+\addlinespace
+Household owns a firearm & 4.8 & 0.45 & 0.92 & 0.34 & 0.65 & $-0.24$ \\
+ & & (0.75) & (1.62) & (0.93) & (0.95) & (1.09) \\
+ & & [0.548] & [0.571] & [0.714] & [0.496] & [0.825] \\
+\addlinespace
+Summary index (first principal component) & 16.4 & 1.38 & 11.44 & 6.13 & 6.90 & 7.41 \\
+ & & (0.84) & (4.04) & (1.83) & (2.13) & (2.32) \\
+ & & [0.104] & [0.005] & [0.001] & [0.001] & [0.001] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item Notes: See Table~\ref{tab:concerns}. Variables: \texttt{Index\_Vivienda},
+\texttt{Index\_Vecinos}, \texttt{del\_arma}, \texttt{pc\_20}.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\paragraph{Crime-preventive behavior.} The pattern matches Table~\ref{tab:concerns}.
+Immigration significantly increases investment in home security and coordination with
+neighbors, but not gun ownership. The post-Dantzig estimates are about 55--70\% of the
+Bartik estimates, with standard errors roughly half as large. Doubling the immigrant share
+raises the preventive-behavior index by 6.9 percentage points (mean 16.4), compared with
+11.4 in the paper.
+
+% ---------------------------------------------------------------- Table IX
+\begin{table}[htbp]
+\centering
+\small
+\begin{threeparttable}
+\caption{Self-reported victimization (paper's Table IX)}
+\label{tab:victim}
+\begin{tabular}{lcccccc}
+\toprule
+ & & \multicolumn{2}{c}{Paper's design} & \multicolumn{3}{c}{Shares as separate instruments}\\
+\cmidrule(lr){3-4}\cmidrule(lr){5-7}
+Outcome & Mean & OLS & 2SLS Bartik & 2SLS all & Post-DS 2SLS & DS-fit IV \\
+\midrule
+Larceny / theft & 8.5 & 0.93 & 0.32 & 1.87 & 1.46 & 0.94 \\
+ & & (1.07) & (3.56) & (1.64) & (1.76) & (1.91) \\
+ & & [0.384] & [0.928] & [0.255] & [0.407] & [0.621] \\
+\addlinespace
+Robbery by surprise (snatching) & 4.6 & $-0.03$ & $-0.60$ & $-0.89$ & $-0.60$ & $-0.68$ \\
+ & & (0.73) & (2.95) & (1.15) & (1.35) & (1.39) \\
+ & & [0.967] & [0.838] & [0.438] & [0.658] & [0.626] \\
+\addlinespace
+Vehicle theft & 0.8 & 0.34 & $-0.95$ & $-0.08$ & $-0.28$ & $-0.09$ \\
+ & & (0.26) & (0.71) & (0.41) & (0.43) & (0.47) \\
+ & & [0.196] & [0.181] & [0.846] & [0.513] & [0.852] \\
+\addlinespace
+Burglary & 4.8 & 2.03 & 1.13 & 2.64 & 2.79 & 3.14 \\
+ & & (0.64) & (1.83) & (0.95) & (0.92) & (0.92) \\
+ & & [0.002] & [0.538] & [0.005] & [0.002] & [0.001] \\
+\addlinespace
+Assault & 1.9 & 0.05 & 1.87 & 1.19 & 0.97 & 1.66 \\
+ & & (0.60) & (1.59) & (0.79) & (0.89) & (0.93) \\
+ & & [0.934] & [0.240] & [0.130] & [0.273] & [0.075] \\
+\addlinespace
+Violent robbery & 4.4 & 0.36 & 3.09 & 0.46 & 0.94 & 1.69 \\
+ & & (0.66) & (2.10) & (0.89) & (0.98) & (1.11) \\
+ & & [0.584] & [0.141] & [0.609] & [0.338] & [0.129] \\
+\addlinespace
+Total victimization & 21.5 & 3.03 & 3.50 & 4.62 & 4.73 & 5.70 \\
+ & & (1.66) & (5.21) & (2.39) & (2.50) & (2.73) \\
+ & & [0.072] & [0.501] & [0.053] & [0.059] & [0.037] \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item Notes: See Table~\ref{tab:concerns}. Crime categories are our English labels for the
+ENUSC categories. Variables: \texttt{vict\_hurto}, \texttt{vict\_robosorpr},
+\texttt{vict\_robovehi}, \texttt{vict\_roboviv}, \texttt{vict\_lesiones},
+\texttt{vict\_roboviolent}, \texttt{vict\_agreg}.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\paragraph{Victimization.} This is where our results depart most from the paper. Most
+crime categories remain null, but \emph{burglary} becomes significant under all three
+share-based estimators: doubling the immigrant share raises burglary victimization by about
+2.8 percentage points (mean 4.8), with $p = 0.002$. That $p$-value would survive a Holm
+correction across the table's seven outcomes. Total victimization is also marginally
+positive ($p = 0.04$--$0.06$). The burglary effect is not new: it appears in the paper's
+OLS and two-way fixed-effects results, where the authors treat it as not robust to
+multiple testing, and the Bartik IV was too imprecise to detect it. It also does not depend
+on selection, since the unselected all-shares 2SLS gives a similar estimate (2.64). The
+crime-perception gap therefore remains: concerns rise by about 9.6 points against at most
+about 4.7 points in total victimization. But it is narrower than in the paper (13.6 against
+3.5).
+
+% =====================================================================================
+\section{Takeaways and next steps}
+
+\paragraph{Takeaways.} The paper's qualitative conclusions largely hold up. Immigration
+raises crime concerns and preventive behavior and has little effect on beliefs about
+national crime trends. Using the shares as separate instruments, with Dantzig selection,
+gives a first stage that explains about three times as much variation as the Bartik
+instrument. The resulting estimates are smaller by roughly a third to a half and
+noticeably more precise. They also suggest a modest effect on burglary that the paper's IV
+could not detect.
+
+\paragraph{Caveats.} The identifying variation now comes from the Argentine, Venezuelan,
+and Chinese shares rather than the Peruvian share, so the paper's pre-trend evidence does
+not directly validate our estimates. The post-Dantzig standard errors treat the selected
+instruments as fixed. The choice of $\lambda$ assumes homoskedastic errors. Finally, we
+have not yet applied the paper's multiple-testing corrections. Table X (homicides) is
+omitted because its data are confidential and not in the replication package.
+
+\paragraph{Next steps.}
+\begin{itemize}
+  \item Run the paper's pre-trend tests (Goldsmith-Pinkham, Sorkin and Swift 2020) for the
+        Argentine, Venezuelan, and Chinese shares.
+  \item Test overidentifying restrictions (Hansen $J$) and report weak-instrument-robust
+        inference (Anderson--Rubin confidence sets, effective $F$).
+  \item Compare penalization methods in the first stage: Lasso and post-Lasso with
+        heteroskedasticity-robust penalty loadings (Belloni et al.\ 2012), the elastic net,
+        and ridge. Choose $\lambda$ by cross-validation as well as by the theoretical rule.
+  \item Add nonlinear first stages (random forests, boosting) with cross-fitting, and DML
+        with flexible controls.
+  \item Repeat the analysis with the work-permit and work-visa immigration measures, and
+        apply Holm corrections within each table.
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,64 @@
+Dantzig-selector IV: Ajzenman, Dominguez & Undurraga (2023), Tables VI-IX
+Immigration measure: all  (endogenous: deltaimm; Bartik: deltaimm_instr)
+Check: sum_n share_n x shift_n vs. deltaimm_instr: max |diff| = 2.86e-08, corr = 1.000000 (N = 101)
+N = 101 municipalities; p = 11 share instruments; controls (unpenalized): intercept, age, hombre
+sigma_hat = 0.3445;  lambda = sigma_hat * sqrt(2 log p / n) = 0.0751
+
+First stage: Dantzig coefficients on standardized shares
+  share2008_arg              Argentina    -0.1214   <- selected
+  share2008_bol              Bolivia       0.0000
+  share2008_bra              Brazil        0.0000
+  share2008_chi              China         0.0084   <- selected
+  share2008_col              Colombia      0.0000
+  share2008_ecu              Ecuador       0.0000
+  share2008_hai              Haiti         0.0000
+  share2008_per              Peru          0.0000
+  share2008_esp              Spain         0.0000
+  share2008_eeuu             USA           0.0000
+  share2008_ven              Venezuela    -0.0209   <- selected
+
+  Bartik instrument (paper):  robust F =  17.35, partial R2 = 0.104
+  All shares (11 used):      robust F =   7.48, partial R2 = 0.373
+  Dantzig-selected (3):      robust F =  13.81, partial R2 = 0.321
+
+=== Table VI ===
+                                       OLS             2SLS Bartik         2SLS all shares            Post-DS 2SLS               DS-fit IV
+del_problema3         4.08 ( 1.68) [0.017]   18.61 ( 6.79) [0.006]    8.18 ( 3.37) [0.015]    8.84 ( 3.88) [0.023]    9.65 ( 4.36) [0.027]
+del_afecta3           5.39 ( 2.00) [0.008]   14.94 ( 7.00) [0.033]    8.43 ( 4.31) [0.050]    9.32 ( 4.73) [0.049]   11.40 ( 5.05) [0.024]
+del_calvida3          6.72 ( 2.09) [0.002]   16.07 ( 6.67) [0.016]    9.95 ( 3.92) [0.011]   11.12 ( 4.25) [0.009]   13.73 ( 4.69) [0.003]
+del_inseg5            6.27 ( 1.93) [0.002]    4.79 ( 6.49) [0.460]    6.81 ( 3.15) [0.031]    6.28 ( 3.49) [0.072]    6.59 ( 3.86) [0.088]
+del_vict              6.59 ( 2.61) [0.013]   16.91 ( 8.92) [0.058]   15.44 ( 4.67) [0.001]   15.03 ( 4.95) [0.002]   16.98 ( 5.30) [0.001]
+pc_19                 5.84 ( 1.52) [0.000]   13.58 ( 5.32) [0.011]    9.40 ( 2.79) [0.001]    9.64 ( 3.22) [0.003]   10.97 ( 3.65) [0.003]
+mean DV           del_problema3=36.08  del_afecta3=34.87  del_calvida3=63.15  del_inseg5=17.39  del_vict=43.83  pc_19=39.42
+
+=== Table VII ===
+                                       OLS             2SLS Bartik         2SLS all shares            Post-DS 2SLS               DS-fit IV
+del_tend_barrio       9.75 ( 2.57) [0.000]   13.44 ( 8.27) [0.104]    8.90 ( 4.74) [0.060]    8.70 ( 5.09) [0.087]    9.64 ( 5.43) [0.076]
+del_tend_com          6.94 ( 2.38) [0.004]    8.74 ( 8.65) [0.312]    6.70 ( 4.24) [0.114]    6.62 ( 4.80) [0.168]    5.63 ( 5.20) [0.278]
+del_tend_pais         2.73 ( 1.19) [0.023]    1.71 ( 4.82) [0.722]    2.25 ( 2.06) [0.274]    0.78 ( 2.25) [0.730]   -0.36 ( 2.54) [0.886]
+mean DV           del_tend_barrio=42.10  del_tend_com=64.86  del_tend_pais=78.91
+
+=== Table VIII ===
+                                       OLS             2SLS Bartik         2SLS all shares            Post-DS 2SLS               DS-fit IV
+Index_Vivienda        1.84 ( 1.09) [0.093]   10.03 ( 4.70) [0.033]    6.41 ( 2.32) [0.006]    6.86 ( 2.61) [0.009]    6.67 ( 2.78) [0.016]
+Index_Vecinos         0.80 ( 0.95) [0.399]   12.44 ( 4.06) [0.002]    5.72 ( 1.67) [0.001]    6.77 ( 1.98) [0.001]    8.09 ( 2.25) [0.000]
+del_arma              0.45 ( 0.75) [0.548]    0.92 ( 1.62) [0.571]    0.34 ( 0.93) [0.714]    0.65 ( 0.95) [0.496]   -0.24 ( 1.09) [0.825]
+pc_20                 1.38 ( 0.84) [0.104]   11.44 ( 4.04) [0.005]    6.13 ( 1.83) [0.001]    6.90 ( 2.13) [0.001]    7.41 ( 2.32) [0.001]
+mean DV           Index_Vivienda=22.78  Index_Vecinos=13.16  del_arma=4.78  pc_20=16.41
+
+=== Table IX ===
+                                       OLS             2SLS Bartik         2SLS all shares            Post-DS 2SLS               DS-fit IV
+vict_hurto            0.93 ( 1.07) [0.384]    0.32 ( 3.56) [0.928]    1.87 ( 1.64) [0.255]    1.46 ( 1.76) [0.407]    0.94 ( 1.91) [0.621]
+vict_robosorpr       -0.03 ( 0.73) [0.967]   -0.60 ( 2.95) [0.838]   -0.89 ( 1.15) [0.438]   -0.60 ( 1.35) [0.658]   -0.68 ( 1.39) [0.626]
+vict_robovehi         0.34 ( 0.26) [0.196]   -0.95 ( 0.71) [0.181]   -0.08 ( 0.41) [0.846]   -0.28 ( 0.43) [0.513]   -0.09 ( 0.47) [0.852]
+vict_roboviv          2.03 ( 0.64) [0.002]    1.13 ( 1.83) [0.538]    2.64 ( 0.95) [0.005]    2.79 ( 0.92) [0.002]    3.14 ( 0.92) [0.001]
+vict_lesiones         0.05 ( 0.60) [0.934]    1.87 ( 1.59) [0.240]    1.19 ( 0.79) [0.130]    0.97 ( 0.89) [0.273]    1.66 ( 0.93) [0.075]
+vict_roboviolent      0.36 ( 0.66) [0.584]    3.09 ( 2.10) [0.141]    0.46 ( 0.89) [0.609]    0.94 ( 0.98) [0.338]    1.69 ( 1.11) [0.129]
+vict_agreg            3.03 ( 1.66) [0.072]    3.50 ( 5.21) [0.501]    4.62 ( 2.39) [0.053]    4.73 ( 2.50) [0.059]    5.70 ( 2.73) [0.037]
+mean DV           vict_hurto=8.45  vict_robosorpr=4.57  vict_robovehi=0.77  vict_roboviv=4.75  vict_lesiones=1.87  vict_roboviolent=4.43  vict_agreg=21.46
+
+Notes: coefficients are the effect of doubling the immigrant share, in percentage points (outcomes x100).
+OLS: HC1 robust SEs, t p-values. IV columns: HC0 robust SEs, normal p-values (matching Stata ivreg2, robust).
+Post-DS 2SLS: 2SLS using the Dantzig-selected shares as instruments; SEs treat the selected set as fixed.
+DS-fit IV: just-identified IV using the Dantzig first-stage fitted value as the single instrument.
+Table X (homicides) is omitted: its data are confidential and not in the replication package.
