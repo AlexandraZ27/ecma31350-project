@@ -1,0 +1,75 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[header=false,clearsection=false]{../../../adenc}
+
+\newcommand{\answer}[1]{\par\medskip #1\par\medskip}
+\setlist[enumerate,1]{label=(\arabic*),leftmargin=*}
+
+\begin{document}
+Regression specifications in Ajzenman, Dominguez, and Undurraga (AEJ: Applied, 2023), ``Immigration, Crime, and Crime (Mis)Perceptions,'' Tables 1--9. All outcomes are multiplied by 100 (0--100 scale). The unit of observation is a respondent \(i\) in municipality \(m\) and survey year \(t\) (ENUSC, 101 municipalities, 2008--2017). Stata variable names are in \texttt{typewriter}.
+
+\section*{Variables}
+\begin{itemize}
+    \item \(\mathrm{immrate}_{mt}\): immigrant stock (residence permits) divided by municipality population; the regressor is \(\log \mathrm{immrate}_{mt}\) (\texttt{lnrate\_stock\_imm}).
+    \item Individual controls: age (\texttt{edad}) and gender (\texttt{ismale}).
+    \item \(\Delta \mathrm{migr}_{m} = \log\mathrm{immrate}_{m,2017} - \log\mathrm{immrate}_{m,2008}\) (\texttt{deltaimm}).
+    \item Instrument (shift-share):
+    \begin{equation*}
+        \Delta\widehat{\mathrm{migr}}_{m} = \sum_n \theta^n_{m,2008}\,\Delta\ln \mathrm{MIGR}^n_t \qquad (\texttt{deltaimm\_instr}),
+    \end{equation*}
+    where \(\theta^n_{m,2008}\) is the 2008 share of nationality \(n\) among non-Chilean immigrants in \(m\), and \(\Delta\ln\mathrm{MIGR}^n_t\) is the log change in the stock of nationality-\(n\) migrants in countries other than Chile (UN bilateral data; 11 origin countries).
+\end{itemize}
+
+\section*{Tables 1--4: two-way fixed effects (respondent level)}
+For each outcome \(Y\) in the table,
+\begin{equation*}
+    Y_{imt} = \beta \log\mathrm{immrate}_{mt} + \gamma_1 \mathrm{age}_{i} + \gamma_2 \mathrm{male}_{i} + \delta_m + \lambda_t + \varepsilon_{imt}.
+\end{equation*}
+Municipality fixed effects \(\delta_m\) are absorbed (\texttt{areg, absorb(cod\_com)}), year fixed effects \(\lambda_t\) enter as dummies, and standard errors are clustered by municipality. The coefficient of interest is \(\beta\).
+
+\begin{center}
+\begin{tabular}{@{}l@{\ \ }p{0.28\textwidth}p{0.55\textwidth}@{}}
+    Table & Outcomes (columns in order) & Variables\\
+    \hline
+    1 & Crime-related concerns & \texttt{del\_problema3}, \texttt{del\_afecta3}, \texttt{del\_calvida3}, \texttt{del\_inseg5}, \texttt{del\_vict}, \texttt{pc\_19}\\
+    2 & Beliefs about crime trends & \texttt{del\_tend\_barrio}, \texttt{del\_tend\_com}, \texttt{del\_tend\_pais}\\
+    3 & Preventive behavior & \texttt{Index\_Vivienda}, \texttt{Index\_Vecinos}, \texttt{del\_arma}, \texttt{pc\_20}\\
+    4 & Victimization & \texttt{vict\_hurto}, \texttt{vict\_robosorpr}, \texttt{vict\_robovehi}, \texttt{vict\_roboviv}, \texttt{vict\_lesiones}, \texttt{vict\_roboviolent}, \texttt{vict\_agreg}\\
+\end{tabular}
+\end{center}
+Here \texttt{pc\_19} and \texttt{pc\_20} are the first principal component of the outcomes in Tables 1 and 3, respectively. Data: \texttt{enusc\_OLS.dta}.
+
+\section*{Table 5: homicides, two-way fixed effects (municipality level)}
+\begin{equation*}
+    Y_{mt} = \beta \log\mathrm{immrate}_{mt} + \gamma_1 \overline{\mathrm{age}}_{mt} + \gamma_2 \overline{\mathrm{male}}_{mt} + \gamma_3 d^{\mathrm{miss}}_{mt} + \delta_m + \lambda_t + \varepsilon_{mt},
+\end{equation*}
+with missing controls set to zero and flagged by \(d^{\mathrm{miss}}\), clustering by municipality. Outcomes: \texttt{log\_homicidios1pc}, \texttt{intmarginhomicidios1}, \texttt{extmargin\_homicidios1}, \texttt{log\_homicidios\_chilenos2pc}, \texttt{log\_homicidios\_nchilenos2pc}. \answer{This uses \texttt{homicides\_OLS.dta}, built from confidential data not included in the replication package, so Table 5 cannot be reproduced.}
+
+\section*{Tables 6--9: first-difference OLS and 2SLS (municipality level, \(N = 101\))}
+Let \(\Delta \bar Y_m = \bar Y_{m,2017} - \bar Y_{m,2008}\) be the change in the municipality average of each outcome (\(\times 100\)), and let \(\overline{\mathrm{age}}_m\) and \(\overline{\mathrm{male}}_m\) (\texttt{age}, \texttt{hombre}) be municipality averages. Each column reports two estimates.
+\begin{enumerate}
+    \item OLS (Panel A):
+    \begin{equation*}
+        \Delta \bar Y_m = \alpha + \beta^{OLS}\,\Delta\mathrm{migr}_m + \gamma_1 \overline{\mathrm{age}}_m + \gamma_2 \overline{\mathrm{male}}_m + u_m,
+    \end{equation*}
+    with heteroskedasticity-robust standard errors (\texttt{reg, robust}).
+    \item 2SLS (Panel B), with first stage
+    \begin{equation*}
+        \Delta\mathrm{migr}_m = \pi_0 + \pi\,\Delta\widehat{\mathrm{migr}}_m + \eta_1 \overline{\mathrm{age}}_m + \eta_2 \overline{\mathrm{male}}_m + v_m,
+    \end{equation*}
+    and second stage as in (1) with \(\Delta\mathrm{migr}_m\) replaced by its fitted value; robust standard errors (\texttt{ivreg2, robust}). The first-stage block reports \(\hat\pi\), its robust standard error, the robust \(F\)-statistic, and the partial \(R^2\) of the instrument.
+\end{enumerate}
+The coefficient of interest is \(\beta\). The outcomes are the same as in Tables 1--4, matched as follows.
+\begin{center}
+\begin{tabular}{@{}ll@{}}
+    Table & Outcomes\\
+    \hline
+    6 & as in Table 1\\
+    7 & as in Table 2\\
+    8 & as in Table 3\\
+    9 & as in Table 4 (Panels A and B)\\
+\end{tabular}
+\end{center}
+Data: \texttt{enusc\_IV.dta}. ``Mean DV'' in every table is the pooled respondent-level mean of the outcome in \texttt{enusc\_OLS.dta}.
+
+\end{document}

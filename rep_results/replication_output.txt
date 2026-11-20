@@ -1,0 +1,60 @@
+
+=== Table 1 (TWFE) ===
+del_problema3         2.00 (1.48) [0.180]  N=242,539  R2=0.02  meanDV=36.08
+del_afecta3           3.95 (1.44) [0.007]  N=232,570  R2=0.02  meanDV=34.87
+del_calvida3          3.59 (1.81) [0.050]  N=243,449  R2=0.04  meanDV=63.15
+del_inseg5            2.67 (1.25) [0.035]  N=213,203  R2=0.05  meanDV=17.39
+del_vict              2.02 (3.20) [0.531]  N=214,375  R2=0.03  meanDV=43.83
+pc_19                 3.07 (1.31) [0.021]  N=180,039  R2=0.05  meanDV=39.42
+
+=== Table 2 (TWFE) ===
+del_tend_barrio       3.14 (2.33) [0.181]  N=235,815  R2=0.05  meanDV=42.10
+del_tend_com          3.01 (1.82) [0.102]  N=236,760  R2=0.06  meanDV=64.86
+del_tend_pais        -0.30 (0.75) [0.687]  N=242,219  R2=0.07  meanDV=78.91
+
+=== Table 3 (TWFE) ===
+Index_Vivienda        1.18 (0.90) [0.192]  N=243,786  R2=0.07  meanDV=22.78
+Index_Vecinos         2.33 (0.76) [0.003]  N=243,993  R2=0.05  meanDV=13.16
+del_arma              1.04 (0.37) [0.007]  N=243,408  R2=0.01  meanDV=4.78
+pc_20                 1.70 (0.62) [0.008]  N=243,096  R2=0.07  meanDV=16.41
+
+=== Table 4 (TWFE) ===
+vict_hurto           -0.34 (0.79) [0.672]  N=244,052  R2=0.01  meanDV=8.45
+vict_robosorpr        0.25 (0.54) [0.644]  N=244,079  R2=0.02  meanDV=4.57
+vict_robovehi         0.05 (0.19) [0.797]  N=244,115  R2=0.00  meanDV=0.77
+vict_roboviv          1.42 (0.61) [0.021]  N=244,103  R2=0.01  meanDV=4.75
+vict_lesiones        -0.11 (0.29) [0.712]  N=244,095  R2=0.01  meanDV=1.87
+vict_roboviolent      0.32 (0.38) [0.407]  N=244,084  R2=0.02  meanDV=4.43
+vict_agreg            1.46 (1.39) [0.296]  N=244,115  R2=0.03  meanDV=21.46
+
+=== Table 6 (OLS: HC1 / 2SLS: HC0, as in Stata reg/ivreg2) ===
+del_problema3      OLS    4.08 (1.68) [0.017]   IV   18.61 (6.79) [0.006]   meanDV=36.08
+del_afecta3        OLS    5.39 (2.00) [0.008]   IV   14.94 (7.00) [0.033]   meanDV=34.87
+del_calvida3       OLS    6.72 (2.09) [0.002]   IV   16.07 (6.67) [0.016]   meanDV=63.15
+del_inseg5         OLS    6.27 (1.93) [0.002]   IV    4.79 (6.49) [0.460]   meanDV=17.39
+del_vict           OLS    6.59 (2.61) [0.013]   IV   16.91 (8.92) [0.058]   meanDV=43.83
+pc_19              OLS    5.84 (1.52) [0.000]   IV   13.58 (5.32) [0.011]   meanDV=39.42
+First stage: 6.81 (1.64)  F=17.35  partial R2=0.10   N=101
+
+=== Table 7 (OLS: HC1 / 2SLS: HC0, as in Stata reg/ivreg2) ===
+del_tend_barrio    OLS    9.75 (2.57) [0.000]   IV   13.44 (8.27) [0.104]   meanDV=42.10
+del_tend_com       OLS    6.94 (2.38) [0.004]   IV    8.74 (8.65) [0.312]   meanDV=64.86
+del_tend_pais      OLS    2.73 (1.19) [0.023]   IV    1.71 (4.82) [0.722]   meanDV=78.91
+First stage: 6.81 (1.64)  F=17.35  partial R2=0.10   N=101
+
+=== Table 8 (OLS: HC1 / 2SLS: HC0, as in Stata reg/ivreg2) ===
+Index_Vivienda     OLS    1.84 (1.09) [0.093]   IV   10.03 (4.70) [0.033]   meanDV=22.78
+Index_Vecinos      OLS    0.80 (0.95) [0.399]   IV   12.44 (4.06) [0.002]   meanDV=13.16
+del_arma           OLS    0.45 (0.75) [0.548]   IV    0.92 (1.62) [0.571]   meanDV=4.78
+pc_20              OLS    1.38 (0.84) [0.104]   IV   11.44 (4.04) [0.005]   meanDV=16.41
+First stage: 6.81 (1.64)  F=17.35  partial R2=0.10   N=101
+
+=== Table 9 (OLS: HC1 / 2SLS: HC0, as in Stata reg/ivreg2) ===
+vict_hurto         OLS    0.93 (1.07) [0.384]   IV    0.32 (3.56) [0.928]   meanDV=8.45
+vict_robosorpr     OLS   -0.03 (0.73) [0.967]   IV   -0.60 (2.95) [0.838]   meanDV=4.57
+vict_robovehi      OLS    0.34 (0.26) [0.196]   IV   -0.95 (0.71) [0.181]   meanDV=0.77
+vict_roboviv       OLS    2.03 (0.64) [0.002]   IV    1.13 (1.83) [0.538]   meanDV=4.75
+vict_lesiones      OLS    0.05 (0.60) [0.934]   IV    1.87 (1.59) [0.240]   meanDV=1.87
+vict_roboviolent   OLS    0.36 (0.66) [0.584]   IV    3.09 (2.10) [0.141]   meanDV=4.43
+vict_agreg         OLS    3.03 (1.66) [0.072]   IV    3.50 (5.21) [0.501]   meanDV=21.46
+First stage: 6.81 (1.64)  F=17.35  partial R2=0.10   N=101

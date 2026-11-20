@@ -1,0 +1,8 @@
+# Data requirements
+
+# The rep_data/ folder is excluded from this repository.
+# To reproduce the analysis, download the replication data from:
+# https://www.openicpsr.org/openicpsr/project/161061/version/V1/view
+
+# Unzip the downloaded file and place its contents in
+# a folder named rep_data/ in the project root.

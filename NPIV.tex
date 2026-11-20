@@ -1,0 +1,59 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[header=false,clearsection=false]{../../../../adenc}
+
+\newcommand{\answer}[1]{\par\medskip #1\par\medskip}
+\setlist[enumerate,1]{label=(\arabic*),leftmargin=*}
+
+\begin{document}
+Consider the SCM with \vocab{additive unobservable confounder}
+\begin{equation*}
+    Y = f(A, X) + f_U(U),
+\end{equation*}
+where there is no interaction between \((A, X)\) and \(U\), the unobserved confounder. Then,
+\begin{equation*}
+    \E(Y\mid X, \doo(A = a)) - \E(Y\mid  X, \doo(A = a')) = f(a, Z)- f(a', X).
+\end{equation*}
+Our goal is to learn the contrast function \(f\).
+
+\begin{theorem}
+    \label{thm:iv}
+    Under IV assumptions and additive unobservable confounders, there exists \(\tilde{f}\) such that
+    \begin{enumerate}
+        \item \(\E(Y\mid X, \doo(A = a)) -\E(Y\mid X, \doo(A = a')) = \tilde{f}(a, x) - \tilde{f}(a', x)\).
+        \item \(\E(Y \mid Z, X) = \int\tilde{f}(a, x)p(a\mid z, x)\dd{a}\), where \(p(a\mid z, x)\) is the probability density of treatment.
+    \end{enumerate}
+    In particular, if there exists a unique function \(g\) satisfying condition 2, then \(\tilde{f} = g\).
+\end{theorem}
+
+\begin{proof}
+    By unconfoundedness, \(U\perp Z\mid X\). Then,
+    \begin{align*}
+        \E(Y\mid Z, X) & = \E(f(A, X)\mid Z, X) + \E(f_U(U)\mid Z, X)\\
+        & = \E(f(A, X)\mid Z, X) + \underbrace{\E(f_U(U)\mid X)}_{h(X)}\\
+        & = \E(\tilde{f}(A, X)\mid Z, X), \text{ where }\tilde{f}(A, X)\coloneqq f(A, X) + h(X)\\
+        & = \int\tilde{f}(a, X)p(a\mid Z, X)\dd{a}.
+    \end{align*}
+\end{proof}
+Note that we never used relevance in the proof. However, we need it for the theorem to be useful. The idea is that the theorem \Cref{thm:iv} gives a system of equations of the form
+\begin{equation*}
+    \E(Y\mid \cdot) = \langle\tilde{f}(\cdot,X ), p(\cdot, z)\rangle
+\end{equation*}
+If the instrument is strong, we have multiply conditional distribution of the form \(p(\cdot, z)\) by varying \(z\), which narrows the choice for function \(\tilde{f}\). This means that weaker instruments yields higher fundamental uncertainty even with infinite data.
+
+\subsubsection{Model fitting}
+\Cref{thm:iv} states that we can fit the model in two steps:
+\begin{enumerate}
+    \item Fit a conditional probability \(\hat{p}(a\mid x, z)\);
+    \item Solve the minimization problem
+    \begin{equation*}
+        \tilde{f} = \argmin_f \frac{1}{n}\sum_{i=1}^n\left(Y - \int \hat{p}(a\mid x, z)f(a, x)\dd{a}\right)^2
+    \end{equation*}
+    \item Compute the average treatment effect estimate
+    \begin{equation*}
+        \frac{1}{n}\sum_{i = 1}^n[\tilde f(a, X_i) - \tilde f(a', X_i)]
+    \end{equation*}
+\end{enumerate}
+
+
+\end{document}
