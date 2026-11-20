@@ -1,0 +1,15 @@
+15:01:50 === panel: G=101 T=10  outcome del_problema3
+15:01:50 linear 2SLS: {'beta': 12.339, 'se': 4.35, 'pi': 5.484, 'se_pi': 1.032, 'F': 28.223, 'partial_r2': 0.158}
+15:02:13 g=kernel: R2 0.166 (no z 0.014, p=0.500)  loglik 0.427 (no z 0.412, p=1.000)  hyper [0.42291743 0.84693247 0.44352593]  [23s]
+15:02:20 g=forest: R2 0.140 (no z 0.003, p=0.500)  loglik 0.366 (no z 0.390, p=0.500)  hyper (0.02, 3)  [6s]
+15:02:27 g=net: R2 0.160 (no z 0.009, p=0.500)  loglik 0.387 (no z 0.391, p=0.500)  hyper (2, 8, 0.02, 80)  [7s]
+15:02:30 g=kernel f=kernel: NPIV [8.506 8.359 7.792]  hyper (2.0, np.float64(1.0))  [3s]
+15:02:34 g=kernel f=forest: NPIV [1.154 1.029 0.796]  hyper (0.2, np.float64(0.001))  [4s]
+15:02:59 g=kernel f=net: NPIV [2.644 2.638 2.599]  hyper (2, 32, 0.02, 10)  [25s]
+15:03:01 g=forest f=kernel: NPIV [8.802 8.653 8.081]  hyper (2.0, np.float64(1.0))  [3s]
+15:03:06 g=forest f=forest: NPIV [1.347 1.203 0.925]  hyper (0.2, np.float64(0.001))  [4s]
+15:03:31 g=forest f=net: NPIV [3.546 3.502 3.361]  hyper (2, 8, 0.02, 30)  [25s]
+15:03:34 g=net f=kernel: NPIV [8.167 8.033 7.521]  hyper (2.0, np.float64(1.0))  [3s]
+15:03:38 g=net f=forest: NPIV [1.226 1.151 0.922]  hyper (0.2, np.float64(0.001))  [4s]
+15:04:03 g=net f=net: NPIV [3.034 3.025 2.981]  hyper (2, 32, 0.02, 10)  [25s]
+15:04:03 done

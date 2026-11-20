@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage[T1]{fontenc}
-\usepackage[header=false,clearsection=false]{../../../../adenc}
+\usepackage[header=false,clearsection=false]{../../../adenc}
 
 \newcommand{\answer}[1]{\par\medskip #1\par\medskip}
 \setlist[enumerate,1]{label=(\arabic*),leftmargin=*}
@@ -12,7 +12,7 @@ Consider the SCM with \vocab{additive unobservable confounder}
 \end{equation*}
 where there is no interaction between \((A, X)\) and \(U\), the unobserved confounder. Then,
 \begin{equation*}
-    \E(Y\mid X, \doo(A = a)) - \E(Y\mid  X, \doo(A = a')) = f(a, Z)- f(a', X).
+    \E(Y\mid X, \doo(A = a)) - \E(Y\mid  X, \doo(A = a')) = f(a, X)- f(a', X).
 \end{equation*}
 Our goal is to learn the contrast function \(f\).
 
@@ -49,11 +49,257 @@ If the instrument is strong, we have multiply conditional distribution of the fo
     \begin{equation*}
         \tilde{f} = \argmin_f \frac{1}{n}\sum_{i=1}^n\left(Y - \int \hat{p}(a\mid x, z)f(a, x)\dd{a}\right)^2
     \end{equation*}
-    \item Compute the average treatment effect estimate
+    \item Compute the average local treatment effect estimate
     \begin{equation*}
-        \frac{1}{n}\sum_{i = 1}^n[\tilde f(a, X_i) - \tilde f(a', X_i)]
+        \frac{1}{n}\sum_{i = 1}^n\frac{\partial}{\partial a}\tilde f(A_i, X_i)
     \end{equation*}
 \end{enumerate}
 
+
+% BEGIN NPIV RESULTS
+\section*{Application: Ajzenman, Dominguez, and Undurraga (2023)}
+We apply the two-step procedure of \Cref{thm:iv} to the instrumental-variable specifications of Ajzenman, Dominguez, and Undurraga (AEJ: Applied, 2023), ``Immigration, Crime, and Crime (Mis)Perceptions.'' The treatment \(A\) is immigration in a Chilean municipality, the instrument \(Z\) is the shift-share (Bartik) predicted change in immigration built from migration flows to countries other than Chile, \(X\) is age and gender, and \(Y\) is a municipality-level outcome on a 0--100 scale. We run the six summary outcomes: the principal-component indices of crime-related concerns and of preventive behavior, the three beliefs about crime trends, and total victimization.
+
+\subsection*{Two samples}
+\begin{enumerate}
+    \item \vocab{Cross-section} (Tables 6--9 of the paper). One observation per municipality (\(n = 101\)): \(A = \Delta\mathrm{migr}\), the 2008--2017 change in the log immigrant-to-population ratio; \(Z\) the shift-share instrument for that change; \(Y\) the 2017--2008 change in the municipality mean of the outcome; \(X\) the municipality mean age and gender share.
+    \item \vocab{Panel} (Table A.4, Panel B, collapsed to municipality-year means; \(n = 1{,}010\)). \(A = \log\) immigration rate, \(Z\) the year-specific instrument, \(Y\) and \(X\) the municipality-year means. Municipality and year fixed effects are removed by two-way demeaning of \(Y, A, Z, X\) before estimation, which assumes they enter additively: \(Y = f(A, X) + \delta_m + \lambda_t + \text{error}\).
+\end{enumerate}
+The estimand in both samples is the average derivative \(\frac{1}{n}\sum_i \partial_a \tilde f(A_i, X_i)\), comparable to the linear 2SLS coefficient.
+
+\subsection*{Implementation}
+Tuning follows the lecture notes.
+\begin{enumerate}
+    \item \emph{Fit \(\hat p(a\mid x, z)\).} A Gaussian conditional kernel density with a product kernel and one bandwidth each for \(z\), \(x\), and \(a\) (all variables standardized). The bandwidths \((h_z, h_x)\) minimize the leave-one-out cross-validation squared error of the kernel conditional mean \(\E(A\mid Z, X)\), so they maximize first-stage fit; \(h_a\) then maximizes the leave-one-out density likelihood.
+    \item \emph{Fit \(\tilde f\).} For each observation we draw \(M = 50\) values \(\tilde a_{ij}\sim\hat p(\cdot\mid z_i, x_i)\). \(\tilde f\) is an \vocab{honest random forest} of \(B = 500\) trees. Each tree uses a subsample of size \(n/2\) drawn without replacement and split into two halves \(I_1, I_2\). A deep tree is grown on \(I_1\) (a random 2 of the 3 covariates considered at each split, each leaf containing at least a share \(\alpha\) of \(I_1\)). The leaf values are estimated on \(I_2\) by minimizing the loss in \Cref{thm:iv} itself,
+    \begin{equation*}
+        \sum_{i\in I_2}\Big(Y_i - \tfrac{1}{M}\sum_{j=1}^M f(\tilde a_{ij}, x_i)\Big)^2 + \text{ridge}.
+    \end{equation*}
+    The share \(\alpha\in\{0.02, 0.05, 0.10, 0.20\}\) and the ridge penalty are chosen by 5-fold cross-validation of this loss, with folds grouped by municipality.
+    \item \emph{Effect.} Centered finite differences of \(\tilde f\) in \(a\), with step \(0.5\) standard deviations of \(A\), averaged over observations between the 5th and 95th percentiles of \(A\). Standard errors and 95\% intervals are from a bootstrap over municipalities (200 draws, 100 trees each), which holds the bandwidths, \(\alpha\), and ridge fixed at their full-sample values.
+\end{enumerate}
+\answer{\textbf{Why the exact loss.} A simpler alternative regresses \(Y_i\) on the draws \((\tilde a_{ij}, x_i)\) directly. That minimizes \(\E[(Y - f(\tilde A))^2]\), which equals the loss above plus \(\operatorname{Var}(f(\tilde A)\mid z, x)\), and it attenuates the slope toward zero when the instrument is weak. In a simulation with known slope 10 and a weak instrument it returned 1.8, so we do not use it.}
+
+\subsection*{First-stage goodness of fit}
+\Cref{tab:fs} reports how well the kernel first stage predicts the treatment out of sample, with and without the instrument. The permutation \(p\)-values permute \(Z\) across observations (200 permutations, bandwidths fixed).
+\begin{table}[h]
+    \centering
+    \caption{First-stage fit}
+    \label{tab:fs}
+\begin{center}
+\begin{tabular}{@{}lcc@{}}
+ & Cross-section & Panel\\
+\hline
+Observations & 101 & 1{,}010\\
+\multicolumn{3}{@{}l}{\emph{Kernel first stage, leave-one-out}}\\
+\(R^2\) of \(\E(A\mid Z, X)\), with \(Z\) & 0.061 & 0.166\\
+\(R^2\), without \(Z\) & $-$0.020 & 0.009\\
+Gain (permutation \(p\)) & 0.081 (0.010) & 0.157 (0.005)\\
+Mean log density of \(A\), with \(Z\) & $-$1.409 & $-$1.284\\
+Mean log density, without \(Z\) & $-$1.437 & $-$1.370\\
+Gain (permutation \(p\)) & 0.028 (0.030) & 0.086 (0.005)\\
+Bandwidths \(h_z / h_x / h_a\) (sd units) & 0.71 / 20.0 / 0.51 & 0.43 / 0.6 / 0.53\\
+\multicolumn{3}{@{}l}{\emph{Linear first stage, in-sample}}\\
+Coefficient on instrument (s.e.) & 6.81 (1.64) & 5.48 (1.03)\\
+\(F\)-statistic & 17.35 & 28.22\\
+Partial \(R^2\) & 0.104 & 0.158\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+The instrument is informative in both samples (permutation \(p\leq 0.03\)). In the cross-section the kernel first stage explains about \(6\%\) of the variation in \(A\) out of sample, against \(17\%\) in the panel. The linear first-stage \(F\)-statistics are larger because they test a single coefficient in-sample, not out-of-sample fit.
+
+\subsection*{Results}
+\Cref{tab:cross,tab:panel} compare the NPIV average derivative with the linear 2SLS estimate of the same specification. The 2SLS numbers match the paper in the cross-section; in the panel they are the cell-mean analogue of Table A.4, not its respondent-level estimates.
+\begin{table}[h]
+    \centering
+    \caption{Cross-section (\(n = 101\)): linear 2SLS and NPIV}
+    \label{tab:cross}
+\begin{center}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccccc@{}}
+Outcome & 2SLS (s.e.) & NPIV (s.e.) & NPIV 95\% CI & \(\alpha\) & ridge\\
+\hline
+Concerns: PCI & 13.58 (5.32) & 0.091 (0.186) & [$-$0.051, 0.571] & 0.2 & 1\\
+Preventive behavior: PCI & 11.44 (4.04) & 0.048 (0.026) & [0.010, 0.091] & 0.05 & 10\\
+Crime rising: neighborhood & 13.44 (8.27) & 0.002 (0.003) & [$-$0.005, 0.008] & 0.02 & 100\\
+Crime rising: municipality & 8.74 (8.65) & $-$0.007 (0.050) & [$-$0.083, 0.102] & 0.05 & 10\\
+Crime rising: country & 1.71 (4.82) & $-$0.001 (0.002) & [$-$0.004, 0.003] & 0.02 & 100\\
+Victimization: total & 3.50 (5.21) & 0.090 (0.199) & [$-$0.231, 0.535] & 0.1 & 1\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+\begin{table}[h]
+    \centering
+    \caption{Panel (\(n = 1{,}010\)): linear 2SLS and NPIV}
+    \label{tab:panel}
+\begin{center}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccccc@{}}
+Outcome & 2SLS (s.e.) & NPIV (s.e.) & NPIV 95\% CI & \(\alpha\) & ridge\\
+\hline
+Concerns: PCI & 10.47 (3.02) & 0.714 (1.290) & [0.102, 4.624] & 0.1 & 0.001\\
+Preventive behavior: PCI & 7.32 (2.11) & 0.630 (0.543) & [0.117, 2.047] & 0.1 & 0.001\\
+Crime rising: neighborhood & 6.65 (5.54) & 0.001 (0.057) & [$-$0.033, 0.179] & 0.2 & 100\\
+Crime rising: municipality & 6.31 (5.38) & $-$0.000 (0.065) & [$-$0.098, 0.135] & 0.05 & 10\\
+Crime rising: country & $-$1.40 (2.62) & $-$0.078 (0.135) & [$-$0.435, 0.114] & 0.05 & 1\\
+Victimization: total & 2.51 (3.05) & 0.096 (0.258) & [$-$0.163, 0.721] & 0.2 & 0.001\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+Using step sizes of 0.25 and 1 standard deviation instead of 0.5 changes no NPIV estimate by more than 0.25 (in outcome units per unit of \(A\)).
+
+\subsection*{Reading the results}
+\begin{itemize}
+    \item The NPIV average derivatives are far smaller than the linear 2SLS estimates, and in all twelve outcome-sample pairs the 2SLS estimate lies outside the NPIV 95\% interval. For example, in the panel the NPIV interval for the concerns index is \([0.10, 4.62]\) and the 2SLS estimate is \(10.47\).
+    \item This should not be read as evidence that the effect is near zero. The NPIV fit is shrunk toward a flat function, and in the cross-section cross-validation selects ridge penalties of 10--100 for the three beliefs outcomes. In a simulation with a known slope of 10 and \(n = 1{,}010\), the same estimator returned 9.8 when the instrument explained 81\% of the variance of \(A\) but only 3.5 when it explained 16\%. The panel's kernel first stage has a similar leave-one-out \(R^2\) (0.17) yet the shrinkage in the data is stronger than in that simulation, and we have not diagnosed why.
+    \item The bootstrap intervals hold the tuning parameters fixed and so do not capture shrinkage bias. They should be read as sampling variability of a regularized estimator.
+    \item There is no accepted pretest like \(F > 10\) for weak instruments in the nonparametric setting, because identification depends on how quickly the singular values of the conditional-expectation operator decay. The linear \(F\)-statistics above do not rule out weak identification of \(\tilde f\).
+    \item Not run: the homicide outcomes (Tables 5 and 10 of the paper), which use confidential data not included in the replication package.
+\end{itemize}
+% END NPIV RESULTS
+
+% BEGIN NPIV9 RESULTS
+\section*{Application: nine estimator combinations}
+We repeat the exercise for the outcome with the largest 2SLS estimate in Tables 6--9 of Ajzenman, Dominguez, and Undurraga (2023): \texttt{del\_problema3}, the share saying crime is a first or second concern (Table 6, column 1; 2SLS \(= 18.61\), s.e.\ \(6.79\)). We combine three estimator classes for the first stage and three for the structural function, giving nine estimates. Both samples from the previous section are used (\(n=101\) cross-section and \(n=1{,}010\) panel with fixed effects removed).
+
+\subsection*{The first stage \(\hat p(a\mid z,x)\): predicting \(A\) from \((Z, X)\)}
+\Cref{thm:iv} needs the whole conditional distribution \(p(a\mid z, x)\), not only the conditional mean. For all three classes we regress \(A\) on \((Z, X)\) and assume \(A = m(Z, X) + \varepsilon\) with \(\varepsilon\) independent of \((Z, X)\). Draws are \(\tilde a_{ij} = \hat m_i + \hat\varepsilon_k + \text{jitter}\), where \(\hat\varepsilon_k\) is resampled from the out-of-fold residuals and the jitter is Gaussian with the Silverman bandwidth; there are \(M = 50\) draws per observation. The mean \(\hat m\) is cross-fitted by 5 folds grouped by municipality, so that no draw uses a model trained on the observation it describes. The assumption of an additive error independent of \((Z, X)\) is ours and is not testable here.
+\begin{itemize}
+    \item \emph{Gaussian kernel.} Local-constant regression with a Gaussian product kernel and one bandwidth per covariate, chosen by leave-one-out least-squares cross-validation (\texttt{statsmodels} \texttt{KernelReg}, \texttt{cv\_ls}).
+    \item \emph{Random forest.} The honest forest described above (half-samples without replacement, a random subset of the covariates at each split, deep trees, leaf values on the other half); the leaf share \(\alpha\) and the number of covariates per split are chosen by grouped 5-fold cross-validation.
+    \item \emph{Neural net.} A feed-forward ReLU net trained by gradient descent with a normalized step and momentum (step \(\eta_k=\eta/(1+k/100)\), momentum \(0.5\)). Depth \(\in\{1,2\}\), width \(\in\{8,32\}\), \(\eta\in\{0.02,0.1\}\) and the stopping step (under-optimization as regularization) are chosen by grouped 5-fold cross-validation.
+\end{itemize}
+
+\subsection*{The structural function \(f\)}
+For each draw set, \(\tilde f\) minimizes the loss of \Cref{thm:iv},
+\begin{equation*}
+    \frac{1}{n}\sum_{i=1}^n\Big(Y_i - \tfrac{1}{M}\sum_{j=1}^M f(\tilde a_{ij}, x_i)\Big)^2,
+\end{equation*}
+over one of three classes, with regularization chosen by grouped 5-fold cross-validation of the same loss.
+\begin{itemize}
+    \item \emph{Gaussian kernel.} A sum of Gaussian bumps centered at the observed \((a, x)\) with a ridge penalty; the bandwidth and ridge are chosen by cross-validation.
+    \item \emph{Random forest.} The honest forest with leaf values estimated on the exact loss (as in the previous section).
+    \item \emph{Neural net.} A ReLU net trained as above on the exact loss, averaged over 5 initializations for the point estimate (one initialization per bootstrap draw).
+\end{itemize}
+The effect is the average derivative of \(\tilde f\) in \(a\) (centered difference with step \(0.5\) standard deviations of \(A\), observations between the 5th and 95th percentiles of \(A\)). Standard errors and intervals are from a bootstrap over municipalities (100 draws in the cross-section, 40 in the panel), holding all tuning parameters fixed.
+
+\subsection*{First-stage goodness of fit}
+\Cref{tab:fs9} reports, for each \(\hat p\) class, the out-of-fold \(R^2\) of \(\hat m(Z, X)\) and the mean leave-one-out log density of the out-of-fold residual (Gaussian kernel density), each with and without the instrument. The gain is the difference. Permutation \(p\)-values permute \(Z\) across observations, refit with the chosen tuning parameters, and use 50 permutations (so the smallest attainable \(p\) is \(0.02\)). The tuning parameters were chosen on the same folds, so the reported fits are mildly optimistic.
+\begin{table}[h]
+    \centering
+    \caption{First-stage fit by \(\hat p\) class}
+    \label{tab:fs9}
+\begin{center}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}llccccccc@{}}
+ & \(\hat p\) class & \(R^2\) & \(R^2\) no \(Z\) & gain (\(p\)) & log dens. & no \(Z\) & gain (\(p\)) & \\
+\hline
+\multicolumn{8}{@{}l}{\emph{Cross-section (\(n=101\))}}\\
+ & Gaussian kernel & 0.104 & 0.077 & 0.028 (0.020) & $-$0.463 & $-$0.483 & 0.019 (0.020) & \\
+ & Random forest & 0.071 & 0.016 & 0.055 (0.020) & $-$0.510 & $-$0.535 & 0.025 (0.020) & \\
+ & Neural net & 0.013 & $-$0.023 & 0.036 (0.020) & $-$0.520 & $-$0.545 & 0.025 (0.020) & \\
+ & Linear (in-sample) & \multicolumn{6}{l}{\(F = 17.35\), partial \(R^2 = 0.104\)} & \\
+\multicolumn{8}{@{}l}{\emph{Panel (\(n=1{,}010\))}}\\
+ & Gaussian kernel & 0.162 & 0.007 & 0.155 (0.020) & 0.430 & 0.391 & 0.039 (0.098) & \\
+ & Random forest & 0.138 & $-$0.001 & 0.139 (0.020) & 0.369 & 0.369 & $-$0.000 (0.510) & \\
+ & Neural net & 0.156 & 0.007 & 0.149 (0.020) & 0.402 & 0.383 & 0.019 (0.333) & \\
+ & Linear (in-sample) & \multicolumn{6}{l}{\(F = 28.22\), partial \(R^2 = 0.158\)} & \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection*{Results}
+Each cell is the NPIV average derivative with the bootstrap standard error in parentheses and the 95\% percentile interval in brackets.
+\begin{table}[h]
+    \centering
+    \caption{Cross-section (\(n = 101\)): nine NPIV estimates for \texttt{del\_problema3}}
+    \label{tab:cross9}
+\begin{center}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccc@{}}
+ & \(\hat p\) = Gaussian kernel & \(\hat p\) = Random forest & \(\hat p\) = Neural net\\
+\hline
+Gaussian kernel \(f\) & 5.47 (2.67) & 0.22 (0.51) & 13.16 (4.02)\\
+ & [$-$0.17, 9.53] & [$-$0.58, 1.37] & [3.05, 16.56]\\
+ & {\scriptsize \(R^2\) 0.104, gain 0.028 (\(p\) 0.02)} & {\scriptsize \(R^2\) 0.071, gain 0.055 (\(p\) 0.02)} & {\scriptsize \(R^2\) 0.013, gain 0.036 (\(p\) 0.02)}\\[3pt]
+Random forest \(f\) & 0.07 (0.17) & 0.00 (0.00) & 1.62 (1.69)\\
+ & [$-$0.09, 0.60] & [$-$0.00, 0.01] & [$-$0.52, 6.01]\\
+ & {\scriptsize \(R^2\) 0.104, gain 0.028 (\(p\) 0.02)} & {\scriptsize \(R^2\) 0.071, gain 0.055 (\(p\) 0.02)} & {\scriptsize \(R^2\) 0.013, gain 0.036 (\(p\) 0.02)}\\[3pt]
+Neural net \(f\) & $-$0.07 (0.27) & 1.35 (0.94) & 5.84 (1.69)\\
+ & [$-$0.69, 0.32] & [1.45, 5.28] & [1.16, 7.26]\\
+ & {\scriptsize \(R^2\) 0.104, gain 0.028 (\(p\) 0.02)} & {\scriptsize \(R^2\) 0.071, gain 0.055 (\(p\) 0.02)} & {\scriptsize \(R^2\) 0.013, gain 0.036 (\(p\) 0.02)}\\[3pt]
+\hline
+\multicolumn{4}{@{}l}{Linear 2SLS: 18.61 (6.79)}\\
+\end{tabular}
+\end{center}
+\end{table}
+\begin{table}[h]
+    \centering
+    \caption{Panel (\(n = 1{,}010\)): nine NPIV estimates for \texttt{del\_problema3}}
+    \label{tab:panel9}
+\begin{center}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccc@{}}
+ & \(\hat p\) = Gaussian kernel & \(\hat p\) = Random forest & \(\hat p\) = Neural net\\
+\hline
+Gaussian kernel \(f\) & 9.47 (3.03) & 9.54 (3.06) & 9.59 (2.93)\\
+ & [3.29, 14.88] & [3.79, 15.03] & [3.51, 14.84]\\
+ & {\scriptsize \(R^2\) 0.162, gain 0.155 (\(p\) 0.02)} & {\scriptsize \(R^2\) 0.138, gain 0.139 (\(p\) 0.02)} & {\scriptsize \(R^2\) 0.156, gain 0.149 (\(p\) 0.02)}\\[3pt]
+Random forest \(f\) & 1.72 (1.19) & 0.99 (1.29) & 2.13 (1.37)\\
+ & [0.07, 4.43] & [0.13, 5.53] & [0.21, 4.78]\\
+ & {\scriptsize \(R^2\) 0.162, gain 0.155 (\(p\) 0.02)} & {\scriptsize \(R^2\) 0.138, gain 0.139 (\(p\) 0.02)} & {\scriptsize \(R^2\) 0.156, gain 0.149 (\(p\) 0.02)}\\[3pt]
+Neural net \(f\) & 9.86 (3.15) & 2.93 (0.87) & 7.46 (2.42)\\
+ & [4.40, 15.29] & [0.99, 4.22] & [4.81, 13.34]\\
+ & {\scriptsize \(R^2\) 0.162, gain 0.155 (\(p\) 0.02)} & {\scriptsize \(R^2\) 0.138, gain 0.139 (\(p\) 0.02)} & {\scriptsize \(R^2\) 0.156, gain 0.149 (\(p\) 0.02)}\\[3pt]
+\hline
+\multicolumn{4}{@{}l}{Linear 2SLS: 12.34 (4.35)}\\
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection*{Stability across random seeds}
+The estimates depend on the random cross-validation folds and on the draws of \(\tilde a\). \Cref{tab:seed9} gives the minimum and maximum point estimate over the main run and reruns that differ only in the random seed (5 reruns for the cross-section, 3 for the panel).
+\begin{table}[h]
+    \centering
+    \caption{Range of the point estimate over seeds: cross-section (top) and panel (bottom)}
+    \label{tab:seed9}
+\begin{center}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccc@{}}
+ & \(\hat p\) = Gaussian kernel & \(\hat p\) = Random forest & \(\hat p\) = Neural net\\
+\hline
+Gaussian kernel \(f\) & 0.00 to 5.47 & 0.02 to 26.29 & 0.62 to 13.16\\
+Random forest \(f\) & $-$0.00 to 0.07 & 0.00 to 4.68 & 0.00 to 2.34\\
+Neural net \(f\) & $-$0.26 to 0.67 & $-$0.11 to 25.98 & 1.65 to 10.03\\
+\hline
+\end{tabular}
+\end{center}
+\begin{center}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lccc@{}}
+ & \(\hat p\) = Gaussian kernel & \(\hat p\) = Random forest & \(\hat p\) = Neural net\\
+\hline
+Gaussian kernel \(f\) & 1.88 to 9.47 & 7.32 to 9.54 & 8.03 to 10.12\\
+Random forest \(f\) & 0.67 to 1.72 & 0.72 to 1.27 & 1.15 to 2.13\\
+Neural net \(f\) & 2.64 to 9.86 & 1.45 to 3.50 & 2.60 to 7.46\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection*{Reading the results}
+\begin{itemize}
+    \item \textbf{Cross-section: no interpretable estimate.} Across seeds the point estimates move enormously; for example, a random-forest \(\hat p\) with a kernel \(f\) gives between \(0.02\) and \(26.3\), and a net \(\hat p\) with a kernel \(f\) between \(0.6\) and \(13.2\) (\Cref{tab:seed9}). The main-run values in \Cref{tab:cross9} are therefore one draw from a wide distribution, and the bootstrap intervals, which hold the tuning parameters and the random folds fixed, do not reflect that variation. With \(n = 101\) and a first stage whose out-of-fold \(R^2\) is between \(0.01\) and \(0.10\) (gain from the instrument \(0.03\) to \(0.06\)), the data do not determine \(\tilde f\), and the estimates mostly reflect the cross-validation folds and the resampled draws.
+    \item \textbf{Panel: more stable, and the class of \(f\) matters more than the class of \(\hat p\).} The three first stages are similar (out-of-fold \(R^2\) \(0.14\) to \(0.16\), each gain significant at the \(0.02\) level). The random-forest \(f\) gives small estimates in every cell, \(0.7\) to \(2.1\) across all seeds and \(\hat p\) classes, consistent with the shrinkage seen earlier. The kernel \(f\) gives \(7.3\) to \(10.1\) across seeds when paired with the random-forest or net \(\hat p\), against a linear 2SLS estimate of \(12.34\) (s.e.\ \(4.35\)); the bootstrap intervals for those cells contain it. The kernel \(f\) with the kernel \(\hat p\) is less stable (\(1.9\) to \(9.5\) across seeds), and the net \(f\) varies from \(1.5\) to \(9.9\) across seeds and \(\hat p\) classes.
+    \item The seed reruns used 5 (cross-section) and 3 (panel) additional seeds and no bootstrap, so the ranges in \Cref{tab:seed9} understate the true spread.
+    \item In the panel, the log-density gain from the instrument is significant only for the kernel \(\hat p\) at the \(10\%\) level (\(p = 0.098\)), not for the forest or net (\(p = 0.51\), \(0.33\)): the instrument improves the prediction of the mean of \(A\) but not clearly the shape of the residual distribution, and we have not explained why the two measures disagree.
+    \item All of this rests on our location-model assumption for \(\hat p\) (an additive error independent of \((Z, X)\)), the choice of \(M = 50\) draws, and tuning on the same folds used to report fit. We do not draw a conclusion about the causal effect of immigration from these estimates.
+\end{itemize}
+
+% END NPIV9 RESULTS
 
 \end{document}

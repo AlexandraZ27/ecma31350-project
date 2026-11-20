@@ -1,0 +1,59 @@
+14:05:01 === cross: G=101 T=1
+14:05:01 first stage: {'n': 101.0, 'h_a': 0.5124, 'h_z': 0.7076, 'h_x': 20.0, 'h_a_noz': 0.4449, 'h_x_noz': 20.0, 'loo_r2': 0.0609, 'loo_r2_noz': -0.0202, 'gain_r2': 0.0811, 'perm_p_r2': 0.01, 'loo_ll_mean': -1.4088, 'loo_ll_mean_noz': -1.4367, 'gain_ll_mean': 0.0279, 'perm_p_ll': 0.0299}
+14:05:01 linear first stage: {'beta': 13.578, 'se': 5.318, 'pi': 6.812, 'se_pi': 1.636, 'F': 17.346, 'partial_r2': 0.104}
+14:05:03 pc_19: NPIV [0.108 0.091 0.091] (steps [0.25, 0.5, 1.0] sd)  linear 2SLS 13.578 (5.318)  alpha=0.2 ridge=1
+14:05:05 pc_20: NPIV [0.05  0.048 0.041] (steps [0.25, 0.5, 1.0] sd)  linear 2SLS 11.436 (4.036)  alpha=0.05 ridge=10
+14:05:07 del_tend_barrio: NPIV [0.001 0.002 0.001] (steps [0.25, 0.5, 1.0] sd)  linear 2SLS 13.444 (8.274)  alpha=0.02 ridge=100
+14:05:09 del_tend_com: NPIV [ 0.001 -0.007 -0.003] (steps [0.25, 0.5, 1.0] sd)  linear 2SLS 8.736 (8.648)  alpha=0.05 ridge=10
+14:05:11 del_tend_pais: NPIV [-0.002 -0.001 -0.001] (steps [0.25, 0.5, 1.0] sd)  linear 2SLS 1.714 (4.823)  alpha=0.02 ridge=100
+14:05:13 vict_agreg: NPIV [0.087 0.09  0.066] (steps [0.25, 0.5, 1.0] sd)  linear 2SLS 3.504 (5.205)  alpha=0.1 ridge=1
+14:05:22 bootstrap 10/200
+14:05:30 bootstrap 20/200
+14:05:38 bootstrap 30/200
+14:05:47 bootstrap 40/200
+14:05:55 bootstrap 50/200
+14:06:03 bootstrap 60/200
+14:06:12 bootstrap 70/200
+14:06:20 bootstrap 80/200
+14:06:28 bootstrap 90/200
+14:06:37 bootstrap 100/200
+14:06:45 bootstrap 110/200
+14:06:53 bootstrap 120/200
+14:07:02 bootstrap 130/200
+14:07:10 bootstrap 140/200
+14:07:18 bootstrap 150/200
+14:07:27 bootstrap 160/200
+14:07:35 bootstrap 170/200
+14:07:44 bootstrap 180/200
+14:07:52 bootstrap 190/200
+14:08:00 bootstrap 200/200
+14:08:00 === panel: G=101 T=10
+14:08:08 first stage: {'n': 1010.0, 'h_a': 0.5266, 'h_z': 0.4338, 'h_x': 0.6216, 'h_a_noz': 0.5299, 'h_x_noz': 0.5618, 'loo_r2': 0.1663, 'loo_r2_noz': 0.0089, 'gain_r2': 0.1574, 'perm_p_r2': 0.005, 'loo_ll_mean': -1.2843, 'loo_ll_mean_noz': -1.3704, 'gain_ll_mean': 0.086, 'perm_p_ll': 0.005}
+14:08:08 linear first stage: {'beta': 10.474, 'se': 3.017, 'pi': 5.484, 'se_pi': 1.032, 'F': 28.223, 'partial_r2': 0.158}
+14:08:12 pc_19: NPIV [0.801 0.714 0.546] (steps [0.25, 0.5, 1.0] sd)  linear 2SLS 10.474 (3.017)  alpha=0.1 ridge=0.001
+14:08:16 pc_20: NPIV [0.719 0.63  0.482] (steps [0.25, 0.5, 1.0] sd)  linear 2SLS 7.324 (2.113)  alpha=0.1 ridge=0.001
+14:08:21 del_tend_barrio: NPIV [0.    0.001 0.001] (steps [0.25, 0.5, 1.0] sd)  linear 2SLS 6.648 (5.538)  alpha=0.2 ridge=100
+14:08:25 del_tend_com: NPIV [-0.001 -0.     0.001] (steps [0.25, 0.5, 1.0] sd)  linear 2SLS 6.310 (5.376)  alpha=0.05 ridge=10
+14:08:30 del_tend_pais: NPIV [-0.081 -0.078 -0.059] (steps [0.25, 0.5, 1.0] sd)  linear 2SLS -1.396 (2.624)  alpha=0.05 ridge=1
+14:08:34 vict_agreg: NPIV [0.107 0.096 0.073] (steps [0.25, 0.5, 1.0] sd)  linear 2SLS 2.509 (3.047)  alpha=0.2 ridge=0.001
+14:08:48 bootstrap 10/200
+14:09:02 bootstrap 20/200
+14:09:17 bootstrap 30/200
+14:09:32 bootstrap 40/200
+14:09:46 bootstrap 50/200
+14:09:59 bootstrap 60/200
+14:10:13 bootstrap 70/200
+14:10:27 bootstrap 80/200
+14:10:42 bootstrap 90/200
+14:10:56 bootstrap 100/200
+14:11:10 bootstrap 110/200
+14:11:24 bootstrap 120/200
+14:11:38 bootstrap 130/200
+14:11:53 bootstrap 140/200
+14:12:12 bootstrap 150/200
+14:12:27 bootstrap 160/200
+14:12:42 bootstrap 170/200
+14:12:56 bootstrap 180/200
+14:13:12 bootstrap 190/200
+14:13:26 bootstrap 200/200
+14:13:26 done

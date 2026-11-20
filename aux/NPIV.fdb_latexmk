@@ -1,6 +1,7 @@
 # Fdb version 4
-["lualatex"] 1795196093.52778 "/Users/alexandra/Library/CloudStorage/Box-Box/coursework/ThisQuarter/ECMA31350/project/NPIV.tex" "aux/NPIV.pdf" "NPIV" 1795196095.60802 0
-  "/Users/alexandra/Library/CloudStorage/Box-Box/coursework/ThisQuarter/ECMA31350/project/NPIV.tex" 1795196093.29422 2698 f16571817080c20bd08701699e9be80f ""
+["lualatex"] 1795208987.79196 "/Users/alexandra/Library/CloudStorage/Box-Box/coursework/ThisQuarter/ECMA31350/project/NPIV.tex" "aux/NPIV.pdf" "NPIV" 1795208990.21844 0
+  "../../../adenc.sty" 1792431812.92272 25449 2ca65812ded0c369bdf90ab1898a350a ""
+  "/Users/alexandra/Library/CloudStorage/Box-Box/coursework/ThisQuarter/ECMA31350/project/NPIV.tex" 1795208675.92652 23693 feeb3dc1ba76e51fdfaef0fbb643385c ""
   "/Users/alexandra/Library/texlive/2026/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-bold.luc" 1786247838.41115 128410 1ba271527a2b67439d43c045d339a34f ""
   "/Users/alexandra/Library/texlive/2026/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-regular.luc" 1780496155.52752 127327 bb05cc850edf5447a76a9cb72263daaf ""
   "/Users/alexandra/Library/texlive/2026/texmf-var/luatex-cache/generic/fonts/otl/texgyretermesx-bold.luc" 1792265163.8968 327337 7e2fb1320020b92f7eb6b1c367c8648e ""
@@ -10,6 +11,7 @@
   "/Users/alexandra/Library/texlive/2026/texmf-var/luatex-cache/generic/fonts/otl/texgyretermesx-regular.luc" 1792265163.60788 339477 149c3e6a6a6e3ba6365b16b23a53c376 ""
   "/Users/alexandra/Library/texlive/2026/texmf-var/luatex-cache/generic/fonts/otl/texgyretermesx-slanted.luc" 1792265164.3489 344933 4267d4eb147d90796240809ec6089fe8 ""
   "/Users/alexandra/Library/texlive/2026/texmf-var/luatex-cache/generic/names/luaotfload-names.luc.gz" 1780496155.47849 430310 e9bb3892d86ca85661100025f87f4bb5 ""
+  "/usr/local/texlive/2026/texmf-dist/fonts/opentype/public/lm/lmroman10-regular.otf" 1255129361 111536 ae9d1b331000d544f47e5223081b7b54 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/opentype/public/newtx/TeXGyreTermesX-Bold.otf" 1698694482 209828 321bbd8273ffcd664249423c19a27ab2 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/opentype/public/newtx/TeXGyreTermesX-Italic.otf" 1698694482 217888 dca5ffd1d00d363269bbc4d06d49ee53 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/opentype/public/newtx/TeXGyreTermesX-Regular.otf" 1698694482 226088 7f76c0afcd1ad8de52b4ea4a96b52cc0 ""
@@ -20,6 +22,7 @@
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm" 1246382020 940 75ac932a52f80982a9f8ea75d03a34cf ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm" 1246382020 940 228d6584342e91276bf566bcf9716b83 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/doublestroke/dsrom10.tfm" 1136768653 452 168d896d9b2ead965bf08c9db69c947f ""
+  "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/doublestroke/dsrom12.tfm" 1136768653 452 d8b5931fd510ede40dce06480d31d007 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/doublestroke/dsrom8.tfm" 1136768653 452 dc44cdd7c88ff2b15557f125edfc277b ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/lm/ec-lmr10.tfm" 1254269338 12056 7e13df7fe4cbce21b072ba7c4f4deb6e ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/newtx/NewTXMI.tfm" 1572128992 1408 ef71a9098da4d5a1a85b5920860b6731 ""
@@ -344,10 +347,9 @@
   "/usr/local/texlive/2026/texmf-dist/tex/luatex/luaotfload/luaotfload.lua" 1740687098 13566 16df94dd2de231b2bca0aaa0190941fe ""
   "/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1776137383 5573038 b99aad5e4898a9034e953632f940512b ""
   "/usr/local/texlive/2026/texmf-var/web2c/luahbtex/lualatex.fmt" 1774209566 5656314 899e889479224af2498ffb6faace451f ""
-  "NPIV.tex" 1795196093.29422 2698 f16571817080c20bd08701699e9be80f ""
-  "aux/../../../../adenc.sty" 1792431812.92272 25449 2ca65812ded0c369bdf90ab1898a350a ""
-  "aux/NPIV.aux" 1795196095.43829 712 e5494ed86912d8ef83d6eb89cf8b6dd8 "lualatex"
-  "aux/NPIV.out" 1795196095.24555 0 d41d8cd98f00b204e9800998ecf8427e "lualatex"
+  "NPIV.tex" 1795208675.92652 23693 feeb3dc1ba76e51fdfaef0fbb643385c ""
+  "aux/NPIV.aux" 1795208990.00627 3114 b89a31f4617174c2ce4934e551869d69 "lualatex"
+  "aux/NPIV.out" 1795208989.56722 0 d41d8cd98f00b204e9800998ecf8427e "lualatex"
   (generated)
   "aux/NPIV.aux"
   "aux/NPIV.log"
