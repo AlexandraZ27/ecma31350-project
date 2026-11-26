@@ -95,7 +95,9 @@ def fit_statistic(d,settings,profiles):
         nodes,weights=n.quadrature(density,RESULTS['quadrature_start_nodes'])
         integration_method='adaptive Gauss-Legendre fallback, checked against Hermite64 per component'
     slope=np.mean(derivatives,axis=0);time_slope=np.mean(time_derivatives,axis=0)
+    # Keep the legacy trimmed key compatible with the original saved draws.
     return {'average_derivative':float(slope[d.trim_keep].mean()),
+            'average_derivative_trimmed':float(slope[d.trim_keep].mean()),
             'average_derivative_all_cells':float(slope.mean()),
             'time_common_profile_derivative':time_slope.tolist(),'years':years.tolist(),
             'trimmed_cells':int(d.trim_keep.sum()),'quadrature_nodes_max':nodes.shape[1],
@@ -112,25 +114,41 @@ def one_job(job):
     record={'outcome':name,'replicate':replicate,'seed':BOOT_SEED+replicate,'commune_draws':draws,
             'result':result,'elapsed_seconds':time.time()-start}
     n.b.save_json(path,record)
-    return name,replicate,result['average_derivative'],record['elapsed_seconds']
+    return name,replicate,result['average_derivative_all_cells'],record['elapsed_seconds']
+
+
+def scalar_inference(name,point,values,estimand,cells):
+    B=len(values);se=float(values.std(ddof=1));errors=values-point
+    p_wald=float(2*norm.sf(abs(point/se))) if se>0 else float(point==0)
+    p_centered=float((1+np.count_nonzero(np.abs(errors)>=abs(point)))/(B+1))
+    lo,hi=np.quantile(errors,[.025,.975]);basic=[float(point-hi),float(point-lo)]
+    critical=float(np.sort(np.abs(errors))[min(B-1,int(np.ceil(.95*(B+1)))-1)])
+    return {'outcome':name,'estimand':estimand,'original_cells':cells,
+            'point_estimate':point,'bootstrap_SE':se,'normal_Wald_p':p_wald,
+            'centered_bootstrap_p':p_centered,'basic_CI_low':basic[0],'basic_CI_high':basic[1],
+            'symmetric_CI_low':float(point-critical),'symmetric_CI_high':float(point+critical),
+            'bootstrap_mean':float(values.mean()),'bootstrap_bias_diagnostic':float(values.mean()-point),
+            'replicates':B,'SE_Monte_Carlo_relative_approx':float(1/np.sqrt(2*(B-1)))}
+
+
+def trimmed_value(result):
+    # Original draw files use average_derivative for the trimmed statistic.
+    return result.get('average_derivative_trimmed',result['average_derivative'])
 
 
 def summarize(out,B):
-    summary=[];inference={};year_rows=[];all_rows=[]
+    summary=[];sensitivity=[];inference={};trimmed_inference={};year_rows=[];all_rows=[]
+    previous=json.loads((out/'results.json').read_text()) if (out/'results.json').exists() else {}
     for name,settings in RESULTS['outcomes'].items():
         records=[json.loads((out/'draws'/f'{name}_{b:04}.json').read_text()) for b in range(B)]
-        values=np.array([r['result']['average_derivative'] for r in records])
-        point=settings['primary']['average_derivative_trimmed'];se=float(values.std(ddof=1));errors=values-point
-        p_wald=float(2*norm.sf(abs(point/se))) if se>0 else float(point==0)
-        p_centered=float((1+np.count_nonzero(np.abs(errors)>=abs(point)))/(B+1))
-        lo,hi=np.quantile(errors,[.025,.975]);basic=[float(point-hi),float(point-lo)]
-        critical=float(np.sort(np.abs(errors))[min(B-1,int(np.ceil(.95*(B+1)))-1)])
-        row={'outcome':name,'point_estimate':point,'bootstrap_SE':se,'normal_Wald_p':p_wald,
-             'centered_bootstrap_p':p_centered,'basic_CI_low':basic[0],'basic_CI_high':basic[1],
-             'symmetric_CI_low':float(point-critical),'symmetric_CI_high':float(point+critical),
-             'bootstrap_mean':float(values.mean()),'bootstrap_bias_diagnostic':float(values.mean()-point),
-             'replicates':B,'SE_Monte_Carlo_relative_approx':float(1/np.sqrt(2*(B-1)))}
+        values=np.array([r['result']['average_derivative_all_cells'] for r in records])
+        point=settings['primary']['average_derivative_all_cells']
+        row=scalar_inference(name,point,values,'full_panel',len(DATA[name]))
         summary.append(row);inference[name]=row
+        trimmed=np.array([trimmed_value(r['result']) for r in records])
+        trim_row=scalar_inference(name,settings['primary']['average_derivative_trimmed'],
+                                  trimmed,'within_year_5_95_sensitivity',int(DATA[name].trim_keep.sum()))
+        sensitivity.append(trim_row);trimmed_inference[name]=trim_row
         times=np.array([r['result']['time_common_profile_derivative'] for r in records])
         original=settings['primary']['time_heterogeneity']['estimates']
         for j,v in enumerate(original):
@@ -145,19 +163,24 @@ def summarize(out,B):
                              'normal_Wald_p':float(2*norm.sf(abs(p/sd)))})
         for rec in records:
             all_rows.append({'outcome':name,'replicate':rec['replicate'],
-                             'estimate':rec['result']['average_derivative'],
+                             'estimate':rec['result']['average_derivative_all_cells'],
+                             'trimmed_sensitivity_estimate':trimmed_value(rec['result']),
                              'distinct_source_communes':len({x['source_commune'] for x in rec['commune_draws']}),
                              'trimmed_cells':rec['result']['trimmed_cells'],
                              'max_quadrature_RMSE':rec['result']['max_quadrature_RMSE']})
     pd.DataFrame(summary).to_csv(out/'summary.csv',index=False)
+    pd.DataFrame(sensitivity).to_csv(out/'trimmed_sensitivity.csv',index=False)
     pd.DataFrame(year_rows).to_csv(out/'time_inference.csv',index=False)
     pd.DataFrame(all_rows).to_csv(out/'bootstrap_draws.csv',index=False)
     metadata={'method':'commune pairs bootstrap stratified by original cross-fitting folds',
         'replicates':B,'seed':BOOT_SEED,'cluster_count':101,'years_per_cluster':10,
+        'headline_estimand':'equally weighted average derivative over all 1010 commune-year cells',
+        'sensitivity_estimand':'average derivative between within-year 5th and 95th treatment percentiles',
         'refitted':'both stages: five cross-fitted MDN ensembles and five outcome initializations per draw',
         'held_fixed':'selected architectures, mixture count, stopping steps, optimizer settings, original fold strata, initialization seeds',
         'resampled':'whole commune histories, including outcomes, treatments, instruments and controls',
-        'trimming':'recompute within-year 5th and 95th treatment percentiles in each resample',
+        'trimming':'sensitivity only: recompute within-year 5th and 95th treatment percentiles in each resample; primary uses every cell',
+        'draw_schema':'average_derivative_all_cells is the full-panel statistic; average_derivative is the legacy trimmed alias, with explicit average_derivative_trimmed also written by current fits',
         'time_reference_profiles':'hold original common-support profiles fixed for time comparisons',
         'integration':'32-node Gaussian mixture integration with a Hermite64 check and adaptive Legendre fallback; earlier checkpoint draws used the original adaptive Legendre rule',
         'p_value':'two-sided centered bootstrap tail probability, with plus-one finite simulation correction',
@@ -168,7 +191,11 @@ def summarize(out,B):
         'runner_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         'fit_runner_sha256':hashlib.sha256((HERE/'run_full_neural.py').read_bytes()).hexdigest(),
         'quadrature_helper_sha256':hashlib.sha256((HERE/'mixture_quadrature.py').read_bytes()).hexdigest(),
-        'outcomes':inference}
+        'outcomes':inference,'sensitivity_outcomes':trimmed_inference}
+    if previous:
+        metadata['draw_fit_provenance']=previous.get('draw_fit_provenance',
+            {key:previous[key] for key in ['source_results_sha256','runner_sha256',
+                'fit_runner_sha256','quadrature_helper_sha256','refactor_compatibility'] if key in previous})
     n.b.save_json(out/'results.json',metadata)
     return summary
 
@@ -179,20 +206,27 @@ def main():
     parser.add_argument('--workers',type=int,default=4)
     parser.add_argument('--output',type=Path,default=SOURCE/'inference')
     parser.add_argument('--check-only',action='store_true')
+    parser.add_argument('--summarize-only',action='store_true',
+                        help='Recompute full-panel and trimmed inference from saved draws, without fitting')
     args=parser.parse_args();out=args.output;(out/'draws').mkdir(parents=True,exist_ok=True)
     setup_worker();start=time.time()
-    check_path=out/'identity_checks_single_thread.json'
+    if args.summarize_only:
+        print(pd.DataFrame(summarize(out,args.replicates)).to_string(index=False),flush=True)
+        return
+    check_path=out/'identity_checks_full_panel.json'
     if not check_path.exists():
         checks={}
         for name,settings in RESULTS['outcomes'].items():
             with threadpool_limits(limits=1):
                 d,_=sample_communes(DATA[name],0,identity=True)
                 result=fit_statistic(d,settings,pd.read_csv(SOURCE/name/'common_time_profiles.csv'))
-            original=settings['primary']['average_derivative_trimmed']
-            assert np.isclose(result['average_derivative'],original,atol=1e-6,rtol=1e-6)
+            original=settings['primary']['average_derivative_all_cells']
+            assert np.isclose(result['average_derivative_all_cells'],original,atol=1e-6,rtol=1e-6)
+            assert np.isclose(trimmed_value(result),settings['primary']['average_derivative_trimmed'],atol=1e-6,rtol=1e-6)
             assert np.allclose(result['time_common_profile_derivative'],
                 [r['common_profile_average_derivative'] for r in settings['primary']['time_heterogeneity']['estimates']],atol=1e-6,rtol=1e-6)
-            checks[name]={'original':original,'identity_refit':result['average_derivative'],
+            checks[name]={'original':original,'identity_refit':result['average_derivative_all_cells'],
+                          'trimmed_sensitivity_refit':trimmed_value(result),
                           'max_quadrature_RMSE':result['max_quadrature_RMSE']}
             print(f'{name}: identity refit matches original estimate',flush=True)
         n.b.save_json(check_path,checks)

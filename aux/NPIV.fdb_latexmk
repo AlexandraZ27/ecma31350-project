@@ -1,5 +1,5 @@
 # Fdb version 4
-["lualatex"] 1795726354.9683 "NPIV.tex" "aux/NPIV.pdf" "NPIV" 1795726360.24953 0
+["lualatex"] 1795727051.40279 "NPIV.tex" "aux/NPIV.pdf" "NPIV" 1795727053.55559 0
   "../../../adenc.sty" 1792431812.92272 25449 2ca65812ded0c369bdf90ab1898a350a ""
   "/private/tmp/npiv-texmfvar/luatex-cache/generic/fonts/otl/lmroman10-bold.luc" 1795676436.46238 128410 1ba271527a2b67439d43c045d339a34f ""
   "/private/tmp/npiv-texmfvar/luatex-cache/generic/fonts/otl/lmroman10-regular.luc" 1795676434.7789 127327 bb05cc850edf5447a76a9cb72263daaf ""
@@ -359,10 +359,10 @@
   "/usr/local/texlive/2026/texmf-dist/tex/luatex/luaotfload/luaotfload.lua" 1740687098 13566 16df94dd2de231b2bca0aaa0190941fe ""
   "/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1776137383 5573038 b99aad5e4898a9034e953632f940512b ""
   "/usr/local/texlive/2026/texmf-var/web2c/luahbtex/lualatex.fmt" 1774209566 5656314 899e889479224af2498ffb6faace451f ""
-  "NPIV.tex" 1795725883.18263 27779 29001b9aeedc5778a7921b30280e3f02 ""
-  "aux/NPIV.aux" 1795726360.03693 5858 a63309d3c5f91bc57a87f477cbba3080 "lualatex"
-  "aux/NPIV.out" 1795726359.56652 0 d41d8cd98f00b204e9800998ecf8427e "lualatex"
-  "npiv/neural/full_neural/inference/time_profiles_inference.pdf" 1795679101.62045 24297 60ac0517f4c8e475bf78863cd06d4258 ""
+  "NPIV.tex" 1795727033.83497 30130 e4381de2db4e4fedadcd4f52f1a695ff ""
+  "aux/NPIV.aux" 1795727053.33478 6367 0391e61b5eb6d63115b54589f8c2e7c0 "lualatex"
+  "aux/NPIV.out" 1795727052.89397 0 d41d8cd98f00b204e9800998ecf8427e "lualatex"
+  "npiv/neural/full_neural/inference/time_profiles_inference.pdf" 1795727033.7032 24299 7ad0e9d1a585bb4ca3206b49d9f89797 ""
   (generated)
   "aux/NPIV.aux"
   "aux/NPIV.log"

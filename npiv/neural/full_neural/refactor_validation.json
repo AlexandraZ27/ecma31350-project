@@ -43,5 +43,6 @@
     }
   },
   "original_fit_code_commit": "7058b55",
-  "current_runner_sha256": "468a916743352f5d2128dfc90ef5493b3b579f1f7548abd09015a0f1c6b85171"
+  "current_runner_sha256": "468a916743352f5d2128dfc90ef5493b3b579f1f7548abd09015a0f1c6b85171",
+  "scope": "Historical neural-only cleanup audit, before the full-panel reporting update. Its outcome point estimates, SEs, p-values and identity refits refer to the 5th-95th percentile trimmed statistic. Current inference is verified in inference/validation.json."
 }

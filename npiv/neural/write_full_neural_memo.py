@@ -43,18 +43,25 @@ def diagnostics(results):
                  'Scores pool all 1,010 held-out cells. Densities with and without shares are tuned separately inside each outer training fold. $L_1$ uses natural logarithms and the original treatment units.')
 
 
-def results_table(results,inf,draft):
+def results_table(results,inf,draft,sensitivity=False):
     rows=[]
+    key='average_derivative_trimmed' if sensitivity else 'average_derivative_all_cells'
     for name,label in LABELS.items():
-        p=results['outcomes'][name]['primary']['average_derivative_trimmed']
+        p=results['outcomes'][name]['primary'][key]
         if draft: rows.append([label,f'{p:.3f}','Pending','Pending','Pending'])
         else:
-            r=inf['outcomes'][name]
+            r=inf['sensitivity_outcomes' if sensitivity else 'outcomes'][name]
+            assert np.isclose(r['point_estimate'],p,atol=1e-12)
             rows.append([label,f'{p:.3f}',f'{r["bootstrap_SE"]:.3f}',f'{r["centered_bootstrap_p"]:.4f}',
                          f'[{r["symmetric_CI_low"]:.3f}, {r["symmetric_CI_high"]:.3f}]'])
-    return table('Average derivatives and conditional bootstrap inference','tab:neural-effects',
+    caption=('Sensitivity: within-year 5th--95th percentile average derivatives'
+             if sensitivity else 'Full-panel average derivatives and conditional bootstrap inference')
+    label='tab:neural-trimmed' if sensitivity else 'tab:neural-effects'
+    sample=('Equal cell weights; 910 cells after within-year treatment trimming. Both stages remain fitted on the full panel. The cutoff is recomputed in each bootstrap draw.'
+            if sensitivity else 'Equal cell weights; all 1,010 commune-year cells, with no treatment trimming.')
+    return table(caption,label,
                  ['Outcome','Estimate','SE','$p$','95\% interval'],rows,4,
-                 'Equal cell weights; 910 trimmed cells in the original sample. SEs resample commune histories and refit both stages. Two-sided centered-bootstrap $p$-values test a zero derivative; symmetric intervals invert the same absolute-error test. All are conditional approximations described below.')
+                 sample+' SEs resample commune histories and refit both stages. Two-sided centered-bootstrap $p$-values test a zero derivative; symmetric intervals invert the same absolute-error test. All are conditional approximations described below.')
 
 
 def time_inference(results,B,draft):
@@ -114,6 +121,7 @@ def main():
     text=(WORK/'memo_body.tex').read_text()
     figure,contrast=time_inference(results,B,args.draft)
     replacements={'@@FIRST_STAGE_TABLE@@':diagnostics(results),'@@RESULTS_TABLE@@':results_table(results,inf,args.draft),
+                  '@@TRIMMED_TABLE@@':results_table(results,inf,args.draft,sensitivity=True),
                   '@@TIME_FIGURE@@':figure,'@@TIME_CONTRAST_TABLE@@':contrast,'@@B@@':str(B),
                   '@@P_RESOLUTION@@':f'{1/(B+1):.4f}'}
     if args.draft: replacements['@@BOOTSTRAP_SHIFT@@']='The centering diagnostics will be inserted when the bootstrap is complete.'

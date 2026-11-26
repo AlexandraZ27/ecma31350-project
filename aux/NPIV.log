@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)  (format=lualatex 2026.3.22)  26 NOV 2026 14:52
+This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)  (format=lualatex 2026.3.22)  26 NOV 2026 15:04
  restricted system commands enabled.
 **NPIV.tex
 (./NPIV.tex
@@ -1675,61 +1675,61 @@ LaTeX Font Info:    Font shape `U/cmsy/m/n' will be
 (Font)              scaled to size 5.5pt on input line 103.
  [3]
 LaTeX Font Info:    Font shape `TU/TeXGyreTermesX(0)/m/n' will be
-(Font)              scaled to size 8.0pt on input line 151.
+(Font)              scaled to size 8.0pt on input line 153.
 LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 8.0pt on input line 151.
+(Font)              scaled to size 8.0pt on input line 153.
 LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 6.0pt on input line 151.
+(Font)              scaled to size 6.0pt on input line 153.
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 8.0pt on input line 151.
+(Font)              scaled to size 8.0pt on input line 153.
 LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 6.0pt on input line 151.
+(Font)              scaled to size 6.0pt on input line 153.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 8.0pt on input line 151.
+(Font)              scaled to size 8.0pt on input line 153.
 LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 6.0pt on input line 151.
+(Font)              scaled to size 6.0pt on input line 153.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 8.0pt on input line 151.
+(Font)              scaled to size 8.0pt on input line 153.
 LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 6.0pt on input line 151.
+(Font)              scaled to size 6.0pt on input line 153.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 8.0pt on input line 151.
+(Font)              scaled to size 8.0pt on input line 153.
 LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 6.0pt on input line 151.
+(Font)              scaled to size 6.0pt on input line 153.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 8.0pt on input line 151.
+(Font)              scaled to size 8.0pt on input line 153.
 LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 6.0pt on input line 151.
+(Font)              scaled to size 6.0pt on input line 153.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 8.0pt on input line 151.
+(Font)              scaled to size 8.0pt on input line 153.
 LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 6.0pt on input line 151.
+(Font)              scaled to size 6.0pt on input line 153.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 8.0pt on input line 151.
+(Font)              scaled to size 8.0pt on input line 153.
 LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 6.0pt on input line 151.
+(Font)              scaled to size 6.0pt on input line 153.
 LaTeX Font Info:    Font shape `U/cmsy/m/n' will be
-(Font)              scaled to size 8.0pt on input line 151.
+(Font)              scaled to size 8.0pt on input line 153.
 LaTeX Font Info:    Font shape `U/cmsy/m/n' will be
-(Font)              scaled to size 6.0pt on input line 151.
- [4] [5] [6]
+(Font)              scaled to size 6.0pt on input line 153.
+ [4] [5] [6] [7]
 LaTeX Font Info:    Font shape `OT1/minntx/b/n' will be
-(Font)              scaled to size 10.0pt on input line 241.
+(Font)              scaled to size 10.0pt on input line 264.
 LaTeX Font Info:    Font shape `OT1/minntx/b/n' will be
-(Font)              scaled to size 7.3pt on input line 241.
+(Font)              scaled to size 7.3pt on input line 264.
 LaTeX Font Info:    Font shape `OT1/minntx/b/n' will be
-(Font)              scaled to size 5.5pt on input line 241.
- [7]
-<npiv/neural/full_neural/inference/time_profiles_inference.pdf, id=115, 469.755
+(Font)              scaled to size 5.5pt on input line 264.
+ [8]
+<npiv/neural/full_neural/inference/time_profiles_inference.pdf, id=121, 469.755
 pt x 469.755pt>
 File: npiv/neural/full_neural/inference/time_profiles_inference.pdf Graphic fil
 e (type pdf)
 <use npiv/neural/full_neural/inference/time_profiles_inference.pdf>
 Package luatex.def Info: npiv/neural/full_neural/inference/time_profiles_infere
-nce.pdf  used on input line 259.
+nce.pdf  used on input line 282.
 (luatex.def)             Requested size: 317.39937pt x 317.40067pt.
- [8] [9<./npiv/neural/full_neural/inference/time_profiles_inference.pdf>] [10] 
-(./aux/NPIV.aux)
+ [9<./npiv/neural/full_neural/inference/time_profiles_inference.pdf>] [10] [11]
+ (./aux/NPIV.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2020/03/25>
@@ -1747,15 +1747,15 @@ Package rerunfilecheck Info: File `NPIV.out' has not changed.
 )
 
 Here is how much of LuaTeX's memory you used:
- 44321 strings out of 476076
+ 44326 strings out of 476076
  100000,1373583 words of node,token memory allocated
- 3174 words of node memory still in use:
-   7 hlist, 2 vlist, 2 rule, 2 glue, 426 kern, 2 sub_mlist, 1 glyph, 135 attribu
-te, 60 glue_spec, 135 attribute_list, 2 write, 1 pdf_action nodes
-   avail lists: 2:687,3:274,4:73,5:758,6:47,7:7772,8:64,9:732,10:9,11:605
- 65520 multiletter control sequences out of 65536+600000
+ 3640 words of node memory still in use:
+   7 hlist, 2 vlist, 2 rule, 2 glue, 508 kern, 2 sub_mlist, 1 glyph, 149 attribu
+te, 60 glue_spec, 149 attribute_list, 2 write, 1 pdf_action nodes
+   avail lists: 2:495,3:274,4:73,5:676,6:47,7:7827,8:64,9:732,10:15,11:615
+ 65522 multiletter control sequences out of 65536+600000
  214 fonts using 17749807 bytes
- 113i,16n,141p,986b,941s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 113i,16n,141p,986b,1063s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc}</usr/
 local/texlive/2026/texmf-dist/fonts/opentype/public/lm/lmroman9-regular.otf></us
 r/local/texlive/2026/texmf-dist/fonts/opentype/public/lm/lmroman10-regular.otf><
@@ -1774,10 +1774,10 @@ live/2026/texmf-dist/fonts/type1/public/newtx/txsym.pfb></usr/local/texlive/2026
 /texmf-dist/fonts/type1/public/newtx/txsys.pfb></usr/local/texlive/2026/texmf-di
 st/fonts/type1/public/newtx/ztmb.pfb></usr/local/texlive/2026/texmf-dist/fonts/t
 ype1/public/newtx/ztmr.pfb>
-Output written on NPIV.pdf (10 pages, 220656 bytes).
+Output written on NPIV.pdf (11 pages, 223841 bytes).
 
-PDF statistics: 284 PDF objects out of 1000 (max. 8388607)
- 187 compressed objects within 2 object streams
- 59 named destinations out of 1000 (max. 1048576)
+PDF statistics: 293 PDF objects out of 1000 (max. 8388607)
+ 195 compressed objects within 2 object streams
+ 62 named destinations out of 1000 (max. 1048576)
  16 words of extra memory for PDF output out of 10000 (max. 100000000)
 

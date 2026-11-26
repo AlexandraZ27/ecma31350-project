@@ -394,9 +394,10 @@ def fit_final(d,selected,seed,nodes,out,reference):
         if error>1e-3*scale_y:raise ValueError(f'Quadrature error {error:g}; increase --nodes')
         models.append(model);values.append(value);derivatives.append(derivative);moments.append(moment)
         fits.append({'initialization':init,'average_derivative':float(derivative[d.trim_keep].mean()),
+                     'average_derivative_all_cells':float(derivative.mean()),
                      'training_integrated_MSE':history[selected[1]]['training_integrated_MSE'],
                      'quadrature_RMSE_versus_Hermite64':error})
-        print(f'  final outcome initialization {init}: derivative {fits[-1]["average_derivative"]:.6g}',flush=True)
+        print(f'  final outcome initialization {init}: full-panel derivative {fits[-1]["average_derivative_all_cells"]:.6g}',flush=True)
     save_models(out/'models_primary.npz',models)
     g=np.mean(values,axis=0);derivative=np.mean(derivatives,axis=0);moment=np.mean(moments,axis=0)
     nuisance=np.linalg.lstsq(p.D,d.y.to_numpy()-moment,rcond=None)[0]
@@ -410,8 +411,11 @@ def fit_final(d,selected,seed,nodes,out,reference):
     cells.to_csv(out/'cells_primary.csv',index=False)
     assert np.isfinite(cells.select_dtypes(include=[np.number]).to_numpy()).all()
     means=[row['average_derivative'] for row in fits]
-    primary={'average_derivative_trimmed':float(derivative[d.trim_keep].mean()),
+    full_means=[row['average_derivative_all_cells'] for row in fits]
+    primary={'headline_estimand':'full_panel_equal_cell_average_derivative',
+        'average_derivative_trimmed':float(derivative[d.trim_keep].mean()),
         'average_derivative_all_cells':float(derivative.mean()),'initialization_range_not_CI':[min(means),max(means)],
+        'initialization_range_all_cells_not_CI':[min(full_means),max(full_means)],
         'initialization_fits':fits,'ensemble_training_integrated_MSE':float(np.mean(p.project(d.y.to_numpy()-moment)**2)),
         'quadrature_nodes':a.shape[1],'quadrature_check':'64 Gauss-Hermite nodes per component',
         'time_heterogeneity':h.time_results(d,models,out,reference)}
@@ -477,6 +481,7 @@ def write_report(results,out):
         'Treatment is integrated on adaptive rowwise Gauss-Legendre grids, checked against componentwise Gauss-Hermite integration; the density network is frozen in stage two.',
         'The outcome objective squares the integrated residual; it does not regress the outcome on individual treatment draws.',
         'Final reported derivatives average five outcome-network initializations, holding the cross-fitted first-stage ensemble fixed.',
+        'Primary average: all 1010 commune-year cells. Within-year 5th-95th treatment percentiles define a 910-cell sensitivity average only.',
         'Initialization ranges are optimization diagnostics, not confidence intervals, and do not assess first-stage uncertainty.',
         'Common-profile time comparisons use fixed empirical overlap profiles in reference_profiles/.',
         'This is a panel adaptation of the two-neural-stage DeepIV method, with deterministic integration and the user-requested zero explicit penalties.',
@@ -489,7 +494,8 @@ def write_report(results,out):
             f"  Treatment mean prediction R2: with shares {fs['with_shares']['mean_prediction_R2']:.6g}; without shares {fs['without_shares']['mean_prediction_R2']:.6g} (levels, not within-FE partial R2).",
             f"  Outcome hidden units {cv['selected_hidden']}; steps {cv['selected_steps']}.",
             f"  Held-out integrated MSE: full neural {cv['selected_heldout_integrated_MSE']:.6g}; FE-only {cv['FE_only_heldout_MSE']:.6g}.",
-            f"  Average derivative {p['average_derivative_trimmed']:.6g}; initialization range (not CI) {p['initialization_range_not_CI']}.",
+            f"  Full-panel average derivative {p['average_derivative_all_cells']:.6g}; initialization range (not CI) {p['initialization_range_all_cells_not_CI']}.",
+            f"  Trimmed sensitivity average derivative {p['average_derivative_trimmed']:.6g}.",
             f"  Training integrated MSE {p['ensemble_training_integrated_MSE']:.6g}.",'']
     lines += ['Run: python project/npiv/neural/run_full_neural.py',
         'Dependencies: project/npiv/neural/requirements-neural.txt',
@@ -523,9 +529,10 @@ def main():
                 'MDN_no_shares_density_NLL':diagnostics['without_shares']['density_NLL'],
                 'full_neural_integrated_MSE':selection['selected_heldout_integrated_MSE'],
                 'FE_only_integrated_MSE':selection['FE_only_heldout_MSE'],
-                'average_derivative':primary['average_derivative_trimmed'],
-                'initialization_min_not_CI':primary['initialization_range_not_CI'][0],
-                'initialization_max_not_CI':primary['initialization_range_not_CI'][1]})
+                'average_derivative':primary['average_derivative_all_cells'],
+                'trimmed_sensitivity_average_derivative':primary['average_derivative_trimmed'],
+                'initialization_min_not_CI':primary['initialization_range_all_cells_not_CI'][0],
+                'initialization_max_not_CI':primary['initialization_range_all_cells_not_CI'][1]})
             b.save_json(out/'results.json',{'method':'full_neural_panel_DeepIV','specification':SPECIFICATION,
                 'seed':seed,'quadrature_start_nodes':args.nodes,'elapsed_seconds':time.time()-started,
                 'runner_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),

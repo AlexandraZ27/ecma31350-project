@@ -85,31 +85,36 @@
             "initialization": 101,
             "average_derivative": 0.7351928408361796,
             "training_integrated_MSE": 14.645514088789897,
-            "quadrature_RMSE_versus_Hermite64": 2.3557898856065897e-10
+            "quadrature_RMSE_versus_Hermite64": 2.3557898856065897e-10,
+            "average_derivative_all_cells": 0.7283668207614179
           },
           {
             "initialization": 211,
             "average_derivative": 0.8842526541853616,
             "training_integrated_MSE": 14.643456694689858,
-            "quadrature_RMSE_versus_Hermite64": 2.756297245618609e-10
+            "quadrature_RMSE_versus_Hermite64": 2.756297245618609e-10,
+            "average_derivative_all_cells": 0.8771168592001359
           },
           {
             "initialization": 307,
             "average_derivative": 0.8822747387086967,
             "training_integrated_MSE": 14.599003991195316,
-            "quadrature_RMSE_versus_Hermite64": 2.7399725067882286e-10
+            "quadrature_RMSE_versus_Hermite64": 2.7399725067882286e-10,
+            "average_derivative_all_cells": 0.8742137955032526
           },
           {
             "initialization": 401,
             "average_derivative": 1.032009835296854,
             "training_integrated_MSE": 14.60047848576323,
-            "quadrature_RMSE_versus_Hermite64": 3.138794283410877e-10
+            "quadrature_RMSE_versus_Hermite64": 3.138794283410877e-10,
+            "average_derivative_all_cells": 1.0162188443685825
           },
           {
             "initialization": 503,
             "average_derivative": 0.9395828886348755,
             "training_integrated_MSE": 14.661876701876848,
-            "quadrature_RMSE_versus_Hermite64": 2.97166361574704e-10
+            "quadrature_RMSE_versus_Hermite64": 2.97166361574704e-10,
+            "average_derivative_all_cells": 0.9257994582455444
           }
         ],
         "ensemble_training_integrated_MSE": 14.623658901735485,
@@ -251,7 +256,12 @@
           ],
           "reference": "fixed empirical common-support profiles in reference_profiles/",
           "initialization_ranges_are_not_confidence_intervals": true
-        }
+        },
+        "headline_estimand": "full_panel_equal_cell_average_derivative",
+        "initialization_range_all_cells_not_CI": [
+          0.7283668207614179,
+          1.0162188443685825
+        ]
       },
       "network_selection": {
         "selected_hidden": [
@@ -17325,31 +17335,36 @@
             "initialization": 101,
             "average_derivative": 1.0192241466186003,
             "training_integrated_MSE": 6.249440107056409,
-            "quadrature_RMSE_versus_Hermite64": 7.990785362920583e-10
+            "quadrature_RMSE_versus_Hermite64": 7.990785362920583e-10,
+            "average_derivative_all_cells": 0.9752269609716214
           },
           {
             "initialization": 211,
             "average_derivative": 1.1638772113497158,
             "training_integrated_MSE": 6.195662872109593,
-            "quadrature_RMSE_versus_Hermite64": 1.2047420392617994e-08
+            "quadrature_RMSE_versus_Hermite64": 1.2047420392617994e-08,
+            "average_derivative_all_cells": 1.1141543628967105
           },
           {
             "initialization": 307,
             "average_derivative": 0.9023230326290417,
             "training_integrated_MSE": 6.219233104736465,
-            "quadrature_RMSE_versus_Hermite64": 6.000819405221255e-10
+            "quadrature_RMSE_versus_Hermite64": 6.000819405221255e-10,
+            "average_derivative_all_cells": 0.8619785671864185
           },
           {
             "initialization": 401,
             "average_derivative": 1.4349038035576944,
             "training_integrated_MSE": 6.192773459829133,
-            "quadrature_RMSE_versus_Hermite64": 2.0841030879425687e-09
+            "quadrature_RMSE_versus_Hermite64": 2.0841030879425687e-09,
+            "average_derivative_all_cells": 1.3811585123961976
           },
           {
             "initialization": 503,
             "average_derivative": 1.3865254303933638,
             "training_integrated_MSE": 6.157253756017924,
-            "quadrature_RMSE_versus_Hermite64": 1.7082393864279e-09
+            "quadrature_RMSE_versus_Hermite64": 1.7082393864279e-09,
+            "average_derivative_all_cells": 1.3288729106101236
           }
         ],
         "ensemble_training_integrated_MSE": 6.1716649352515836,
@@ -17491,7 +17506,12 @@
           ],
           "reference": "fixed empirical common-support profiles in reference_profiles/",
           "initialization_ranges_are_not_confidence_intervals": true
-        }
+        },
+        "headline_estimand": "full_panel_equal_cell_average_derivative",
+        "initialization_range_all_cells_not_CI": [
+          0.8619785671864185,
+          1.3811585123961976
+        ]
       },
       "network_selection": {
         "selected_hidden": [
@@ -34565,31 +34585,36 @@
             "initialization": 101,
             "average_derivative": 0.9218586406913418,
             "training_integrated_MSE": 15.659886799248246,
-            "quadrature_RMSE_versus_Hermite64": 4.4743714191382295e-10
+            "quadrature_RMSE_versus_Hermite64": 4.4743714191382295e-10,
+            "average_derivative_all_cells": 0.88998125861349
           },
           {
             "initialization": 211,
             "average_derivative": 1.2675599901624293,
             "training_integrated_MSE": 15.653392716880601,
-            "quadrature_RMSE_versus_Hermite64": 5.351214907818355e-10
+            "quadrature_RMSE_versus_Hermite64": 5.351214907818355e-10,
+            "average_derivative_all_cells": 1.231327673522282
           },
           {
             "initialization": 307,
             "average_derivative": 0.8627447015487602,
             "training_integrated_MSE": 15.638700059809135,
-            "quadrature_RMSE_versus_Hermite64": 4.014398103216722e-10
+            "quadrature_RMSE_versus_Hermite64": 4.014398103216722e-10,
+            "average_derivative_all_cells": 0.8319398230862318
           },
           {
             "initialization": 401,
             "average_derivative": 0.9905534753157582,
             "training_integrated_MSE": 15.590685770986347,
-            "quadrature_RMSE_versus_Hermite64": 4.480597957284525e-10
+            "quadrature_RMSE_versus_Hermite64": 4.480597957284525e-10,
+            "average_derivative_all_cells": 0.959851217912801
           },
           {
             "initialization": 503,
             "average_derivative": 1.01674471705562,
             "training_integrated_MSE": 15.617690759052023,
-            "quadrature_RMSE_versus_Hermite64": 4.412418312556405e-10
+            "quadrature_RMSE_versus_Hermite64": 4.412418312556405e-10,
+            "average_derivative_all_cells": 0.9889329728415642
           }
         ],
         "ensemble_training_integrated_MSE": 15.624955548021726,
@@ -34731,7 +34756,12 @@
           ],
           "reference": "fixed empirical common-support profiles in reference_profiles/",
           "initialization_ranges_are_not_confidence_intervals": true
-        }
+        },
+        "headline_estimand": "full_panel_equal_cell_average_derivative",
+        "initialization_range_all_cells_not_CI": [
+          0.8319398230862318,
+          1.231327673522282
+        ]
       },
       "network_selection": {
         "selected_hidden": [
@@ -51759,6 +51789,16 @@
     "description": "Neural-only extraction; original weights, cell estimates and bootstrap draws retained. Original fit hashes remain above and resolve in Git history.",
     "original_code_commit": "7058b55",
     "runner_sha256": "468a916743352f5d2128dfc90ef5493b3b579f1f7548abd09015a0f1c6b85171",
+    "helper_sha256": {
+      "panel.py": "da6ca892e4ae84e319f0491a8585c40a354e9a755ecc5cb189d18086f17c6cb7",
+      "outcome_network.py": "1d6c3d0e9c02dbf3d0a59ccab8ceed1375163f7a772749cd303fb49fdd4d5354"
+    },
+    "reference_sha256": "6c6c774640af188d3f982b66415088377c0b8d039eb1c95e05b9ee0dd205be7f"
+  },
+  "reporting_update": {
+    "description": "Full-panel average is primary; within-year 5th-95th percentile average is sensitivity. Reuses the original fitted networks, cell derivatives and 399 bootstrap draws per outcome.",
+    "previous_commit": "e5cd402",
+    "runner_sha256": "e026fdd08b51e22e1ec662ba9dedaf5a1a5ecf3473e3cb000aee9ff196284008",
     "helper_sha256": {
       "panel.py": "da6ca892e4ae84e319f0491a8585c40a354e9a755ecc5cb189d18086f17c6cb7",
       "outcome_network.py": "1d6c3d0e9c02dbf3d0a59ccab8ceed1375163f7a772749cd303fb49fdd4d5354"

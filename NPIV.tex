@@ -98,13 +98,15 @@ Here $g_\theta$ is a fully connected neural network with treatment, both demogra
 The outcome network has 13 inputs: treatment, two demographic controls, and ten year indicators. The density network has 23 inputs: eleven shares, the two controls, and ten year indicators. Features enter on their original scale before training-sample standardization; treatment is never demeaned by commune or year before entering the nonlinear function.
 
 \paragraph{Estimand and identifying restrictions.}
-The headline estimand is an average local derivative,
+The primary estimand averages local derivatives over the full panel,
 \begin{equation}
-\widehat\beta=\frac{1}{|\mathcal T|}
-\sum_{(m,t)\in\mathcal T}\partial_a\widehat g(A_{mt},X_{mt},t),
+\widehat\beta=\frac{1}{|\mathcal P|}
+\sum_{(m,t)\in\mathcal P}\partial_a\widehat g(A_{mt},X_{mt},t),
 \label{eq:neural-effect}
 \end{equation}
-where $\mathcal T$ contains cells between the 5th and 95th treatment percentiles within their year, inclusive. The original sample retains 910 cells. Derivatives are computed analytically and averaged across the five fitted outcome networks. A derivative is measured in outcome points per unit of $\log(1+r)$. A 0.01-unit increase in $A$ has approximate effect $0.01\widehat\beta$. For a 1\% increase in the raw rate $r$, the cell-level approximation is $0.01\{r/(1+r)\}\partial_a\widehat g$; average this adjusted derivative for that estimand. This is a commune-level, equally weighted derivative, not a respondent-weighted effect or an individual treatment effect.
+where $\mathcal P$ contains all 1,010 commune-year cells (101 communes over 2008--2017). Both stages are estimated on this full panel. Derivatives are computed analytically and averaged across the five fitted outcome networks, then across all cells without treatment trimming. A derivative is measured in outcome points per unit of $\log(1+r)$. A 0.01-unit increase in $A$ has approximate effect $0.01\widehat\beta$. For a 1\% increase in the raw rate $r$, the cell-level approximation is $0.01\{r/(1+r)\}\partial_a\widehat g$; average this adjusted derivative for that estimand. This is a commune-level, equally weighted derivative, not a respondent-weighted effect or an individual treatment effect.
+
+As a sensitivity check, define $\mathcal T\subset\mathcal P$ to include cells between the 5th and 95th treatment percentiles within each year, inclusive, and average the same fitted derivatives over $\mathcal T$. This retains 910 original cells. The cutoff is a discretionary tail-sensitivity rule, not selected by validation loss or established by a conditional-IV support diagnostic. This restricted average targets a different distribution of commune-year profiles; it does not replace the full-panel estimand.
 
 The empirical identifying restriction is that, after the additive commune and year terms, the conditional outcome mean is the integral of $g$ against $p(A\mid Z,X,t)$. It requires exclusion of direct share-related changes in outcomes and sufficient instrument-induced variation to distinguish response functions after accounting for the nuisance effects. The first-stage density is pooled over communes conditional on $(Z,X,t)$; it does not estimate a separate treatment law for each commune. Completeness is the relevant nonparametric uniqueness condition in Newey and Powell \cite{neweypowell}. Neither the inclusion of fixed effects nor good predictive fit establishes completeness or exclusion. In particular, fixed effects absorb permanent commune differences, but do not automatically exclude share-specific outcome trends.
 
@@ -201,12 +203,35 @@ Adding the separate shares improves average held-out density loss for every outc
 
 \subsection*{4. Results and inference}
 \paragraph{Average local derivatives.}
-\Cref{tab:neural-effects} reports the selected estimator in \Cref{eq:neural-effect}, with sampling uncertainty from refitting both stages under commune resampling. The three point estimates are positive. A local 0.01-unit increase in $A=\log(1+r)$ corresponds approximately to 0.0089 crime-concern index points, 0.0118 preventive-behavior index points, and 0.0101 victimization percentage points. These magnitudes refer to the rescaled cell outcomes and this fitted response function.
+\Cref{tab:neural-effects} reports the full-panel estimator in \Cref{eq:neural-effect}, with sampling uncertainty from refitting both stages under commune resampling. The three point estimates are positive. A local 0.01-unit increase in $A=\log(1+r)$ corresponds approximately to 0.0088 points on the crime concern index, 0.0113 points on the preventive behavior index, and 0.0098 victimization percentage points. These magnitudes refer to the rescaled cell outcomes and this fitted response function.
 
 \begin{table}[H]
 \centering
-\caption{Average derivatives and conditional bootstrap inference}
+\caption{Full-panel average derivatives and conditional bootstrap inference}
 \label{tab:neural-effects}
+\small
+\begin{tabularx}{\linewidth}{@{}Xrrrr@{}}
+\toprule
+Outcome & Estimate & SE & $p$ & 95\% interval\\
+\midrule
+Crime concerns & 0.884 & 0.338 & 0.0550 & [-0.019, 1.788]\\
+Preventive behavior & 1.132 & 0.613 & 0.0875 & [-0.480, 2.745]\\
+Victimization & 0.980 & 0.477 & 0.0775 & [-0.122, 2.083]\\
+\bottomrule
+\end{tabularx}
+\smallskip
+\parbox{\linewidth}{\footnotesize Equal cell weights; all 1,010 commune-year cells, with no treatment trimming. SEs resample commune histories and refit both stages. Two-sided centered-bootstrap $p$-values test a zero derivative; symmetric intervals invert the same absolute-error test. All are conditional approximations described below.}
+\end{table}
+
+All three two-sided centered-bootstrap $p$-values exceed 0.05. The reported intervals use the same test, with the finite-simulation critical value defined below.
+
+\paragraph{Trimming sensitivity.}
+\Cref{tab:neural-trimmed} averages the same fitted derivatives over the within-year 5th--95th treatment percentile range. Its point estimates are modestly larger than the full-panel averages. The original network fits and all 399 bootstrap draws already contain both statistics; promoting the full-panel average to the primary result requires aggregation of the saved draws, not new estimation or tuning. Each table uses the uncertainty calculated for its own averaging rule.
+
+\begin{table}[H]
+\centering
+\caption{Sensitivity: within-year 5th--95th percentile average derivatives}
+\label{tab:neural-trimmed}
 \small
 \begin{tabularx}{\linewidth}{@{}Xrrrr@{}}
 \toprule
@@ -218,17 +243,15 @@ Victimization & 1.012 & 0.488 & 0.0775 & [-0.118, 2.142]\\
 \bottomrule
 \end{tabularx}
 \smallskip
-\parbox{\linewidth}{\footnotesize Equal cell weights; 910 trimmed cells in the original sample. SEs resample commune histories and refit both stages. Two-sided centered-bootstrap $p$-values test a zero derivative; symmetric intervals invert the same absolute-error test. All are conditional approximations described below.}
+\parbox{\linewidth}{\footnotesize Equal cell weights; 910 cells after within-year treatment trimming. Both stages remain fitted on the full panel. The cutoff is recomputed in each bootstrap draw. SEs resample commune histories and refit both stages. Two-sided centered-bootstrap $p$-values test a zero derivative; symmetric intervals invert the same absolute-error test. All are conditional approximations described below.}
 \end{table}
-
-All three two-sided centered-bootstrap $p$-values exceed 0.05. The reported intervals use the same test, with the finite-simulation critical value defined below.
 
 The selected held-out integrated outcome losses are 14.395, 6.193, and 15.160, respectively, in squared outcome points. These scores describe fit of conditional moments after projecting out held-out additive effects. They do not measure prediction of counterfactual outcomes, and low moment loss alone does not guarantee accurate treatment derivatives \cite[Section 3.2]{deepiv}.
 
 \paragraph{Bootstrap construction.}
 We use $B=399$ commune pairs-bootstrap draws, with seed 20261126. Within each of the five original fold strata, communes are sampled with replacement, retaining all ten observations and their outcomes, treatments, controls, and shares. The draw has 101 commune histories and 1,010 cells. Each copy receives a distinct intercept identifier, while all copies of the same source commune stay in the same fold. This preserves within-commune dependence and prevents duplicate histories from appearing in both a first-stage fitting sample and its held-out sample.
 
-In each draw, all ten cross-fitted density networks (two initializations in each of five folds) and all five outcome networks are refitted. Scaling, nuisance-effect projection, and the within-year treatment trimming rule are recomputed. Architectures, mixture counts, stopping steps, optimizer settings, initialization seeds, and the original fold strata are held fixed. The headline bootstrap also allows the distribution of trimmed profiles to vary across samples. Thus it includes first-stage estimation uncertainty conditional on the fixed fitting choices. It does not retune the model or use the spread across initializations as a standard error.
+In each original draw, all ten cross-fitted density networks (two initializations in each of five folds) and all five outcome networks were refitted. Scaling and nuisance-effect projection were recomputed. The primary statistic averages derivatives over all 1,010 resampled cells. For the sensitivity statistic only, the within-year treatment cutoffs and retained sample were recomputed. Architectures, mixture counts, stopping steps, optimizer settings, initialization seeds, and the original fold strata are held fixed. Both statistics allow the empirical distribution of evaluated profiles to vary across resamples and include first-stage estimation uncertainty conditional on the fixed fitting choices. This procedure does not retune the model or use the spread across initializations as a standard error.
 
 Let $\widehat\beta_b^*$ be a bootstrap estimate, $\overline\beta^*=B^{-1}\sum_b\widehat\beta_b^*$, and $e_b^*=\widehat\beta_b^*-\widehat\beta$. The reported standard error and two-sided centered-bootstrap $p$-value for $H_0:\beta=0$ are
 \begin{align}
@@ -242,9 +265,9 @@ Let $\widehat\beta_b^*$ be a bootstrap estimate, $\overline\beta^*=B^{-1}\sum_b\
 The reported 95\% interval is $[\widehat\beta-c_{.95},\widehat\beta+c_{.95}]$, where $c_{.95}$ is the 380th ordered absolute error among 399 draws. This finite-simulation critical value inverts the same test as \Cref{eq:neural-bootstrap-p}.
 The finite simulation correction gives $p$-value resolution $1/(B+1)=0.0025$; it cannot resolve smaller tail probabilities. An alternative normal-Wald calculation, $2\Phi(-|\widehat\beta/\widehat{\mathrm{se}}|)$, is saved with the inference outputs but is not the $p$-value shown in the tables.
 
-The bootstrap means minus the original estimates are $-0.261$, $-0.305$, $-0.197$ for crime concerns, preventive behavior, and victimization, respectively. These shifts flag finite-sample centering sensitivity; they do not measure bias relative to the unknown causal response. The point estimates are not bias-corrected. The reported symmetric intervals invert the same absolute-error test as the displayed p-values; alternative equal-tailed basic intervals are retained in the saved results.
+The bootstrap means minus the original estimates are $-0.256$, $-0.292$, $-0.187$ for crime concerns, preventive behavior, and victimization, respectively. These shifts flag finite-sample centering sensitivity; they do not measure bias relative to the unknown causal response. The point estimates are not bias-corrected. The reported symmetric intervals invert the same absolute-error test as the displayed p-values; alternative equal-tailed basic intervals are retained in the saved results.
 
-For computational efficiency, most bootstrap refits use a 32-node Gaussian rule for each fitted mixture, constructed from the 64-node-per-component Hermite reference. Every refit checks its integrated predictions against that reference and falls back to the original adaptive rule if necessary. Identity resampling reproduces the original headline derivatives within $10^{-6}$, and additional resampled-data checks compare the short rule directly against the original integration procedure. This changes numerical integration cost, not the network specification or the bootstrap resampling unit.
+For computational efficiency, most bootstrap refits use a 32-node Gaussian rule for each fitted mixture, constructed from the 64-node-per-component Hermite reference. Every refit checks its integrated predictions against that reference and falls back to the original adaptive rule if necessary. Identity resampling reproduces the original trimmed derivatives within $10^{-6}$, and additional resampled-data checks compare the short rule directly against the original integration procedure. This changes numerical integration cost, not the network specification or the bootstrap resampling unit.
 
 \paragraph{Time heterogeneity at common covariate profiles.}
 To separate time variation from changes in composition, evaluate
@@ -252,7 +275,7 @@ To separate time variation from changes in composition, evaluate
 \widehat\beta_t^{\mathrm{common}}
 =\frac1{|\mathcal C|}\sum_{(a,x)\in\mathcal C}\partial_a\widehat g(a,x,t).
 \end{equation}
-The same reference profiles $\mathcal C$ are used for every year. They lie in the intersection of each year's marginal 5th--95th percentile ranges and empirical three-dimensional convex hull for treatment, age, and male share. This leaves 300 profiles for crime concerns, 266 for preventive behavior, and 261 for victimization. It is an empirical overlap screen, not a test of conditional IV support. The reference sets are held fixed in the time-profile bootstrap.
+The same reference profiles $\mathcal C$ are used for every year. They lie in the intersection of each year's marginal 5th--95th percentile ranges and empirical three-dimensional convex hull for treatment, age, and male share. This leaves 300 profiles for crime concerns, 266 for preventive behavior, and 261 for victimization. It is an empirical overlap screen, not a test of conditional IV support. The reference sets are held fixed in the time-profile bootstrap. These curves are separate standardized year comparisons; they do not replace the primary full-panel average.
 
 \begin{figure}[H]
 \centering
@@ -291,7 +314,9 @@ The calculations do not account for model-selection uncertainty, early-stopping 
 Hartford et al.\ \cite{deepiv} motivate the two-stage neural objective and held-out loss selection. The supplied Newey--Powell manuscript \cite{neweypowell} develops completeness-based identification, the ill-posedness issue, and consistency for constrained nonparametric estimators. Neither supplied paper establishes validity of this particular commune bootstrap for early-stopped neural NPIV derivatives. Formal causal confidence statements would require additional regularity, identification, and bias-control arguments for this estimator; the reported bootstrap should be read with that qualification.
 
 \paragraph{Reproducibility.}
-Point fits and diagnostics are in \path{npiv/neural/full_neural/}. Run \path{npiv/neural/bootstrap_full_neural.py} to generate draws, summary statistics, time profiles, and validation checks in \path{npiv/neural/full_neural/inference/}. The original point estimates are retained unchanged. The memo uses only the selected full neural specification.
+Saved fits and diagnostics are in \path{npiv/neural/full_neural/}. Inference outputs are in its \path{inference/} subdirectory.
+
+To recompute both tables from existing draws without fitting, run \path{npiv/neural/bootstrap_full_neural.py} with the \path{--summarize-only} option. Network weights and all cell-level derivatives are retained unchanged. The memo uses only the selected full neural specification.
 
 \begin{thebibliography}{9}
 \bibitem{immigration}

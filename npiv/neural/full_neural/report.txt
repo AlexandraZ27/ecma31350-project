@@ -15,6 +15,7 @@ The minimum structural CV score is used for selection and is not an untouched-te
 Treatment is integrated on adaptive rowwise Gauss-Legendre grids, checked against componentwise Gauss-Hermite integration; the density network is frozen in stage two.
 The outcome objective squares the integrated residual; it does not regress the outcome on individual treatment draws.
 Final reported derivatives average five outcome-network initializations, holding the cross-fitted first-stage ensemble fixed.
+Primary average: all 1010 commune-year cells. Within-year 5th-95th treatment percentiles define a 910-cell sensitivity average only.
 Initialization ranges are optimization diagnostics, not confidence intervals, and do not assess first-stage uncertainty.
 Common-profile time comparisons use fixed empirical overlap profiles in reference_profiles/.
 This is a panel adaptation of the two-neural-stage DeepIV method, with deterministic integration and the user-requested zero explicit penalties.
@@ -26,7 +27,8 @@ Crime concerns index (pc_19)
   Treatment mean prediction R2: with shares 0.643763; without shares 0.150663 (levels, not within-FE partial R2).
   Outcome hidden units [8]; steps 50.
   Held-out integrated MSE: full neural 14.3946; FE-only 14.5913.
-  Average derivative 0.894663; initialization range (not CI) [0.7351928408361796, 1.032009835296854].
+  Full-panel average derivative 0.884343; initialization range (not CI) [0.7283668207614179, 1.0162188443685825].
+  Trimmed sensitivity average derivative 0.894663.
   Training integrated MSE 14.6237.
 
 Preventive behavior index (pc_20)
@@ -35,7 +37,8 @@ Preventive behavior index (pc_20)
   Treatment mean prediction R2: with shares 0.633401; without shares 0.165658 (levels, not within-FE partial R2).
   Outcome hidden units [16, 8]; steps 50.
   Held-out integrated MSE: full neural 6.19294; FE-only 6.53883.
-  Average derivative 1.18137; initialization range (not CI) [0.9023230326290417, 1.4349038035576944].
+  Full-panel average derivative 1.13228; initialization range (not CI) [0.8619785671864185, 1.3811585123961976].
+  Trimmed sensitivity average derivative 1.18137.
   Training integrated MSE 6.17166.
 
 Total victimization (vict_agreg)
@@ -44,7 +47,8 @@ Total victimization (vict_agreg)
   Treatment mean prediction R2: with shares 0.633451; without shares 0.165499 (levels, not within-FE partial R2).
   Outcome hidden units [8]; steps 50.
   Held-out integrated MSE: full neural 15.1598; FE-only 15.4464.
-  Average derivative 1.01189; initialization range (not CI) [0.8627447015487602, 1.2675599901624293].
+  Full-panel average derivative 0.980407; initialization range (not CI) [0.8319398230862318, 1.231327673522282].
+  Trimmed sensitivity average derivative 1.01189.
   Training integrated MSE 15.625.
 
 Run: python project/npiv/neural/run_full_neural.py

@@ -4,23 +4,81 @@
   "seed": 20261126,
   "cluster_count": 101,
   "years_per_cluster": 10,
+  "headline_estimand": "equally weighted average derivative over all 1010 commune-year cells",
+  "sensitivity_estimand": "average derivative between within-year 5th and 95th treatment percentiles",
   "refitted": "both stages: five cross-fitted MDN ensembles and five outcome initializations per draw",
   "held_fixed": "selected architectures, mixture count, stopping steps, optimizer settings, original fold strata, initialization seeds",
   "resampled": "whole commune histories, including outcomes, treatments, instruments and controls",
-  "trimming": "recompute within-year 5th and 95th treatment percentiles in each resample",
+  "trimming": "sensitivity only: recompute within-year 5th and 95th treatment percentiles in each resample; primary uses every cell",
+  "draw_schema": "average_derivative_all_cells is the full-panel statistic; average_derivative is the legacy trimmed alias, with explicit average_derivative_trimmed also written by current fits",
   "time_reference_profiles": "hold original common-support profiles fixed for time comparisons",
   "integration": "32-node Gaussian mixture integration with a Hermite64 check and adaptive Legendre fallback; earlier checkpoint draws used the original adaptive Legendre rule",
   "p_value": "two-sided centered bootstrap tail probability, with plus-one finite simulation correction",
   "alternative_p_value": "two-sided normal Wald p using the bootstrap standard error",
   "reported_interval": "symmetric centered-bootstrap interval from the absolute-error order statistic matching the reported test; equal-tailed basic intervals retained as an alternative",
   "limitations": "conditional-on-selection approximation; no theorem for unrestricted neural NPIV derivatives, no correction for approximation/early-stopping bias or weak identification; assumes independent commune clusters conditional on common time shocks",
-  "source_results_sha256": "7f4c586e35b2420b84d88f34c11eddec2a0c519a274afd233f99795609daaf9c",
-  "runner_sha256": "85ffb60a403be313a75c6c35446b30cd040e18b9341caf4d5c2ec483a0e5a0a3",
-  "fit_runner_sha256": "a6f41610357109ac4e1397058666e6b8f583709655cb74cfde9fb4700f06e201",
+  "source_results_sha256": "a91cc9794ca9ffc21c7471d04a6dbb9fc9f1cce086a533d2764b6a1bbf8966b2",
+  "runner_sha256": "983df5193d8cd638601732abdfd8fc370fd7711c765b85159c42ca7970896696",
+  "fit_runner_sha256": "e026fdd08b51e22e1ec662ba9dedaf5a1a5ecf3473e3cb000aee9ff196284008",
   "quadrature_helper_sha256": "6a9472817add0dffe4e3746f280a0e5339db5b1f14f5bb985fc68203b499e0d4",
   "outcomes": {
     "pc_19": {
       "outcome": "pc_19",
+      "estimand": "full_panel",
+      "original_cells": 1010,
+      "point_estimate": 0.8843431556157866,
+      "bootstrap_SE": 0.33813728512913227,
+      "normal_Wald_p": 0.00891393001585528,
+      "centered_bootstrap_p": 0.055,
+      "basic_CI_low": 0.5992256841693375,
+      "basic_CI_high": 1.872205555691481,
+      "symmetric_CI_low": -0.019044153338226844,
+      "symmetric_CI_high": 1.7877304645698,
+      "bootstrap_mean": 0.6282201463950249,
+      "bootstrap_bias_diagnostic": -0.2561230092207617,
+      "replicates": 399,
+      "SE_Monte_Carlo_relative_approx": 0.03544406025041679
+    },
+    "pc_20": {
+      "outcome": "pc_20",
+      "estimand": "full_panel",
+      "original_cells": 1010,
+      "point_estimate": 1.1322782628122143,
+      "bootstrap_SE": 0.612910588795316,
+      "normal_Wald_p": 0.06469220405986163,
+      "centered_bootstrap_p": 0.0875,
+      "basic_CI_low": 0.4212877490725919,
+      "basic_CI_high": 2.9286500009769263,
+      "symmetric_CI_low": -0.4801415385296648,
+      "symmetric_CI_high": 2.7446980641540932,
+      "bootstrap_mean": 0.840217138442772,
+      "bootstrap_bias_diagnostic": -0.2920611243694423,
+      "replicates": 399,
+      "SE_Monte_Carlo_relative_approx": 0.03544406025041679
+    },
+    "vict_agreg": {
+      "outcome": "vict_agreg",
+      "estimand": "full_panel",
+      "original_cells": 1010,
+      "point_estimate": 0.9804065891952738,
+      "bootstrap_SE": 0.47736771562681113,
+      "normal_Wald_p": 0.03999732984763796,
+      "centered_bootstrap_p": 0.0775,
+      "basic_CI_low": 0.47797931616711553,
+      "basic_CI_high": 2.2930220029033235,
+      "symmetric_CI_low": -0.12187968117717407,
+      "symmetric_CI_high": 2.0826928595677217,
+      "bootstrap_mean": 0.7933321108399672,
+      "bootstrap_bias_diagnostic": -0.18707447835530655,
+      "replicates": 399,
+      "SE_Monte_Carlo_relative_approx": 0.03544406025041679
+    }
+  },
+  "sensitivity_outcomes": {
+    "pc_19": {
+      "outcome": "pc_19",
+      "estimand": "within_year_5_95_sensitivity",
+      "original_cells": 910,
       "point_estimate": 0.8946625915323935,
       "bootstrap_SE": 0.3439482508823818,
       "normal_Wald_p": 0.009291055987974122,
@@ -36,6 +94,8 @@
     },
     "pc_20": {
       "outcome": "pc_20",
+      "estimand": "within_year_5_95_sensitivity",
+      "original_cells": 910,
       "point_estimate": 1.1813707249096834,
       "bootstrap_SE": 0.6382740659423779,
       "normal_Wald_p": 0.0641863628277637,
@@ -51,6 +111,8 @@
     },
     "vict_agreg": {
       "outcome": "vict_agreg",
+      "estimand": "within_year_5_95_sensitivity",
+      "original_cells": 910,
       "point_estimate": 1.0118923049547819,
       "bootstrap_SE": 0.48760315142283983,
       "normal_Wald_p": 0.037964536320985995,
@@ -65,11 +127,17 @@
       "SE_Monte_Carlo_relative_approx": 0.03544406025041679
     }
   },
-  "refactor_compatibility": {
-    "description": "Original bootstrap draws and inference unchanged; paths/helpers extracted into standalone neural implementation.",
-    "original_code_commit": "7058b55",
-    "source_results_sha256": "d754fc31b796ecb7bf9e45cda73961aabd1a1131df5d892bb66a8a0801a84c44",
-    "runner_sha256": "ebbb2d2fc0dfaea2e172f054d79fc9342a64b889df526246561a61aef0c6f93b",
-    "fit_runner_sha256": "468a916743352f5d2128dfc90ef5493b3b579f1f7548abd09015a0f1c6b85171"
+  "draw_fit_provenance": {
+    "source_results_sha256": "7f4c586e35b2420b84d88f34c11eddec2a0c519a274afd233f99795609daaf9c",
+    "runner_sha256": "85ffb60a403be313a75c6c35446b30cd040e18b9341caf4d5c2ec483a0e5a0a3",
+    "fit_runner_sha256": "a6f41610357109ac4e1397058666e6b8f583709655cb74cfde9fb4700f06e201",
+    "quadrature_helper_sha256": "6a9472817add0dffe4e3746f280a0e5339db5b1f14f5bb985fc68203b499e0d4",
+    "refactor_compatibility": {
+      "description": "Original bootstrap draws and inference unchanged; paths/helpers extracted into standalone neural implementation.",
+      "original_code_commit": "7058b55",
+      "source_results_sha256": "d754fc31b796ecb7bf9e45cda73961aabd1a1131df5d892bb66a8a0801a84c44",
+      "runner_sha256": "ebbb2d2fc0dfaea2e172f054d79fc9342a64b889df526246561a61aef0c6f93b",
+      "fit_runner_sha256": "468a916743352f5d2128dfc90ef5493b3b579f1f7548abd09015a0f1c6b85171"
+    }
   }
 }

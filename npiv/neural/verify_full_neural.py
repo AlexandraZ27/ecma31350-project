@@ -50,7 +50,7 @@ def verify_selection(selection):
 def main():
     r=json.loads((OUT/'results.json').read_text())
     reference=json.loads((ROOT/'reference_design.json').read_text())
-    code=r.get('refactor_compatibility',r)
+    code=r.get('reporting_update',r.get('refactor_compatibility',r))
     assert set(r['outcomes'])=={'pc_19','pc_20','vict_agreg'}
     assert code['runner_sha256']==hashlib.sha256((ROOT/'run_full_neural.py').read_bytes()).hexdigest()
     for file,sha in code['helper_sha256'].items():assert sha==hashlib.sha256((ROOT/file).read_bytes()).hexdigest()
@@ -155,6 +155,7 @@ def main():
                 value,derivative=n.h.evaluate(model,s);moment=n.integrate(model,s,a,q)
                 values.append(value);derivatives.append(derivative);moments.append(moment)
                 assert np.isclose(derivative[d.trim_keep].mean(),fit['average_derivative'],atol=1e-9)
+                assert np.isclose(derivative.mean(),fit['average_derivative_all_cells'],atol=1e-9)
                 plus=s.copy();minus=s.copy();plus[:,0]+=1e-5;minus[:,0]-=1e-5
                 numerical=(n.h.evaluate(model,plus)[0]-n.h.evaluate(model,minus)[0])/(2e-5)
                 assert np.allclose(numerical,derivative,atol=1e-7,rtol=1e-6)
@@ -168,9 +169,12 @@ def main():
             assert np.allclose(np.min(derivatives,axis=0),cells.initialization_min_not_CI,atol=1e-9)
             assert np.allclose(np.max(derivatives,axis=0),cells.initialization_max_not_CI,atol=1e-9)
             moment=np.mean(moments,axis=0);assert np.allclose(moment,cells.integrated_g_component,atol=1e-9,rtol=1e-9)
-            effect=cells.loc[cells.trim_keep,'marginal_effect'].mean()
-            assert np.isclose(effect,v['primary']['average_derivative_trimmed'],atol=1e-9)
+            effect=cells.marginal_effect.mean()
+            assert np.isclose(effect,v['primary']['average_derivative_all_cells'],atol=1e-9)
             assert np.isclose(effect,summary.loc[name,'average_derivative'],atol=1e-9)
+            trimmed=cells.loc[cells.trim_keep,'marginal_effect'].mean()
+            assert np.isclose(trimmed,v['primary']['average_derivative_trimmed'],atol=1e-9)
+            assert np.isclose(trimmed,summary.loc[name,'trimmed_sensitivity_average_derivative'],atol=1e-9)
             p=n.b.Absorb(d);nuisance=np.linalg.lstsq(p.D,d.y.to_numpy()-moment,rcond=None)[0]
             assert np.allclose(p.D@nuisance+moment,cells.integrated_moment_fitted,atol=1e-8)
             assert np.allclose(p.D@nuisance+np.mean(values,axis=0),cells.structural_fitted,atol=1e-8)
