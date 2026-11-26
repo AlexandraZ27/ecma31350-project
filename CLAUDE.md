@@ -2,6 +2,28 @@
 
 Paper: "Immigration, Crime, and Crime (Mis)Perceptions", AEJ: Applied 15(4), 2023. Main text is `ref/immigration.pdf` (the same file previously called `paper.pdf`); the appendix is `ref/immigration-appendix.pdf`. Replication package: openICPSR (see `requirements.txt`), unzipped into `rep_data/Replication/` (gitignored).
 
+## Start here — handoff for project partner's Claude
+
+This file is the persistent project memory; the prior chat and the original machine's temporary environment are not required. All paths and commands below are relative to the Git repository root (called `project/` on the original machine). The repository is `AlexandraZ27/ecma31350-project`, branch `main`. Commit `495d0c3` (`Finished NPIV implementation`) contains the completed full neural analysis and memo; this handoff expands the instructions for the next researcher.
+
+- **Completed:** both neural stages, held-out diagnostics, analytic treatment derivatives, common-profile year curves, and 399 commune-bootstrap draws per outcome. The selected specification and numerical results are recorded below. `NPIV.tex` / `NPIV.pdf` contain the memo in the requested order: specification, fit settings, first-stage diagnostics, results and inference. The user's original model exposition and LaTeX template are preserved.
+- **Next requested research extension:** heterogeneous average marginal treatment effects by commune average age, commune education, and year. The section **Heterogeneous average marginal treatment effects: age, education, and year** is an implementation roadmap, not completed education results. Begin with the education-code audit in subsection 1; do not launch a new neural fit before validating the moderator. The current response already allows age/time interactions, but education is absent and age/education subgroup inference has not been run.
+- **Decisions to retain:** commune-year observations; eleven raw origin shares as instruments; flexible neural density and response; separate additive commune/year nuisance effects plus year inputs in the response; exact integrated second-stage loss; no explicit L2 penalty. The latest implemented specification supersedes earlier requests to put commune indicators inside the neural function. Use the current specification below, not the legacy notes, when extending it.
+- **Inputs outside Git:** the raw replication package and the external `adenc.sty` LaTeX style. Obtain the package using the instructions in root `requirements.txt`; confirm `rep_data/Replication/data/analysis/IV_panel.dta` exists. That root file is a data-download note, **not** a pip requirements file. Python dependencies are in `npiv/kernel/requirements-neural.txt`. The committed PDF can be read without installing TeX or obtaining the style.
+- **Git hygiene:** run `git status --short --branch` before editing. The original workspace contains unrelated, untracked historical experiments; a fresh clone will not contain all of them. Do not delete or stage them indiscriminately. Preserve the tracked historical manifests/profile files used by the current runner, even though their estimator results are superseded. Keep `full_neural/` as the reference and write new-model results separately.
+
+Read `NPIV.pdf`, this file's current-specification section, and the following saved artifacts before changing code:
+
+| Artifact | Purpose |
+| --- | --- |
+| `npiv/kernel/full_neural/results.json` | Sample/source hashes, folds, selected settings, point estimates and environment provenance |
+| `npiv/kernel/full_neural/<outcome>/first_stage_diagnostics.json` | Held-out density loss with and without instruments; outcomes are `pc_19`, `pc_20`, `vict_agreg` |
+| `npiv/kernel/full_neural/inference/summary.csv` | Overall estimates, bootstrap SEs, p-values and intervals; use the centered-bootstrap/symmetric columns for the memo |
+| `npiv/kernel/full_neural/inference/time_inference.csv` and `time_endpoint_contrasts.csv` | Year curves and paired 2017-minus-2008 tests |
+| `npiv/kernel/full_neural/validation.json` and `inference/validation.json` | Saved verification of the estimator and inference outputs |
+
+Outstanding substantive choices are annual versus 2008 baseline moderators and the harmonized education definition. Recommendations below are not already fitted choices. Audit the available data/dictionaries first; if the education mapping or intended target remains unresolved, explain the specific missing information before proceeding. Do not interpret a failure to reject zero as proof that immigration has no effect.
+
 ## Layout
 - `rep_scripts/replicate.py`: Python re-implementation of Tables 1-4 and 6-9 (no Stata available). Output: `rep_results/replication_output.txt`.
 - `npiv/npiv.py` + `npiv/make_tex.py`: NPIV on six summary outcomes (kernel-density first stage, honest forest f). Output: `npiv/results/`.
@@ -11,12 +33,20 @@ Paper: "Immigration, Crime, and Crime (Mis)Perceptions", AEJ: Applied 15(4), 202
 - Compile with `latexmk -lualatex NPIV.tex` (`adenc.sty` is in `coursework/`, loaded as `../../../adenc`).
 
 ## Environment
-Stata is not installed; Python is 3.9. `pyfixest` and `pyreadstat` do not work on 3.9. A venv with `pandas numpy scipy statsmodels scikit-learn torch joblib pypdf` is enough (it lived in the session scratchpad and may need rebuilding). Read `.dta` with `pd.read_stata(..., convert_categoricals=False)`; `cod_com` can load as a category, so cast to float.
+
+The recorded neural environment used Python 3.9.6 and the versions in `npiv/kernel/requirements-neural.txt`; its header refers to the earlier neural experiment, but the full neural run uses the same dependency file. Create a local environment rather than relying on the absolute temporary interpreter path saved in the manifest:
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install -r npiv/kernel/requirements-neural.txt
+```
+
+Record the actual Python/package versions if the partner's platform requires changes, and run the numerical preflight below before fitting. These commands do not reproduce the original Python version automatically. The original machine had no Stata; the separate legacy paper replication also used `statsmodels`, `scikit-learn`, and `joblib`. Read `.dta` with `pd.read_stata(..., convert_categoricals=False)`; `cod_com` can load as a category, so cast to float. Do not use pooled education value labels without the year-specific validation described below.
 
 ## Replication status
 - Tables 1-4 (TWFE, `areg` with cluster) and 6-9 (OLS HC1, 2SLS HC0 with normal p-values, as Stata `ivreg2, robust`) match the paper to the printed digit, including the first stage (6.81 (1.64), F = 17.35, partial R^2 = 0.10). One cosmetic difference: Table 1 col. 1 s.e. is 1.48 vs 1.49 published.
 - Table 5 (and Table 10, homicides) cannot be reproduced: `homicides_OLS.dta` is confidential and not in the package.
-- Data: only `data/analysis` and `code/` matter. One raw `.xls` with a non-ASCII filename failed to unzip; later raw files may be truncated. Not needed.
+- The completed paper replication used `data/analysis` and `code/`. One raw `.xls` with a non-ASCII filename failed to unzip; later raw files may be truncated. Those files were not needed for that replication, but the proposed education harmonization may require original annual files/dictionaries; do not assume the local raw-data extraction is complete.
 - Run (from `project/`): `python -I rep_scripts/replicate.py rep_data/Replication/data/analysis rep_results`.
 
 ## Instruments (shipped in the data, not rebuilt)
@@ -41,19 +71,28 @@ This is the user's selected primary specification. Earlier kernel, kernel-with-i
 
 ### Reproduction and reporting
 
-Run from this `project/` directory in an environment with `npiv/kernel/requirements-neural.txt` installed. The original temporary virtual environment path is recorded in the result manifest but is not a durable dependency.
+Run from the repository root with the environment above. Choose the relevant operation; these are **not** a single sequence that must be rerun for a handoff.
+
+**Numerical preflight without fitting the panel or changing the reference results:**
 
 ```sh
-python3 npiv/kernel/run_full_neural.py --check-only
-python3 npiv/kernel/run_full_neural.py --reuse-density
-python3 npiv/kernel/verify_full_neural.py
-python3 npiv/kernel/bootstrap_full_neural.py --replicates 399 --workers 4
-python3 npiv/kernel/memo_quadrature_check.py
-python3 npiv/kernel/write_full_neural_memo.py
+.venv/bin/python npiv/kernel/run_full_neural.py --check-only --output /tmp/ecma31350-neural-preflight
+```
+
+**Verify the saved full fit:** `.venv/bin/python npiv/kernel/verify_full_neural.py`. This requires the original raw data with the recorded source hash; it reconstructs saved predictions/derivatives and refreshes verification outputs, without retuning the model. Review the resulting Git diff.
+
+**Rebuild only the memo from saved estimates and inference:**
+
+```sh
+.venv/bin/python npiv/kernel/write_full_neural_memo.py
 latexmk -lualatex NPIV.tex
 ```
 
-The full fit reads the historical `neural_outcome/results.json` manifest for sample/fold provenance and `no_penalty/<outcome>/common_time_profiles.csv` for matched time profiles; preserve these dependencies. `--reuse-density` still refits/tunes the outcome stage and may be expensive; it is not needed merely to rebuild the memo. The bootstrap resumes existing draw files, so use a fresh output directory after changing any model/data/tuning choice; never mix incompatible checkpoint draws. The memo generator reads the finished inference outputs and writes only the full-neural block after the preserved exposition. `memo_work/NPIV.before_full_neural.tex` is the preservation backup, not the current report. If restricted caches prevent compilation, create a writable directory under `/tmp` and set `TEXMFVAR` and `TEXMFCACHE` to it; likewise use a writable `MPLCONFIGDIR` for figures. The template still loads `../../../adenc.sty`.
+Edit memo prose in `npiv/kernel/full_neural/memo_work/memo_body.tex`; the generator inserts tables/figures and replaces only the full-neural block. `memo_work/NPIV.before_full_neural.tex` is the preservation backup, not the current report. The template loads `../../../adenc.sty`, outside this repository. Supply the original style from the course workspace when compiling; retain the user's template. If restricted caches prevent compilation, create a writable directory under `/tmp` and set `TEXMFVAR` and `TEXMFCACHE` to it; likewise use a writable `MPLCONFIGDIR` for figures.
+
+**Refit only when intended:** `.venv/bin/python npiv/kernel/run_full_neural.py --output npiv/kernel/full_neural_rerun` fits the existing specification in a fresh directory. It reads the tracked historical `neural_outcome/results.json` manifest for sample/fold provenance and `no_penalty/<outcome>/common_time_profiles.csv` for matched time profiles; preserve these dependencies. `--reuse-density` can reuse compatible saved density checkpoints in the chosen output directory, but still retunes/refits the outcome stage and is not needed for the memo. A fresh directory alone does not add education to the feature construction.
+
+**Bootstrap only when intended:** `.venv/bin/python npiv/kernel/bootstrap_full_neural.py --replicates 399 --workers 4` uses the existing baseline model and resumes its saved draws. For a new model, first change the source-directory handling as described in heterogeneity subsection 5. Its `--output` option changes only the inference destination, not the model being read. Never mix checkpoint draws after changing features, sample, tuning, or evaluation targets; use fresh directories and verify hashes. `memo_quadrature_check.py` performs additional numerical integration checks, not a new model selection. Existing completed results do not require rerunning fits or bootstrap for review.
 
 ## Legacy NPIV experiments (superseded by the full neural specification)
 
@@ -105,3 +144,31 @@ Extend the commune bootstrap to refit **both expanded stages** and recompute eve
 Save each draw's vector of AMTEs. Report point estimates, cluster-bootstrap SEs, centered-bootstrap p-values, and symmetric test-matched intervals with the same documented definitions as the memo. For heterogeneity tests, bootstrap **paired differences** such as older-minus-younger, higher-minus-lower education, or 2017-minus-2008; do not infer differences from separate significance tests or overlap of marginal intervals. If testing an entire curve, use a centered joint max-statistic from the same bootstrap vectors and label resulting simultaneous bands; pointwise bands alone are not a joint heterogeneity test. Declare any multiplicity correction across outcomes, groups, and years. Include sensitivity to sample support, network/stopping choices, and bootstrap mean shifts; neither a predictive first-stage gain nor a small conditional p-value proves nonparametric causal identification.
 
 Deliver an education codebook/crosswalk, cell-level moderator file, named model-feature manifest, held-out diagnostics, AMTE and contrast tables (estimate/SE/p/interval/counts), bootstrap vectors, plots with labeled uncertainty, and an updated memo. Validate that the mean of the reported cell derivatives reproduces each aggregate and that constant year/commune main effects have zero treatment derivative. Do not claim that the present saved networks already estimate education heterogeneity.
+
+### 5. Implementation map and checkpoint safety
+
+The current module chain is `run_full_neural.py` → `run_density_neural.py` → `run_density_no_penalty.py` → `run_kernel.py`. The helper filenames reflect development history; the selected first stage is an MDN, not a kernel density estimator. Inspect all shared feature constructors before modifying one caller.
+
+| File under `npiv/kernel/` | Required extension work |
+| --- | --- |
+| `run_kernel.py` (`load_cells`, `inputs`) | Add validated outcome-specific education aggregates and a named feature order; preserve keys, cell weights and explicit raw-share mode. `inputs` defaults to Bartik if `d.attrs['instrument_mode']` is lost, so assert the eleven instrument columns after merges/resampling. |
+| `run_full_neural.py` (`continuous_inputs`, density scaling, outcome packing/integration) | Extend both stages, remove fixed positional slices, and save feature/data hashes with every fit. For one added annual education scalar, input counts become 24 with shares, 13 without shares, and 14 in the response (including ten year indicators). Additional baseline moderators add further inputs. |
+| `run_density_neural.py` (`scaling`, `context`, `evaluate`) | Extend response scaling/context and analytic treatment differentiation; ensure derivative is with respect to original A units, not standardized A. |
+| `bootstrap_full_neural.py` | Parameterize model source separately from output; propagate source to worker initialization. Current `SOURCE=HERE/'full_neural'` is hard-coded. Extend `fit_statistic` to return the full AMTE/contrast vector; update fixed three-coordinate profiles and 101-commune/10-year assertions if the validated sample changes. |
+| `verify_full_neural.py` | Parameterize `OUT`, validate the feature manifest and changed input dimensions, and independently reconstruct new predictions and derivatives. It currently reads only `full_neural/` and checks 23/12 density inputs. |
+| `write_full_neural_memo.py` and memo numerical checks | Parameterize their baseline paths or create extension-specific reporting/checking entry points. The current memo generator hard-codes `SOURCE=HERE/'full_neural'`; a new output folder does not redirect it. Preserve the original exposition/template and reference results. |
+
+Use a dedicated extension runner or parameterize these paths before producing new-model inference; do not claim that a baseline bootstrap written into `full_neural_heterogeneity/` estimates the extension. Recompute four-coordinate common support `(A, age, educ, male_share)` rather than reusing the original three-coordinate profile CSVs.
+
+Saved baseline draw JSONs contain resampling information, overall derivatives, and common-profile year averages; they do not retain fitted bootstrap networks or cell-level derivatives for new age/education groupings. They cannot provide subgroup SEs by relabeling the existing overall draws. Existing point-fit networks can produce age curves, but new age-group inference requires computing those targets in refits; education interactions require both expanded stages to be fitted.
+
+For each new draw, save the model/data/feature/target hashes, resampled source communes, group counts, the ordered vector of estimates and integration checks. Use identical resamples for all contrasts and compatible outcome comparisons. Validate metadata before resuming; the current baseline runner skips existing draw filenames without a complete compatibility audit.
+
+### 6. First implementation milestone and completion criteria
+
+1. **Audit before fitting:** write the year-specific education crosswalk, validate its implied distributions, and save a moderator audit with missingness/denominators by commune/year. State annual versus baseline targets and fixed bin/reference definitions. Compare outcome-specific cell counts and keys with the reference data.
+2. **Smoke check one outcome:** exercise the expanded pipeline and one bootstrap resample in a fresh directory before launching the full grid or 399-draw run. Check input dimensions/names, no source-commune leakage across folds, training-only scaling, density normalization/integration, and analytic derivatives against a small finite-difference check. Confirm additive commune/year effects have zero treatment derivative and that group averages match the saved cell derivatives. This is a validation milestone, not sufficient final inference.
+3. **Fit and report:** tune both stages, fit all three outcomes, compute prespecified AMTEs/paired contrasts on supported profiles, and bootstrap the whole expanded estimator. Preserve full within-commune histories. Explain sample changes and whether tuning, cutoffs and reference profiles are held fixed. Do not describe pointwise uncertainty as simultaneous coverage.
+4. **Finish the handoff:** save the artifacts listed in subsection 4, update this memory with exact commands/paths and completed versus outstanding work, and update the memo in the established order. Review `git diff --check` and `git status`; include only intended code/results, keep raw replication data excluded, and preserve unrelated local work.
+
+For consistency with the current memo, for scalar target `theta_hat` and B bootstrap estimates define `e_b = theta_b - theta_hat`, SE as the sample SD of `theta_b` (ddof=1), and `p = (1 + count(abs(e_b) >= abs(theta_hat))) / (B+1)`. The reported symmetric 95% interval is `theta_hat ± c`, where c is the `ceil(.95*(B+1))`-th ordered absolute error (380th when B=399). Apply this to each **paired contrast** as its own scalar target. A joint curve test needs a separately documented centered max-statistic and simultaneous-band construction; these scalar formulas do not provide it automatically. Retain the conditional-inference and identification limitations stated above.
