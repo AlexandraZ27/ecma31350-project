@@ -1,0 +1,51 @@
+{
+  "source_hashes_match": true,
+  "all_numerical_self_checks_pass": true,
+  "outcomes": {
+    "pc_19": {
+      "sample_and_outer_folds_match_reference_design": true,
+      "MDN_density_selection_minimizes_saved_heldout_loss": true,
+      "both_stage_predictions_reproduced_from_saved_models": true,
+      "first_stage_training_communes_exclude_validation_communes": true,
+      "MDN_prediction_inputs_exclude_outcome_and_observed_treatment": true,
+      "all_structural_CV_scores_reproduced": true,
+      "structural_selection_minimizes_saved_heldout_loss": true,
+      "cell_and_time_derivatives_reproduced": true,
+      "derivatives_agree_with_finite_differences": true,
+      "fixed_effects_satisfy_integrated_normal_equations": true,
+      "minimum_predicted_component_sd_in_training_A_sd": 0.07578764621614617,
+      "max_selected_CV_quadrature_RMSE": 2.903687948600436e-10,
+      "max_final_quadrature_RMSE": 3.138794283410877e-10
+    },
+    "pc_20": {
+      "sample_and_outer_folds_match_reference_design": true,
+      "MDN_density_selection_minimizes_saved_heldout_loss": true,
+      "both_stage_predictions_reproduced_from_saved_models": true,
+      "first_stage_training_communes_exclude_validation_communes": true,
+      "MDN_prediction_inputs_exclude_outcome_and_observed_treatment": true,
+      "all_structural_CV_scores_reproduced": true,
+      "structural_selection_minimizes_saved_heldout_loss": true,
+      "cell_and_time_derivatives_reproduced": true,
+      "derivatives_agree_with_finite_differences": true,
+      "fixed_effects_satisfy_integrated_normal_equations": true,
+      "minimum_predicted_component_sd_in_training_A_sd": 0.07383408415184645,
+      "max_selected_CV_quadrature_RMSE": 6.8159571518728494e-09,
+      "max_final_quadrature_RMSE": 1.2047420392617994e-08
+    },
+    "vict_agreg": {
+      "sample_and_outer_folds_match_reference_design": true,
+      "MDN_density_selection_minimizes_saved_heldout_loss": true,
+      "both_stage_predictions_reproduced_from_saved_models": true,
+      "first_stage_training_communes_exclude_validation_communes": true,
+      "MDN_prediction_inputs_exclude_outcome_and_observed_treatment": true,
+      "all_structural_CV_scores_reproduced": true,
+      "structural_selection_minimizes_saved_heldout_loss": true,
+      "cell_and_time_derivatives_reproduced": true,
+      "derivatives_agree_with_finite_differences": true,
+      "fixed_effects_satisfy_integrated_normal_equations": true,
+      "minimum_predicted_component_sd_in_training_A_sd": 0.07495466904592009,
+      "max_selected_CV_quadrature_RMSE": 4.194588164137384e-10,
+      "max_final_quadrature_RMSE": 5.351214907818355e-10
+    }
+  }
+}

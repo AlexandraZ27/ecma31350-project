@@ -256,7 +256,7 @@ The same reference profiles $\mathcal C$ are used for every year. They lie in th
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=.92\linewidth]{npiv/kernel/full_neural/inference/time_profiles_inference.pdf}
+\includegraphics[width=.92\linewidth]{npiv/neural/full_neural/inference/time_profiles_inference.pdf}
 \caption{Time-specific average derivatives at common treatment and demographic profiles. Shaded bands are pointwise 95\% symmetric centered-bootstrap intervals, conditional on fixed reference profiles and selected fit settings.}
 \label{fig:neural-time}
 \end{figure}
@@ -291,7 +291,7 @@ The calculations do not account for model-selection uncertainty, early-stopping 
 Hartford et al.\ \cite{deepiv} motivate the two-stage neural objective and held-out loss selection. The supplied Newey--Powell manuscript \cite{neweypowell} develops completeness-based identification, the ill-posedness issue, and consistency for constrained nonparametric estimators. Neither supplied paper establishes validity of this particular commune bootstrap for early-stopped neural NPIV derivatives. Formal causal confidence statements would require additional regularity, identification, and bias-control arguments for this estimator; the reported bootstrap should be read with that qualification.
 
 \paragraph{Reproducibility.}
-Point fits and diagnostics are in \path{npiv/kernel/full_neural/}. Run \path{npiv/kernel/bootstrap_full_neural.py} to generate draws, summary statistics, time profiles, and validation checks in \path{npiv/kernel/full_neural/inference/}. The original point estimates are retained unchanged. The memo uses only the selected full neural specification.
+Point fits and diagnostics are in \path{npiv/neural/full_neural/}. Run \path{npiv/neural/bootstrap_full_neural.py} to generate draws, summary statistics, time profiles, and validation checks in \path{npiv/neural/full_neural/inference/}. The original point estimates are retained unchanged. The memo uses only the selected full neural specification.
 
 \begin{thebibliography}{9}
 \bibitem{immigration}
