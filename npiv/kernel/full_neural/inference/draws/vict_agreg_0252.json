@@ -1,0 +1,572 @@
+{
+  "outcome": "vict_agreg",
+  "replicate": 252,
+  "seed": 20261378,
+  "commune_draws": [
+    {
+      "copy": 0,
+      "source_commune": 13110,
+      "fold": 0
+    },
+    {
+      "copy": 1,
+      "source_commune": 8103,
+      "fold": 0
+    },
+    {
+      "copy": 2,
+      "source_commune": 12101,
+      "fold": 0
+    },
+    {
+      "copy": 3,
+      "source_commune": 7304,
+      "fold": 0
+    },
+    {
+      "copy": 4,
+      "source_commune": 11101,
+      "fold": 0
+    },
+    {
+      "copy": 5,
+      "source_commune": 7304,
+      "fold": 0
+    },
+    {
+      "copy": 6,
+      "source_commune": 8301,
+      "fold": 0
+    },
+    {
+      "copy": 7,
+      "source_commune": 11101,
+      "fold": 0
+    },
+    {
+      "copy": 8,
+      "source_commune": 5804,
+      "fold": 0
+    },
+    {
+      "copy": 9,
+      "source_commune": 7101,
+      "fold": 0
+    },
+    {
+      "copy": 10,
+      "source_commune": 7101,
+      "fold": 0
+    },
+    {
+      "copy": 11,
+      "source_commune": 13110,
+      "fold": 0
+    },
+    {
+      "copy": 12,
+      "source_commune": 8111,
+      "fold": 0
+    },
+    {
+      "copy": 13,
+      "source_commune": 13110,
+      "fold": 0
+    },
+    {
+      "copy": 14,
+      "source_commune": 8416,
+      "fold": 0
+    },
+    {
+      "copy": 15,
+      "source_commune": 8416,
+      "fold": 0
+    },
+    {
+      "copy": 16,
+      "source_commune": 8416,
+      "fold": 0
+    },
+    {
+      "copy": 17,
+      "source_commune": 13402,
+      "fold": 0
+    },
+    {
+      "copy": 18,
+      "source_commune": 13110,
+      "fold": 0
+    },
+    {
+      "copy": 19,
+      "source_commune": 7101,
+      "fold": 0
+    },
+    {
+      "copy": 20,
+      "source_commune": 5804,
+      "fold": 0
+    },
+    {
+      "copy": 21,
+      "source_commune": 13112,
+      "fold": 1
+    },
+    {
+      "copy": 22,
+      "source_commune": 13601,
+      "fold": 1
+    },
+    {
+      "copy": 23,
+      "source_commune": 13131,
+      "fold": 1
+    },
+    {
+      "copy": 24,
+      "source_commune": 5103,
+      "fold": 1
+    },
+    {
+      "copy": 25,
+      "source_commune": 13101,
+      "fold": 1
+    },
+    {
+      "copy": 26,
+      "source_commune": 13127,
+      "fold": 1
+    },
+    {
+      "copy": 27,
+      "source_commune": 10202,
+      "fold": 1
+    },
+    {
+      "copy": 28,
+      "source_commune": 5103,
+      "fold": 1
+    },
+    {
+      "copy": 29,
+      "source_commune": 13108,
+      "fold": 1
+    },
+    {
+      "copy": 30,
+      "source_commune": 15101,
+      "fold": 1
+    },
+    {
+      "copy": 31,
+      "source_commune": 15101,
+      "fold": 1
+    },
+    {
+      "copy": 32,
+      "source_commune": 13112,
+      "fold": 1
+    },
+    {
+      "copy": 33,
+      "source_commune": 13132,
+      "fold": 1
+    },
+    {
+      "copy": 34,
+      "source_commune": 6115,
+      "fold": 1
+    },
+    {
+      "copy": 35,
+      "source_commune": 6115,
+      "fold": 1
+    },
+    {
+      "copy": 36,
+      "source_commune": 6301,
+      "fold": 1
+    },
+    {
+      "copy": 37,
+      "source_commune": 13105,
+      "fold": 1
+    },
+    {
+      "copy": 38,
+      "source_commune": 15101,
+      "fold": 1
+    },
+    {
+      "copy": 39,
+      "source_commune": 15101,
+      "fold": 1
+    },
+    {
+      "copy": 40,
+      "source_commune": 5103,
+      "fold": 1
+    },
+    {
+      "copy": 41,
+      "source_commune": 10301,
+      "fold": 2
+    },
+    {
+      "copy": 42,
+      "source_commune": 14201,
+      "fold": 2
+    },
+    {
+      "copy": 43,
+      "source_commune": 5109,
+      "fold": 2
+    },
+    {
+      "copy": 44,
+      "source_commune": 13114,
+      "fold": 2
+    },
+    {
+      "copy": 45,
+      "source_commune": 14201,
+      "fold": 2
+    },
+    {
+      "copy": 46,
+      "source_commune": 13125,
+      "fold": 2
+    },
+    {
+      "copy": 47,
+      "source_commune": 6117,
+      "fold": 2
+    },
+    {
+      "copy": 48,
+      "source_commune": 8107,
+      "fold": 2
+    },
+    {
+      "copy": 49,
+      "source_commune": 8110,
+      "fold": 2
+    },
+    {
+      "copy": 50,
+      "source_commune": 13122,
+      "fold": 2
+    },
+    {
+      "copy": 51,
+      "source_commune": 3101,
+      "fold": 2
+    },
+    {
+      "copy": 52,
+      "source_commune": 8108,
+      "fold": 2
+    },
+    {
+      "copy": 53,
+      "source_commune": 4102,
+      "fold": 2
+    },
+    {
+      "copy": 54,
+      "source_commune": 9112,
+      "fold": 2
+    },
+    {
+      "copy": 55,
+      "source_commune": 5701,
+      "fold": 2
+    },
+    {
+      "copy": 56,
+      "source_commune": 6117,
+      "fold": 2
+    },
+    {
+      "copy": 57,
+      "source_commune": 3101,
+      "fold": 2
+    },
+    {
+      "copy": 58,
+      "source_commune": 13114,
+      "fold": 2
+    },
+    {
+      "copy": 59,
+      "source_commune": 13126,
+      "fold": 2
+    },
+    {
+      "copy": 60,
+      "source_commune": 13122,
+      "fold": 2
+    },
+    {
+      "copy": 61,
+      "source_commune": 13115,
+      "fold": 3
+    },
+    {
+      "copy": 62,
+      "source_commune": 13115,
+      "fold": 3
+    },
+    {
+      "copy": 63,
+      "source_commune": 13115,
+      "fold": 3
+    },
+    {
+      "copy": 64,
+      "source_commune": 13401,
+      "fold": 3
+    },
+    {
+      "copy": 65,
+      "source_commune": 13302,
+      "fold": 3
+    },
+    {
+      "copy": 66,
+      "source_commune": 4101,
+      "fold": 3
+    },
+    {
+      "copy": 67,
+      "source_commune": 13604,
+      "fold": 3
+    },
+    {
+      "copy": 68,
+      "source_commune": 13404,
+      "fold": 3
+    },
+    {
+      "copy": 69,
+      "source_commune": 6101,
+      "fold": 3
+    },
+    {
+      "copy": 70,
+      "source_commune": 4101,
+      "fold": 3
+    },
+    {
+      "copy": 71,
+      "source_commune": 13123,
+      "fold": 3
+    },
+    {
+      "copy": 72,
+      "source_commune": 13119,
+      "fold": 3
+    },
+    {
+      "copy": 73,
+      "source_commune": 13404,
+      "fold": 3
+    },
+    {
+      "copy": 74,
+      "source_commune": 8401,
+      "fold": 3
+    },
+    {
+      "copy": 75,
+      "source_commune": 13123,
+      "fold": 3
+    },
+    {
+      "copy": 76,
+      "source_commune": 1101,
+      "fold": 3
+    },
+    {
+      "copy": 77,
+      "source_commune": 13115,
+      "fold": 3
+    },
+    {
+      "copy": 78,
+      "source_commune": 13301,
+      "fold": 3
+    },
+    {
+      "copy": 79,
+      "source_commune": 13119,
+      "fold": 3
+    },
+    {
+      "copy": 80,
+      "source_commune": 13123,
+      "fold": 3
+    },
+    {
+      "copy": 81,
+      "source_commune": 5301,
+      "fold": 4
+    },
+    {
+      "copy": 82,
+      "source_commune": 1107,
+      "fold": 4
+    },
+    {
+      "copy": 83,
+      "source_commune": 7301,
+      "fold": 4
+    },
+    {
+      "copy": 84,
+      "source_commune": 10101,
+      "fold": 4
+    },
+    {
+      "copy": 85,
+      "source_commune": 13124,
+      "fold": 4
+    },
+    {
+      "copy": 86,
+      "source_commune": 8102,
+      "fold": 4
+    },
+    {
+      "copy": 87,
+      "source_commune": 13107,
+      "fold": 4
+    },
+    {
+      "copy": 88,
+      "source_commune": 13129,
+      "fold": 4
+    },
+    {
+      "copy": 89,
+      "source_commune": 5301,
+      "fold": 4
+    },
+    {
+      "copy": 90,
+      "source_commune": 8102,
+      "fold": 4
+    },
+    {
+      "copy": 91,
+      "source_commune": 13102,
+      "fold": 4
+    },
+    {
+      "copy": 92,
+      "source_commune": 13201,
+      "fold": 4
+    },
+    {
+      "copy": 93,
+      "source_commune": 13501,
+      "fold": 4
+    },
+    {
+      "copy": 94,
+      "source_commune": 7301,
+      "fold": 4
+    },
+    {
+      "copy": 95,
+      "source_commune": 5501,
+      "fold": 4
+    },
+    {
+      "copy": 96,
+      "source_commune": 1107,
+      "fold": 4
+    },
+    {
+      "copy": 97,
+      "source_commune": 13117,
+      "fold": 4
+    },
+    {
+      "copy": 98,
+      "source_commune": 5301,
+      "fold": 4
+    },
+    {
+      "copy": 99,
+      "source_commune": 13102,
+      "fold": 4
+    },
+    {
+      "copy": 100,
+      "source_commune": 4301,
+      "fold": 4
+    }
+  ],
+  "result": {
+    "average_derivative": 1.0479836515662697,
+    "average_derivative_all_cells": 1.0217580385020117,
+    "time_common_profile_derivative": [
+      1.091423027950029,
+      1.068384351415225,
+      1.1137876095903547,
+      1.2140383014513856,
+      1.148111780735526,
+      1.2140766994102694,
+      1.0154259301615436,
+      1.068829703129102,
+      1.2239681783794834,
+      1.1221110052084367
+    ],
+    "years": [
+      2008,
+      2009,
+      2010,
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017
+    ],
+    "trimmed_cells": 911,
+    "quadrature_nodes_max": 32,
+    "max_quadrature_RMSE": 1.48892397852087e-08,
+    "fold_exclusions": [
+      {
+        "fold": 0,
+        "train_distinct_source_communes": 54,
+        "test_distinct_source_communes": 11
+      },
+      {
+        "fold": 1,
+        "train_distinct_source_communes": 52,
+        "test_distinct_source_communes": 13
+      },
+      {
+        "fold": 2,
+        "train_distinct_source_communes": 50,
+        "test_distinct_source_communes": 15
+      },
+      {
+        "fold": 3,
+        "train_distinct_source_communes": 53,
+        "test_distinct_source_communes": 12
+      },
+      {
+        "fold": 4,
+        "train_distinct_source_communes": 51,
+        "test_distinct_source_communes": 14
+      }
+    ],
+    "integration_method": "32-node Gaussian mixture rule, checked against Hermite64 per component"
+  },
+  "elapsed_seconds": 4.1527180671691895
+}

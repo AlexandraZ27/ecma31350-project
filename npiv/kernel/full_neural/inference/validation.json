@@ -1,0 +1,32 @@
+{
+  "all_checks_passed": true,
+  "original_exposition_and_template_unchanged": true,
+  "paired_draws_across_outcomes": true,
+  "source_communes_remain_in_original_folds": true,
+  "reported_intervals_match_tests": true,
+  "integration_rule_counts": {
+    "original adaptive rule": 81,
+    "32-node Gaussian mixture rule, checked against Hermite64 per component": 1076,
+    "adaptive Gauss-Legendre fallback, checked against Hermite64 per component": 40
+  },
+  "outcomes": {
+    "pc_19": {
+      "draws": 399,
+      "max_quadrature_RMSE": 3.3005554758010976e-07,
+      "SE": 0.3439482508823818,
+      "p": 0.055
+    },
+    "pc_20": {
+      "draws": 399,
+      "max_quadrature_RMSE": 2.698788161344643e-05,
+      "SE": 0.6382740659423779,
+      "p": 0.0875
+    },
+    "vict_agreg": {
+      "draws": 399,
+      "max_quadrature_RMSE": 1.1986896341927305e-07,
+      "SE": 0.48760315142283983,
+      "p": 0.0775
+    }
+  }
+}

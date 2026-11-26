@@ -1,6 +1,22 @@
 /rep_data/
-<<<<<<< Updated upstream
 .venv/
-=======
 /replication.zip
->>>>>>> Stashed changes
+.DS_Store
+__pycache__/
+*.py[cod]
+
+# LaTeX build intermediates; keep the final NPIV.pdf report.
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+
+# Temporary memo review files; retain its editable body and inference checks.
+npiv/kernel/full_neural/memo_work/*
+!npiv/kernel/full_neural/memo_work/memo_body.tex
+!npiv/kernel/full_neural/memo_work/NPIV.before_full_neural.tex
+!npiv/kernel/full_neural/memo_work/render_pdf.swift
+npiv/kernel/full_neural/inference/*_draft.pdf
+npiv/kernel/full_neural/inference/*_draft.png

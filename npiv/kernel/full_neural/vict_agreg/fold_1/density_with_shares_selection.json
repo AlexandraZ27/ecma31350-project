@@ -1,0 +1,1317 @@
+{
+  "selected": {
+    "hidden": [
+      16
+    ],
+    "components": 10,
+    "steps": 50,
+    "heldout_density_NLL": 1.0168398138943096
+  },
+  "grid": [
+    {
+      "hidden": [
+        16
+      ],
+      "components": 1,
+      "steps": 0,
+      "heldout_density_NLL": 1.5459815347423986
+    },
+    {
+      "hidden": [
+        16
+      ],
+      "components": 1,
+      "steps": 50,
+      "heldout_density_NLL": 1.364846730158698
+    },
+    {
+      "hidden": [
+        16
+      ],
+      "components": 1,
+      "steps": 100,
+      "heldout_density_NLL": 2.9795591437112194
+    },
+    {
+      "hidden": [
+        16
+      ],
+      "components": 1,
+      "steps": 200,
+      "heldout_density_NLL": 19.598117590474327
+    },
+    {
+      "hidden": [
+        16
+      ],
+      "components": 1,
+      "steps": 400,
+      "heldout_density_NLL": 38.07337760976465
+    },
+    {
+      "hidden": [
+        16
+      ],
+      "components": 3,
+      "steps": 0,
+      "heldout_density_NLL": 1.5611632056479008
+    },
+    {
+      "hidden": [
+        16
+      ],
+      "components": 3,
+      "steps": 50,
+      "heldout_density_NLL": 1.0835763341397873
+    },
+    {
+      "hidden": [
+        16
+      ],
+      "components": 3,
+      "steps": 100,
+      "heldout_density_NLL": 1.908296467945123
+    },
+    {
+      "hidden": [
+        16
+      ],
+      "components": 3,
+      "steps": 200,
+      "heldout_density_NLL": 3.535395563093818
+    },
+    {
+      "hidden": [
+        16
+      ],
+      "components": 3,
+      "steps": 400,
+      "heldout_density_NLL": 5.524116128326968
+    },
+    {
+      "hidden": [
+        16
+      ],
+      "components": 10,
+      "steps": 0,
+      "heldout_density_NLL": 1.5396215607615507
+    },
+    {
+      "hidden": [
+        16
+      ],
+      "components": 10,
+      "steps": 50,
+      "heldout_density_NLL": 1.0168398138943096
+    },
+    {
+      "hidden": [
+        16
+      ],
+      "components": 10,
+      "steps": 100,
+      "heldout_density_NLL": 1.8458533764885245
+    },
+    {
+      "hidden": [
+        16
+      ],
+      "components": 10,
+      "steps": 200,
+      "heldout_density_NLL": 2.9620058824671465
+    },
+    {
+      "hidden": [
+        16
+      ],
+      "components": 10,
+      "steps": 400,
+      "heldout_density_NLL": 3.8747306498457075
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 1,
+      "steps": 0,
+      "heldout_density_NLL": 1.5459815347423986
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 1,
+      "steps": 50,
+      "heldout_density_NLL": 1.339804693086133
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 1,
+      "steps": 100,
+      "heldout_density_NLL": 10.665976758413615
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 1,
+      "steps": 200,
+      "heldout_density_NLL": 28.992658576366455
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 1,
+      "steps": 400,
+      "heldout_density_NLL": 38.57056194114541
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 3,
+      "steps": 0,
+      "heldout_density_NLL": 1.5611632056479008
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 3,
+      "steps": 50,
+      "heldout_density_NLL": 1.1553136309717564
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 3,
+      "steps": 100,
+      "heldout_density_NLL": 2.0141493477869563
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 3,
+      "steps": 200,
+      "heldout_density_NLL": 3.258730412447123
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 3,
+      "steps": 400,
+      "heldout_density_NLL": 4.99143016641975
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 10,
+      "steps": 0,
+      "heldout_density_NLL": 1.5396215607615507
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 10,
+      "steps": 50,
+      "heldout_density_NLL": 1.0542092135155212
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 10,
+      "steps": 100,
+      "heldout_density_NLL": 2.0103017411574755
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 10,
+      "steps": 200,
+      "heldout_density_NLL": 3.203957300395168
+    },
+    {
+      "hidden": [
+        32,
+        16
+      ],
+      "components": 10,
+      "steps": 400,
+      "heldout_density_NLL": 4.297449559979127
+    }
+  ],
+  "folds": [
+    {
+      "fold": 0,
+      "train_communes": [
+        1101,
+        1107,
+        2101,
+        2201,
+        2301,
+        3101,
+        3301,
+        4102,
+        4201,
+        4203,
+        5301,
+        5501,
+        5801,
+        5802,
+        5804,
+        6101,
+        6117,
+        7101,
+        7301,
+        7401,
+        8101,
+        8102,
+        8106,
+        8107,
+        8108,
+        8112,
+        8301,
+        8401,
+        8416,
+        9120,
+        9201,
+        10101,
+        10301,
+        12101,
+        13103,
+        13107,
+        13109,
+        13113,
+        13115,
+        13116,
+        13119,
+        13122,
+        13123,
+        13124,
+        13128,
+        13129,
+        13130,
+        13201,
+        13301,
+        13401,
+        13501,
+        13605,
+        14101,
+        14201
+      ],
+      "test_communes": [
+        4101,
+        4301,
+        5109,
+        5502,
+        5701,
+        7102,
+        7304,
+        8103,
+        8110,
+        8111,
+        9112,
+        11101,
+        13102,
+        13104,
+        13106,
+        13110,
+        13114,
+        13117,
+        13118,
+        13120,
+        13121,
+        13125,
+        13126,
+        13302,
+        13402,
+        13404,
+        13604
+      ],
+      "test_n": 270,
+      "grid": [
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 0,
+          "heldout_density_NLL": 1.5478765004507158
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 50,
+          "heldout_density_NLL": 1.9385965765094209
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 100,
+          "heldout_density_NLL": 5.014745815241578
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 200,
+          "heldout_density_NLL": 28.239836903409845
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 400,
+          "heldout_density_NLL": 44.40156087488509
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 0,
+          "heldout_density_NLL": 1.5475802765136475
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 50,
+          "heldout_density_NLL": 1.336697748356111
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 100,
+          "heldout_density_NLL": 2.4567781444066426
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 200,
+          "heldout_density_NLL": 3.9682120770871077
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 400,
+          "heldout_density_NLL": 5.632871726450411
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 0,
+          "heldout_density_NLL": 1.5322089203846532
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 50,
+          "heldout_density_NLL": 1.310223711995423
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 100,
+          "heldout_density_NLL": 2.3543311636240514
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 200,
+          "heldout_density_NLL": 2.78924970485397
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 400,
+          "heldout_density_NLL": 4.008490277454923
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 0,
+          "heldout_density_NLL": 1.5478765004507158
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 50,
+          "heldout_density_NLL": 1.8118974136738966
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 100,
+          "heldout_density_NLL": 19.21495152691603
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 200,
+          "heldout_density_NLL": 45.04518548289454
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 400,
+          "heldout_density_NLL": 53.582559684398795
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 0,
+          "heldout_density_NLL": 1.5475802765136475
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 50,
+          "heldout_density_NLL": 1.4478594369128825
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 100,
+          "heldout_density_NLL": 2.829993099124718
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 200,
+          "heldout_density_NLL": 4.27255045185481
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 400,
+          "heldout_density_NLL": 6.694223478068249
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 0,
+          "heldout_density_NLL": 1.5322089203846532
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 50,
+          "heldout_density_NLL": 1.4069145354893147
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 100,
+          "heldout_density_NLL": 2.6306439209977466
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 200,
+          "heldout_density_NLL": 3.9769466099178383
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 400,
+          "heldout_density_NLL": 4.794587633535203
+        }
+      ]
+    },
+    {
+      "fold": 1,
+      "train_communes": [
+        1101,
+        1107,
+        3101,
+        3301,
+        4101,
+        4201,
+        4301,
+        5109,
+        5502,
+        5701,
+        5802,
+        6101,
+        7101,
+        7102,
+        7304,
+        7401,
+        8101,
+        8102,
+        8103,
+        8107,
+        8110,
+        8111,
+        8416,
+        9112,
+        9201,
+        10301,
+        11101,
+        12101,
+        13102,
+        13104,
+        13106,
+        13107,
+        13110,
+        13113,
+        13114,
+        13115,
+        13117,
+        13118,
+        13119,
+        13120,
+        13121,
+        13122,
+        13123,
+        13125,
+        13126,
+        13129,
+        13201,
+        13302,
+        13402,
+        13404,
+        13501,
+        13604,
+        14101,
+        14201
+      ],
+      "test_communes": [
+        2101,
+        2201,
+        2301,
+        4102,
+        4203,
+        5301,
+        5501,
+        5801,
+        5804,
+        6117,
+        7301,
+        8106,
+        8108,
+        8112,
+        8301,
+        8401,
+        9120,
+        10101,
+        13103,
+        13109,
+        13116,
+        13124,
+        13128,
+        13130,
+        13301,
+        13401,
+        13605
+      ],
+      "test_n": 270,
+      "grid": [
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 0,
+          "heldout_density_NLL": 1.435842597935223
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 50,
+          "heldout_density_NLL": 1.1266813656184922
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 100,
+          "heldout_density_NLL": 2.7551684451500895
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 200,
+          "heldout_density_NLL": 23.589333146183453
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 400,
+          "heldout_density_NLL": 37.28775836518115
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 0,
+          "heldout_density_NLL": 1.531136390473932
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 50,
+          "heldout_density_NLL": 1.002270099610981
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 100,
+          "heldout_density_NLL": 1.802547741217101
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 200,
+          "heldout_density_NLL": 3.2677623649075254
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 400,
+          "heldout_density_NLL": 5.540312072738275
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 0,
+          "heldout_density_NLL": 1.4314944249114387
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 50,
+          "heldout_density_NLL": 0.8671220227653361
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 100,
+          "heldout_density_NLL": 1.4689682569460238
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 200,
+          "heldout_density_NLL": 2.9315357918052256
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 400,
+          "heldout_density_NLL": 3.198078515354754
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 0,
+          "heldout_density_NLL": 1.435842597935223
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 50,
+          "heldout_density_NLL": 1.2395674585799163
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 100,
+          "heldout_density_NLL": 10.342186666535897
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 200,
+          "heldout_density_NLL": 20.270815169264946
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 400,
+          "heldout_density_NLL": 23.430820863529803
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 0,
+          "heldout_density_NLL": 1.531136390473932
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 50,
+          "heldout_density_NLL": 0.978089749018153
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 100,
+          "heldout_density_NLL": 1.6363528810797212
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 200,
+          "heldout_density_NLL": 2.967608592162651
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 400,
+          "heldout_density_NLL": 4.040641608711778
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 0,
+          "heldout_density_NLL": 1.4314944249114387
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 50,
+          "heldout_density_NLL": 0.8405965545743836
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 100,
+          "heldout_density_NLL": 1.9383472768697074
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 200,
+          "heldout_density_NLL": 2.6659175345981905
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 400,
+          "heldout_density_NLL": 3.7279294414916713
+        }
+      ]
+    },
+    {
+      "fold": 2,
+      "train_communes": [
+        2101,
+        2201,
+        2301,
+        4101,
+        4102,
+        4203,
+        4301,
+        5109,
+        5301,
+        5501,
+        5502,
+        5701,
+        5801,
+        5804,
+        6117,
+        7102,
+        7301,
+        7304,
+        8103,
+        8106,
+        8108,
+        8110,
+        8111,
+        8112,
+        8301,
+        8401,
+        9112,
+        9120,
+        10101,
+        11101,
+        13102,
+        13103,
+        13104,
+        13106,
+        13109,
+        13110,
+        13114,
+        13116,
+        13117,
+        13118,
+        13120,
+        13121,
+        13124,
+        13125,
+        13126,
+        13128,
+        13130,
+        13301,
+        13302,
+        13401,
+        13402,
+        13404,
+        13604,
+        13605
+      ],
+      "test_communes": [
+        1101,
+        1107,
+        3101,
+        3301,
+        4201,
+        5802,
+        6101,
+        7101,
+        7401,
+        8101,
+        8102,
+        8107,
+        8416,
+        9201,
+        10301,
+        12101,
+        13107,
+        13113,
+        13115,
+        13119,
+        13122,
+        13123,
+        13129,
+        13201,
+        13501,
+        14101,
+        14201
+      ],
+      "test_n": 270,
+      "grid": [
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 0,
+          "heldout_density_NLL": 1.654225505841257
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 50,
+          "heldout_density_NLL": 1.029262248348181
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 100,
+          "heldout_density_NLL": 1.1687631707419912
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 200,
+          "heldout_density_NLL": 6.965182721829678
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 1,
+          "steps": 400,
+          "heldout_density_NLL": 32.53081358922769
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 0,
+          "heldout_density_NLL": 1.6047729499561225
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 50,
+          "heldout_density_NLL": 0.9117611544522694
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 100,
+          "heldout_density_NLL": 1.4655635182116258
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 200,
+          "heldout_density_NLL": 3.3702122472868226
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 3,
+          "steps": 400,
+          "heldout_density_NLL": 5.399164585792218
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 0,
+          "heldout_density_NLL": 1.6551613369885607
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 50,
+          "heldout_density_NLL": 0.8731737069221693
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 100,
+          "heldout_density_NLL": 1.7142607088954989
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 200,
+          "heldout_density_NLL": 3.165232150742244
+        },
+        {
+          "hidden": [
+            16
+          ],
+          "components": 10,
+          "steps": 400,
+          "heldout_density_NLL": 4.417623156727447
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 0,
+          "heldout_density_NLL": 1.654225505841257
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 50,
+          "heldout_density_NLL": 0.9679492070045858
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 100,
+          "heldout_density_NLL": 2.440792081788922
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 200,
+          "heldout_density_NLL": 21.661975076939868
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 1,
+          "steps": 400,
+          "heldout_density_NLL": 38.698305275507614
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 0,
+          "heldout_density_NLL": 1.6047729499561225
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 50,
+          "heldout_density_NLL": 1.039991706984233
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 100,
+          "heldout_density_NLL": 1.5761020631564293
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 200,
+          "heldout_density_NLL": 2.5360321933239076
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 3,
+          "steps": 400,
+          "heldout_density_NLL": 4.239425412479222
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 0,
+          "heldout_density_NLL": 1.6551613369885607
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 50,
+          "heldout_density_NLL": 0.9151165504828656
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 100,
+          "heldout_density_NLL": 1.4619140256049725
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 200,
+          "heldout_density_NLL": 2.969007756669475
+        },
+        {
+          "hidden": [
+            32,
+            16
+          ],
+          "components": 10,
+          "steps": 400,
+          "heldout_density_NLL": 4.369831604910508
+        }
+      ]
+    }
+  ],
+  "with_shares": true,
+  "seeds": [
+    127,
+    229
+  ],
+  "weight_decay": 0.0,
+  "dropout": 0.0,
+  "sigma_floor_in_training_A_sd": 0.05,
+  "selection_loss": "negative log of the ensemble density; entire communes held out",
+  "selected_maximum_steps": false
+}

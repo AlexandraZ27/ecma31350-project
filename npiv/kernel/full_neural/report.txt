@@ -1,0 +1,62 @@
+FULL NEURAL PANEL NPIV / DEEPIV
+
+First stage: neural Gaussian mixture density on 11 raw country shares, demographics and year indicators.
+Second stage: Y_mt = alpha_m + b_t + g_theta(A_mt, age_mt, male_share_mt, year indicators) + u_mt.
+Commune fixed effects are additive and separate from both networks; year enters both networks, with unpenalized outcome year main effects.
+Both stages have zero explicit L2 penalty and dropout. Compact architecture and early stopping restrict complexity.
+MDN hidden units [(16,), (32, 16)]; mixture counts [1, 3, 10]; steps [0, 50, 100, 200, 400]; seeds [127, 229].
+MDN component standard deviations are bounded below by 0.05 times training SD(A), to prevent variance collapse.
+MDN weights, means and standard deviations all depend on its inputs. Stage one minimizes negative log density.
+First-stage tuning is nested inside five commune outer folds. The no-shares density baseline is tuned separately.
+Within each structural training set, first-stage predictions are cross-fitted by commune. All scaling uses only the relevant training sample.
+Outcome architecture and training duration minimize held-out integrated squared loss on the same outer commune folds as the hybrid.
+Held-out commune/year effects are profiled for within-panel moment validation; these scores do not measure forecasting of new-commune levels.
+The minimum structural CV score is used for selection and is not an untouched-test-set assessment.
+Treatment is integrated on adaptive rowwise Gauss-Legendre grids, checked against componentwise Gauss-Hermite integration; the density network is frozen in stage two.
+The outcome objective squares the integrated residual; it does not regress the outcome on individual treatment draws.
+Final reported derivatives average five outcome-network initializations, holding the cross-fitted first-stage ensemble fixed.
+Initialization ranges are optimization diagnostics, not confidence intervals, and do not assess first-stage uncertainty.
+Common-profile time comparisons use the same overlap profiles as the kernel and hybrid runs.
+This is a panel adaptation of the two-neural-stage DeepIV method, with deterministic integration and the user-requested zero explicit penalties.
+Causal interpretation still requires the panel IV moment and identification assumptions. No confidence intervals are reported.
+
+Crime concerns index (pc_19)
+  Final MDN selection: {'hidden': [32, 16], 'components': 3, 'steps': 50, 'heldout_density_NLL': 1.2047480480572559}
+  Nested held-out first-stage density NLL: with shares 1.21443; without shares 1.52985; improvement 0.315419.
+  Kernel first-stage held-out NLL with shares: 1.33532.
+  Treatment mean prediction R2: with shares 0.643763; without shares 0.150663 (levels, not within-FE partial R2).
+  Outcome hidden units [8]; steps 50.
+  Held-out integrated MSE: full neural 14.3946; hybrid 14.3478; FE-only 14.5913.
+  Average derivative 0.894663; initialization range (not CI) [0.7351928408361796, 1.032009835296854].
+  Training integrated MSE 14.6237.
+
+Preventive behavior index (pc_20)
+  Final MDN selection: {'hidden': [32, 16], 'components': 3, 'steps': 50, 'heldout_density_NLL': 1.2019056807949875}
+  Nested held-out first-stage density NLL: with shares 1.24291; without shares 1.50187; improvement 0.258963.
+  Kernel first-stage held-out NLL with shares: 1.33818.
+  Treatment mean prediction R2: with shares 0.633401; without shares 0.165658 (levels, not within-FE partial R2).
+  Outcome hidden units [16, 8]; steps 50.
+  Held-out integrated MSE: full neural 6.19294; hybrid 6.31556; FE-only 6.53883.
+  Average derivative 1.18137; initialization range (not CI) [0.9023230326290417, 1.4349038035576944].
+  Training integrated MSE 6.17166.
+
+Total victimization (vict_agreg)
+  Final MDN selection: {'hidden': [32, 16], 'components': 3, 'steps': 50, 'heldout_density_NLL': 1.2015287467748776}
+  Nested held-out first-stage density NLL: with shares 1.24305; without shares 1.50198; improvement 0.258936.
+  Kernel first-stage held-out NLL with shares: 1.33609.
+  Treatment mean prediction R2: with shares 0.633451; without shares 0.165499 (levels, not within-FE partial R2).
+  Outcome hidden units [8]; steps 50.
+  Held-out integrated MSE: full neural 15.1598; hybrid 15.2446; FE-only 15.4464.
+  Average derivative 1.01189; initialization range (not CI) [0.8627447015487602, 1.2675599901624293].
+  Training integrated MSE 15.625.
+
+Run: python project/npiv/kernel/run_full_neural.py
+Dependencies: project/npiv/kernel/requirements-neural.txt
+Reference: Hartford et al. (2017), https://proceedings.mlr.press/v70/hartford17a.html.
+
+POST-RUN VALIDATION
+Both stages, all structural CV predictions, and the selected nested first-stage predictions were reconstructed from saved networks.
+Validation communes are excluded from network training and scaling. Density and structural choices minimize their saved held-out grids.
+Integrated predictions, derivatives, fixed effects and common-profile time estimates reproduce the reported results.
+Selected validation and final predictions pass independent Gauss-Hermite quadrature accuracy checks.
+Run: python project/npiv/kernel/verify_full_neural.py

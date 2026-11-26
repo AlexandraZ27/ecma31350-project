@@ -1,0 +1,74 @@
+[
+  {
+    "outcome": "pc_19",
+    "replicate": 0,
+    "point_difference": 2.428669487741786e-10,
+    "max_time_difference": 5.674658520860021e-10,
+    "quadrature_RMSE": 3.3044916609333827e-09,
+    "seconds": 7.245047092437744
+  },
+  {
+    "outcome": "pc_19",
+    "replicate": 7,
+    "point_difference": 6.240675753943492e-10,
+    "max_time_difference": 7.584134431581901e-10,
+    "quadrature_RMSE": 3.2460426562982987e-10,
+    "seconds": 5.256031036376953
+  },
+  {
+    "outcome": "pc_19",
+    "replicate": 20,
+    "point_difference": 1.860985116008962e-10,
+    "max_time_difference": 2.2552071321513267e-10,
+    "quadrature_RMSE": 1.2821289432888088e-10,
+    "seconds": 7.232311248779297
+  },
+  {
+    "outcome": "pc_20",
+    "replicate": 0,
+    "point_difference": 5.999780072762917e-07,
+    "max_time_difference": 1.4925602084270295e-06,
+    "quadrature_RMSE": 4.133303901077011e-06,
+    "seconds": 10.223614931106567
+  },
+  {
+    "outcome": "pc_20",
+    "replicate": 7,
+    "point_difference": 7.809928066482286e-07,
+    "max_time_difference": 2.7325231419794704e-06,
+    "quadrature_RMSE": 2.2275968617992713e-06,
+    "seconds": 8.251539945602417
+  },
+  {
+    "outcome": "pc_20",
+    "replicate": 20,
+    "point_difference": -7.235265087057741e-07,
+    "max_time_difference": 1.9831770563527584e-06,
+    "quadrature_RMSE": 1.021100821328749e-06,
+    "seconds": 12.771425008773804
+  },
+  {
+    "outcome": "vict_agreg",
+    "replicate": 0,
+    "point_difference": 1.6105561329027296e-11,
+    "max_time_difference": 4.98123764458569e-10,
+    "quadrature_RMSE": 2.6072333269773295e-09,
+    "seconds": 7.704270124435425
+  },
+  {
+    "outcome": "vict_agreg",
+    "replicate": 7,
+    "point_difference": 6.892442172556912e-11,
+    "max_time_difference": 1.8019374881106387e-10,
+    "quadrature_RMSE": 9.64328676027385e-10,
+    "seconds": 7.324064016342163
+  },
+  {
+    "outcome": "vict_agreg",
+    "replicate": 20,
+    "point_difference": -6.943902119971312e-10,
+    "max_time_difference": 8.371801030193637e-10,
+    "quadrature_RMSE": 2.14366596671478e-11,
+    "seconds": 5.673478126525879
+  }
+]

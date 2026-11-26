@@ -1,0 +1,17 @@
+{
+  "pc_19": {
+    "original": 0.8946625915323935,
+    "identity_refit": 0.8946625915034162,
+    "max_quadrature_RMSE": 8.961891125058166e-11
+  },
+  "pc_20": {
+    "original": 1.1813707249096834,
+    "identity_refit": 1.1813706326909412,
+    "max_quadrature_RMSE": 7.521937169866161e-07
+  },
+  "vict_agreg": {
+    "original": 1.0118923049547819,
+    "identity_refit": 1.0118923051676239,
+    "max_quadrature_RMSE": 6.087606980677346e-11
+  }
+}

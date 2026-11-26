@@ -1,0 +1,9 @@
+{
+  "MDN_log_loss_matches_torch_distribution": true,
+  "numpy_and_torch_density_agree": true,
+  "quadrature_recovers_mixture_moments": true,
+  "numpy_and_torch_integrated_predictions_agree": true,
+  "integration_does_not_use_observed_target_treatment": true,
+  "integrated_gradient_matches_finite_difference": true,
+  "grouped_integration_preserves_row_order_and_predictions": true
+}
