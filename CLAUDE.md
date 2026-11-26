@@ -113,6 +113,68 @@ Edit memo prose in `npiv/neural/full_neural/memo_work/memo_body.tex`; the genera
 
 This section is the requested implementation roadmap. The education extension and age/education subgroup inference have **not** been fitted in this session. Preserve `full_neural/` as the reference result; write the extension to a new `npiv/neural/full_neural_heterogeneity/` directory.
 
+### Exposition: how heterogeneous immigration effects are computed
+
+Use this explanation when briefing the project partner. Distinguish the fitted response, the derivative of that response, and the population over which derivatives are averaged. The year results already exist; the age and education extensions below must not be described as completed analyses.
+
+#### What varies, and what remains the treatment
+
+Immigration is always the treatment: `A = log(1 + r)`, with r the immigrant stock per 10,000 residents. Mean age, resident education, male share and year describe a commune-year profile. We ask whether a small change in immigration has a different fitted effect at different profiles. The current structural response is
+
+`Y_mt = alpha_m + b_t + g(A_mt, age_mt, male_share_mt, t) + u_mt`.
+
+The planned education extension adds education as another joint input of g. For intuition only, a simple interaction model could contain `g(A,h,e,t) = q(h,e,t) + A*(beta_0 + beta_age*h + beta_educ*e + gamma_t)`. Its immigration derivative is `beta_0 + beta_age*h + beta_educ*e + gamma_t`: the slope with respect to immigration varies with age, education and year. This illustrative formula is not our fitted specification. The tanh network permits more general dependence, including slopes that also vary with the immigration level itself, without explicitly adding linear product variables.
+
+Thus an age comparison concerns the **immigration slope at different mean ages**, not the slope of the outcome with respect to age. An education comparison has the same interpretation. Neither comparison estimates a causal effect of changing a commune's age or schooling composition.
+
+#### How the two stages produce the response whose slope we evaluate
+
+The first-stage mixture-density network estimates `p(A | eleven raw origin shares, controls, year)`. The second stage learns g by matching observed outcomes to the integral of g over that fitted treatment distribution, after accounting for additive commune and year effects. It uses the whole fitted distribution, not only a first-stage predicted treatment mean. Cross-fitting keeps a commune out of the density-training sample used for its fitted density.
+
+Once fitted, we evaluate **the derivative of the structural network g with respect to A**. We do not differentiate the first-stage density, the integrated conditional-moment prediction, or the year fixed-effect coefficient. The additive terms `alpha_m` and `b_t` have zero derivative with respect to A. Including year inside g nevertheless lets the immigration slope differ across years.
+
+This distinction is why a year curve can vary despite year main effects being absorbed. Likewise, age entering jointly with A allows immigration–age interactions; simply placing age outside g as an additive linear control would not represent those interactions.
+
+#### From a fitted network to an average marginal effect
+
+For each commune-year and each of the five fitted outcome-network initializations, compute `d_mt,s = partial_A g_s(A_mt, X_mt, t)`, holding the other inputs fixed. `outcome_network.py::evaluate` propagates the derivative analytically through the tanh layers using the chain rule. It accounts for treatment standardization and output scaling, so the result is in outcome points per unit of the original `A = log(1+r)`. Average the five derivatives to obtain `d_mt`. The stored `cells_primary.csv::marginal_effect` is this ensemble derivative.
+
+For a small treatment change `Delta A`, the fitted local outcome change is approximately `d_mt * Delta A`. This is a local slope, not the effect of an arbitrarily large immigration change. For a raw-rate derivative use `d_mt/(1+r_mt)`; for a local 1% increase in the raw rate use `0.01*r_mt/(1+r_mt)*d_mt`. Apply these transformations cell by cell before averaging.
+
+The primary result is `mean(d_mt)` over **all 1,010 commune-year cells**, giving every cell equal weight. The 5th--95th within-year treatment trim produces a separate 910-cell sensitivity average. Both use exactly the same fitted networks. Since derivatives also depend on the profile, every heterogeneous average must specify both what is being changed and which profiles are being averaged.
+
+#### Two distinct ways to describe heterogeneity
+
+**Observed-group averages** answer, for example, "What is the average fitted immigration slope among communes in the older-age group?" Define the group before examining its estimated effects, select its observed cells, and average their d values. Compute the younger-group average the same way. Their difference includes differences in the groups' immigration, male-share and year distributions as well as age. For an untrimmed observed-year average, average the 101 observed cell derivatives in that year.
+
+**Standardized curves** instead keep a common collection of reference profiles and its weights fixed. For an age grid value h, replace only the age coordinate in each reference profile with h, evaluate the immigration derivative, and average: `B_age(h) = mean_i partial_A g(A_i, h, other_controls_i, t_i)`. After education is validated and added to both stages, construct the education curve analogously. Compare only supported profile combinations. If the data do not support a common reference population across the requested grid, narrow the grid or explicitly change the target rather than relying on extrapolation.
+
+For year heterogeneity, replace only the year category: `B_year(t) = mean_(a,x in C) partial_A g(a,x,t)`. Year is categorical, so we set its indicators and then differentiate with respect to **immigration**, not with respect to time. We use one shared fitted response for all years, not a separately fitted model for each year. Differences across this curve reflect variation in the fitted immigration response at the same reference profiles.
+
+The year figure in `NPIV.tex` implements this standardized comparison. C contains the same 300 / 266 / 261 treatment-age-male-share profiles for every year for crime concerns / prevention / victimization. These profiles pass the intersection of the years' marginal 5th--95th percentile ranges and empirical convex hulls. That support screen is separate from the primary full-panel average and its trimmed sensitivity check. The figure is therefore **not** the average over each year's actual 101 communes.
+
+**Saved-column caveat:** `full_neural/<outcome>/time_heterogeneity.csv::common_profile_average_derivative` is the standardized curve used in the memo. Its existing `observed_profile_average_derivative` column is an older, within-year **trimmed** observed-profile average. Do not relabel it as the full-panel-by-year result. Full-panel observed-year point estimates can be computed from `cells_primary.csv::marginal_effect`; their bootstrap uncertainty is not recoverable from the saved overall and common-profile averages alone.
+
+#### What uncertainty and a heterogeneity test mean
+
+Each of the 399 existing bootstrap draws resamples complete commune histories and refits both neural stages under the selected fitting settings. It then computes the full-panel average, trimmed average and standardized year curve. The distribution across draws supplies sampling uncertainty under the conditional bootstrap approximation. The spread across five initialization seeds measures optimization sensitivity and is not a sampling standard error.
+
+To test heterogeneity, compute a **difference within each draw**. For example, form `Delta_b = B_year,b(2017) - B_year,b(2008)`, then use the SD of those paired differences for the contrast SE and the centered-bootstrap calculation below for its p-value and interval. Apply the same principle to older-minus-younger or higher-minus-lower education comparisons once those targets are computed in every draw. A significant effect in one group and an insignificant effect in another do not establish a significant difference between them.
+
+The memo currently provides pointwise year bands and the paired 2017-minus-2008 test. It does not provide an omnibus test of all years or simultaneous bands. The bootstrap conditions on selected architecture/stopping choices; the time analysis also conditions on fixed reference profiles. Predictive first-stage gains and narrow bands do not by themselves establish instrument validity, completeness, or accurate heterogeneous causal derivatives.
+
+#### What the partner can say has actually been done
+
+| Quantity | Current status |
+| --- | --- |
+| Immigration derivative at each observed commune-year | Estimated and saved for all three outcomes |
+| Full-panel average and trimmed sensitivity average | Reported with separate bootstrap inference |
+| Immigration–year heterogeneity at fixed common profiles | Reported with pointwise bootstrap bands and an endpoint contrast |
+| Immigration–age heterogeneity | Allowed by the current response; dedicated age curves/groups and their inference have not been produced |
+| Immigration–education heterogeneity | Not fitted; requires validated education data, expansion of both stages and new target-specific bootstrap calculations |
+
+The short explanation to give the partner is: "We fit an IV response function, calculate its immigration slope at a specified profile, and average those slopes over a clearly defined set of profiles. We then compare the averages across age, education or year, using paired commune-bootstrap calculations to assess uncertainty in the differences."
+
 ### 1. Define and validate the commune characteristics
 
 - **Age:** the current `age` column is outcome-specific commune-year mean respondent age. Use it for contemporaneous age heterogeneity. If the target is heterogeneity by a predetermined commune characteristic, construct 2008 mean age once and carry it across all years; include that baseline moderator in both stages. State which target is being estimated. Do not silently replace annual mean age with a mean over the whole 2008–2017 period.
