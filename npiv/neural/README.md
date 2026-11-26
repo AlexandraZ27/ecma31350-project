@@ -34,8 +34,10 @@ effects from the original data and networks.
   implementation and deleting the other methods. Original fitting hashes remain
   in the manifests; `refactor_compatibility` records the new code separately.
 - `write_full_neural_memo.py`: rebuild `NPIV.tex` from saved results and editable
-  memo prose. Compile with `latexmk -lualatex NPIV.tex`; the original template
-  requires the external course style `../../../adenc.sty`.
+  memo prose. Compile from the repository root with `latexmk -lualatex NPIV.tex`;
+  `.latexmkrc` writes the PDF and build intermediates to `aux/`. The final memo
+  is `aux/NPIV.pdf`. The original template requires the external course style
+  `../../../adenc.sty`.
 
 See `CLAUDE.md` in the repository root for complete settings, inference limits,
 and the unimplemented age/education/year heterogeneity roadmap. No other NPIV

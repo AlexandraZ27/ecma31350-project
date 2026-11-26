@@ -6,7 +6,7 @@ __pycache__/
 *.py[cod]
 /data/
 
-# LaTeX build intermediates; keep the final NPIV.pdf report.
+# LaTeX build intermediates; .latexmkrc puts the final report in aux/NPIV.pdf.
 *.aux
 *.fdb_latexmk
 *.fls
