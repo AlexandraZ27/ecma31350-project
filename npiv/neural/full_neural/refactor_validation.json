@@ -1,0 +1,47 @@
+{
+  "all_checks_passed": true,
+  "only_neural_implementation_remains": true,
+  "original_exposition_and_template_unchanged": true,
+  "byte_identical_numerical_files": 1381,
+  "saved_models_cells_and_bootstrap_draws_unchanged": true,
+  "both_stages_and_all_CV_predictions_reconstructed": true,
+  "fresh_identity_bootstrap_refits_match_original": true,
+  "paired_draws_and_source_fold_separation_verified": true,
+  "numerical_self_checks": {
+    "MDN_log_loss_matches_torch_distribution": true,
+    "numpy_and_torch_density_agree": true,
+    "quadrature_recovers_mixture_moments": true,
+    "numpy_and_torch_integrated_predictions_agree": true,
+    "integration_does_not_use_observed_target_treatment": true,
+    "integrated_gradient_matches_finite_difference": true,
+    "grouped_integration_preserves_row_order_and_predictions": true
+  },
+  "outcomes": {
+    "pc_19": {
+      "draws": 399,
+      "point_estimate": 0.8946625915323935,
+      "bootstrap_SE": 0.3439482508823818,
+      "centered_bootstrap_p": 0.055,
+      "identity_refit": 0.8946625915034162,
+      "inference_reconstructed": true
+    },
+    "pc_20": {
+      "draws": 399,
+      "point_estimate": 1.1813707249096834,
+      "bootstrap_SE": 0.6382740659423779,
+      "centered_bootstrap_p": 0.0875,
+      "identity_refit": 1.1813706326909412,
+      "inference_reconstructed": true
+    },
+    "vict_agreg": {
+      "draws": 399,
+      "point_estimate": 1.0118923049547819,
+      "bootstrap_SE": 0.48760315142283983,
+      "centered_bootstrap_p": 0.0775,
+      "identity_refit": 1.0118923051676239,
+      "inference_reconstructed": true
+    }
+  },
+  "original_fit_code_commit": "7058b55",
+  "current_runner_sha256": "468a916743352f5d2128dfc90ef5493b3b579f1f7548abd09015a0f1c6b85171"
+}

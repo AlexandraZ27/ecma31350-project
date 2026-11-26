@@ -1,0 +1,203 @@
+% BEGIN FULL NEURAL MEMO
+\medskip
+\section*{Memo: Full neural NPIV on the commune panel}
+This memo records the selected specification with neural networks in both stages, using the replication data of Ajzenman, Dom\'{i}nguez, and Undurraga \cite{immigration}. It applies the conditional-density and integrated-response approach of Hartford et al.\ \cite{deepiv}, with additive panel effects and commune-grouped fitting. The reported derivatives are estimates from this fitted specification; their causal interpretation additionally requires the panel IV and identification assumptions described below.
+
+\subsection*{1. Specification: outcomes and features}
+\paragraph{Sample and outcomes.}
+The source is \texttt{IV\_panel.dta}. Each observation is one commune in one year. There are 101 communes observed annually from 2008 through 2017, giving $n=1{,}010$ observations for each outcome. Respondents with missing required variables are excluded before aggregation. Outcomes, age, and male share are unweighted respondent means within each cell; estimation then gives each cell equal weight. The outcome-specific complete-case samples imply slightly different demographic controls across outcomes.
+\begin{table}[H]
+\centering
+\caption{Outcome definitions and eligible respondent counts}
+\label{tab:neural-outcomes}
+\small
+\begin{tabularx}{\linewidth}{@{}Xlr@{}}
+\toprule
+Outcome & Replication variable & Respondents\\
+\midrule
+Crime concerns, principal-component index & \texttt{pc\_19} & 180,039\\
+Preventive behavior, principal-component index & \texttt{pc\_20} & 243,096\\
+Total victimization & \texttt{vict\_agreg} & 244,115\\
+\bottomrule
+\end{tabularx}
+\end{table}
+Each outcome mean is multiplied by 100. Effects on the two indices are in these rescaled index points; effects on victimization are in percentage points. The principal-component indices are not probabilities.
+
+\paragraph{Treatment, controls, and instruments.}
+The treatment is $A_{mt}=\log(1+r_{mt})$, supplied as \texttt{lnrate\_stock\_imm}, where $r_{mt}$ is the immigrant stock per 10,000 residents. This definition is verified against \texttt{rate\_stock\_imm} in the panel data. The controls $X_{mt}$ are cell mean age and male share, constructed from \texttt{edad} and \texttt{ismale}. Calendar year enters as ten indicator variables.
+
+The instrument vector $Z_m$ contains the eleven separate raw 2008 origin shares, \texttt{share2008\_*}: Haiti, Peru, Colombia, Venezuela, Bolivia, Argentina, Ecuador, the United States, Spain, China, and Brazil. These shares enter the first-stage network jointly with demographics and year indicators. The fitted model uses the raw shares, rather than the scalar Bartik instrument or share--migration-shock products. Because shares are constant within a commune, their additive main effects are absorbed by commune effects; useful within-panel variation must come from their interactions with time or other changing features. The nonlinear first stage permits such interactions.
+
+\paragraph{Structural specification.}
+For each outcome we estimate
+\begin{equation}
+Y_{mt}=\alpha_m+f(A_{mt},X_{mt},t)+u_{mt},\qquad
+f(a,x,t)=b_t+g_\theta(a,x,t).
+\label{eq:neural-panel}
+\end{equation}
+Here $g_\theta$ is a fully connected neural network with treatment, both demographic controls, and all ten year indicators as joint inputs. This permits nonlinear responses and treatment--time interactions. Commune intercepts $\alpha_m$ and year main effects $b_t$ are separate, unpenalized nuisance parameters, with $b_{2008}=0$. Commune identity is not an input to either network. Thus ``full neural'' describes both estimation stages; it does not mean that commune-specific response surfaces are estimated. Pure year effects can also be represented by $g_\theta$, so their allocation between $b_t$ and the network is not substantively identified; the treatment derivative is unchanged by that allocation.
+
+The outcome network has 13 inputs: treatment, two demographic controls, and ten year indicators. The density network has 23 inputs: eleven shares, the two controls, and ten year indicators. Features enter on their original scale before training-sample standardization; treatment is never demeaned by commune or year before entering the nonlinear function.
+
+\paragraph{Estimand and identifying restrictions.}
+The headline estimand is an average local derivative,
+\begin{equation}
+\widehat\beta=\frac{1}{|\mathcal T|}
+\sum_{(m,t)\in\mathcal T}\partial_a\widehat g(A_{mt},X_{mt},t),
+\label{eq:neural-effect}
+\end{equation}
+where $\mathcal T$ contains cells between the 5th and 95th treatment percentiles within their year, inclusive. The original sample retains 910 cells. Derivatives are computed analytically and averaged across the five fitted outcome networks. A derivative is measured in outcome points per unit of $\log(1+r)$. A 0.01-unit increase in $A$ has approximate effect $0.01\widehat\beta$. For a 1\% increase in the raw rate $r$, the cell-level approximation is $0.01\{r/(1+r)\}\partial_a\widehat g$; average this adjusted derivative for that estimand. This is a commune-level, equally weighted derivative, not a respondent-weighted effect or an individual treatment effect.
+
+The empirical identifying restriction is that, after the additive commune and year terms, the conditional outcome mean is the integral of $g$ against $p(A\mid Z,X,t)$. It requires exclusion of direct share-related changes in outcomes and sufficient instrument-induced variation to distinguish response functions after accounting for the nuisance effects. The first-stage density is pooled over communes conditional on $(Z,X,t)$; it does not estimate a separate treatment law for each commune. Completeness is the relevant nonparametric uniqueness condition in Newey and Powell \cite{neweypowell}. Neither the inclusion of fixed effects nor good predictive fit establishes completeness or exclusion. In particular, fixed effects absorb permanent commune differences, but do not automatically exclude share-specific outcome trends.
+
+\subsection*{2. Fit settings}
+\paragraph{First stage: a conditional treatment density.}
+Each mixture-density network estimates
+\begin{equation}
+\widehat p_\phi(a\mid z,x,t)
+=\sum_{k=1}^{K}\pi_{\phi k}(z,x,t)
+\mathcal N\!\left(a;\mu_{\phi k}(z,x,t),\sigma_{\phi k}^2(z,x,t)\right).
+\label{eq:neural-density}
+\end{equation}
+Hidden layers use $\tanh$ activations. The output layer supplies softmax mixture weights, unrestricted component means, and softplus standard deviations with a floor of 0.05 in training-standardized treatment units. Training minimizes average negative log density. Two independently initialized densities are averaged. The selected final architecture has hidden widths $(32,16)$ and $K=3$ components per network, hence six components in the ensemble. This density-based first stage follows the continuous-treatment construction of \cite[Section 3]{deepiv}.
+
+\paragraph{Second stage: the integrated IV loss.}
+Let $D$ contain the 101 commune indicators and nine year indicators, and let $M_D=I-D(D'D)^{-1}D'$. For the density fitted excluding the cell's commune fold, define
+\begin{equation}
+\widehat\mu_{\theta,mt}
+=\int g_\theta(a,X_{mt},t)\widehat p^{(-k(m))}(a\mid Z_m,X_{mt},t)\,\dd a.
+\end{equation}
+Holding the density fixed, the outcome optimizer takes the selected number of Adam steps on
+\begin{equation}
+\widehat L_2(\theta)=\frac1n
+\left\|M_D(Y-\widehat\mu_\theta)\right\|^2.
+\label{eq:neural-loss}
+\end{equation}
+Early stopping does not guarantee a global minimum. The projection profiles out the unpenalized nuisance coefficients at every optimizer step. After fitting $\theta$, the coefficients are recovered by least squares of $Y-\widehat\mu_\theta$ on $D$. Thus fixed effects are part of the fitting objective throughout; their numerical recovery at the end is not a separate causal regression. The squared residual is formed after integration, as in the Deep IV objective \cite[eqs. (6)--(7)]{deepiv}.
+
+\begin{table}[H]
+\centering
+\caption{Selected final networks}
+\label{tab:neural-settings}
+\small
+\begin{tabularx}{\linewidth}{@{}Xccc@{}}
+\toprule
+Outcome & Density hidden widths & Outcome hidden widths & Adam steps\\
+\midrule
+Crime concerns & $(32,16)$ & $(8)$ & 50 / 50\\
+Preventive behavior & $(32,16)$ & $(16,8)$ & 50 / 50\\
+Victimization & $(32,16)$ & $(8)$ & 50 / 50\\
+\bottomrule
+\end{tabularx}
+\smallskip
+\parbox{\linewidth}{\footnotesize Steps are first stage / second stage. Density mixtures have three components per initialization. Both stages use $\tanh$ hidden activations; the outcome output is linear.}
+\end{table}
+
+\paragraph{Optimization and scaling.}
+Both stages use full-batch Adam with learning rate 0.005, $\beta_1=0.9$, $\beta_2=0.999$, and $\epsilon=10^{-8}$. Weight decay and dropout are both zero. Continuous inputs are centered and scaled using only the fitting sample; year indicators are left as indicators. First-stage treatment is standardized using its fitting sample. The second-stage target is scaled by the standard deviation of the outcome after projecting out $D$, and predictions and derivatives are returned to outcome units. Outcome output weights and bias start at zero. Density output weights also start at zero; for the final three-component networks, initial weights are uniform, means are $(-1.2,0,1.2)$, and standard deviations are 0.6 in standardized treatment units. Hidden layers use the seeded PyTorch linear-layer initialization. Computation uses PyTorch 2.8.0 on CPU in 64-bit floating point.
+
+The density ensemble uses seeds 127 and 229. Outcome validation averages seeds 17 and 43; the final outcome estimator averages seeds 101, 211, 307, 401, and 503. The commune split seed is 20261125. These settings are an application-specific adaptation, rather than the neural architectures or optimizer defaults used in the Deep IV experiments. Zero coefficient penalty does not make the fit unrestricted: finite network size, the scale floor, and early stopping still constrain estimation. Such restrictions matter in an ill-posed inverse problem \cite{neweypowell}.
+
+\paragraph{Tuning and sample separation.}
+Five outer folds hold out entire communes. Within each outer training sample, three commune folds select the density architecture, mixture count, and stopping step, and construct cross-fitted training densities. The density grid is hidden widths $(16)$ or $(32,16)$, mixture counts $1,3,10$, and steps $0,50,100,200,400$. The criterion is held-out negative log density, following \cite[eq. (13)]{deepiv}. A separate no-shares density is tuned by the same procedure for the instrument diagnostic.
+
+The outcome grid is hidden widths $(8)$ or $(16,8)$ and steps $0,50,100,200,400,600$. The selected pair minimizes the pooled outer-fold integrated squared loss, following the validation principle in \cite[eq. (14)]{deepiv}. For a held-out commune, its intercept cannot be learned from the training sample. Accordingly, validation projects the held-out residuals onto the complement of that fold's commune and year indicators. The resulting score measures fit after removing held-out additive effects; it is not a forecast of levels for a new commune without observing its outcomes. The minimum score used for selection is not an untouched test-set score.
+
+For the final fit, five-fold density selection on the full data chooses $(32,16)$, three components, and 50 steps for all outcomes. First-stage densities used to train the final outcome network are still cross-fitted across commune folds. The nested first-stage diagnostics below evaluate the tuning procedure: its outer-fold with-shares selections are $(16)$, ten components, and 50 steps. They therefore should not be read as an independent test of the subsequently selected final density architecture.
+
+\paragraph{Numerical integration.}
+The saved point fits use adaptive Gauss--Legendre integration, starting at 64 nodes per cell and doubling until density mass and its first two moments agree to $10^{-9}$. Bounds cover eight component standard deviations; the final fits require up to 256 nodes. Integrated predictions are checked against 64 Gauss--Hermite nodes per mixture component. The maximum check error across the final fits is below $1.3\times10^{-8}$ outcome points. Integration is deterministic, so no Monte Carlo treatment draws enter the fitting loss.
+
+\subsection*{3. First-stage diagnostics}
+For held-out cells, define the negative log density loss and conditional-mean prediction score as
+\begin{align}
+L_1&=-\frac1n\sum_{mt}\log\widehat p^{(-k(m))}(A_{mt}\mid Z_m,X_{mt},t),\\
+R^2_{\mathrm{mean}}&=1-
+\frac{\sum_{mt}(A_{mt}-\widehat{\E}^{(-k(m))}[A\mid Z_m,X_{mt},t])^2}
+{\sum_{mt}(A_{mt}-\overline A_{-k(m)})^2}.
+\end{align}
+Here $\overline A_{-k(m)}$ is the treatment mean in the corresponding outer training sample. The no-shares version retains demographics and year indicators. Lower $L_1$ is better, and $\Delta L_1=L_1(\text{no shares})-L_1(\text{with shares})>0$ indicates improvement.
+
+@@FIRST_STAGE_TABLE@@
+
+Adding the separate shares improves average held-out density loss for every outcome, and improves it in four of the five outer folds for each outcome. It also improves conditional-mean prediction. Unlike training loss for a nested class, held-out loss need not fall when predictors are added. These $R^2$ values concern treatment levels: they are not partial $R^2$ statistics after commune absorption and are not first-stage $F$ statistics. Between-commune predictability can contribute substantially to them. The diagnostics support predictive usefulness of the instruments; they do not establish sufficient within-panel identification of heterogeneous causal derivatives.
+
+\subsection*{4. Results and inference}
+\paragraph{Average local derivatives.}
+\Cref{tab:neural-effects} reports the selected estimator in \Cref{eq:neural-effect}, with sampling uncertainty from refitting both stages under commune resampling. The three point estimates are positive. A local 0.01-unit increase in $A=\log(1+r)$ corresponds approximately to 0.0089 crime-concern index points, 0.0118 preventive-behavior index points, and 0.0101 victimization percentage points. These magnitudes refer to the rescaled cell outcomes and this fitted response function.
+
+@@RESULTS_TABLE@@
+
+All three two-sided centered-bootstrap $p$-values exceed 0.05. The reported intervals use the same test, with the finite-simulation critical value defined below.
+
+The selected held-out integrated outcome losses are 14.395, 6.193, and 15.160, respectively, in squared outcome points. These scores describe fit of conditional moments after projecting out held-out additive effects. They do not measure prediction of counterfactual outcomes, and low moment loss alone does not guarantee accurate treatment derivatives \cite[Section 3.2]{deepiv}.
+
+\paragraph{Bootstrap construction.}
+We use $B=@@B@@$ commune pairs-bootstrap draws, with seed 20261126. Within each of the five original fold strata, communes are sampled with replacement, retaining all ten observations and their outcomes, treatments, controls, and shares. The draw has 101 commune histories and 1,010 cells. Each copy receives a distinct intercept identifier, while all copies of the same source commune stay in the same fold. This preserves within-commune dependence and prevents duplicate histories from appearing in both a first-stage fitting sample and its held-out sample.
+
+In each draw, all ten cross-fitted density networks (two initializations in each of five folds) and all five outcome networks are refitted. Scaling, nuisance-effect projection, and the within-year treatment trimming rule are recomputed. Architectures, mixture counts, stopping steps, optimizer settings, initialization seeds, and the original fold strata are held fixed. The headline bootstrap also allows the distribution of trimmed profiles to vary across samples. Thus it includes first-stage estimation uncertainty conditional on the fixed fitting choices. It does not retune the model or use the spread across initializations as a standard error.
+
+Let $\widehat\beta_b^*$ be a bootstrap estimate, $\overline\beta^*=B^{-1}\sum_b\widehat\beta_b^*$, and $e_b^*=\widehat\beta_b^*-\widehat\beta$. The reported standard error and two-sided centered-bootstrap $p$-value for $H_0:\beta=0$ are
+\begin{align}
+\widehat{\mathrm{se}}(\widehat\beta)
+&=\left[\frac{1}{B-1}\sum_{b=1}^{B}
+(\widehat\beta_b^*-\overline\beta^*)^2\right]^{1/2},\\
+\widehat p
+&=\frac{1+\sum_{b=1}^{B}\mathbf1\{|e_b^*|\geq|\widehat\beta|\}}{B+1}.
+\label{eq:neural-bootstrap-p}
+\end{align}
+The reported 95\% interval is $[\widehat\beta-c_{.95},\widehat\beta+c_{.95}]$, where $c_{.95}$ is the 380th ordered absolute error among 399 draws. This finite-simulation critical value inverts the same test as \Cref{eq:neural-bootstrap-p}.
+The finite simulation correction gives $p$-value resolution $1/(B+1)=@@P_RESOLUTION@@$; it cannot resolve smaller tail probabilities. An alternative normal-Wald calculation, $2\Phi(-|\widehat\beta/\widehat{\mathrm{se}}|)$, is saved with the inference outputs but is not the $p$-value shown in the tables.
+
+@@BOOTSTRAP_SHIFT@@
+
+For computational efficiency, most bootstrap refits use a 32-node Gaussian rule for each fitted mixture, constructed from the 64-node-per-component Hermite reference. Every refit checks its integrated predictions against that reference and falls back to the original adaptive rule if necessary. Identity resampling reproduces the original headline derivatives within $10^{-6}$, and additional resampled-data checks compare the short rule directly against the original integration procedure. This changes numerical integration cost, not the network specification or the bootstrap resampling unit.
+
+\paragraph{Time heterogeneity at common covariate profiles.}
+To separate time variation from changes in composition, evaluate
+\begin{equation}
+\widehat\beta_t^{\mathrm{common}}
+=\frac1{|\mathcal C|}\sum_{(a,x)\in\mathcal C}\partial_a\widehat g(a,x,t).
+\end{equation}
+The same reference profiles $\mathcal C$ are used for every year. They lie in the intersection of each year's marginal 5th--95th percentile ranges and empirical three-dimensional convex hull for treatment, age, and male share. This leaves 300 profiles for crime concerns, 266 for preventive behavior, and 261 for victimization. It is an empirical overlap screen, not a test of conditional IV support. The reference sets are held fixed in the time-profile bootstrap.
+
+@@TIME_FIGURE@@
+
+@@TIME_CONTRAST_TABLE@@
+
+The paired endpoint tests indicate increases in the fitted common-profile derivative for crime concerns ($p=0.0275$) and preventive behavior ($p=0.0050$), with little evidence of an endpoint difference for victimization ($p=0.8100$), under the conditional bootstrap approximation.
+
+The time intervals are pointwise. The endpoint contrast compares 2017 with 2008 using paired bootstrap draws, accounting for covariance between the two slopes. It is not an omnibus test of equality across all ten years. Neither these intervals nor the three outcome tests are adjusted for multiple comparisons.
+
+\paragraph{Scope of the inference.}
+These standard errors, intervals, and $p$-values are \emph{conditional bootstrap approximations}. They treat commune histories as independent clusters conditional on common time shocks and allow arbitrary dependence within each commune. Additive fixed effects control persistent mean differences; clustering addresses dependence of the sampling errors over time. The two play different roles.
+
+The calculations do not account for model-selection uncertainty, early-stopping or approximation bias, weak identification, or dependence across communes from spatial or origin-specific shocks. The small neural class and early stopping can stabilize derivatives and also shrink their variation. Consequently, a small standard error or $p$-value does not validate the underlying IV assumptions, and a failure to reject a zero effect would not by itself establish that immigration has no effect.
+
+Hartford et al.\ \cite{deepiv} motivate the two-stage neural objective and held-out loss selection. The supplied Newey--Powell manuscript \cite{neweypowell} develops completeness-based identification, the ill-posedness issue, and consistency for constrained nonparametric estimators. Neither supplied paper establishes validity of this particular commune bootstrap for early-stopped neural NPIV derivatives. Formal causal confidence statements would require additional regularity, identification, and bias-control arguments for this estimator; the reported bootstrap should be read with that qualification.
+
+\paragraph{Reproducibility.}
+Point fits and diagnostics are in \path{npiv/neural/full_neural/}. Run \path{npiv/neural/bootstrap_full_neural.py} to generate draws, summary statistics, time profiles, and validation checks in \path{npiv/neural/full_neural/inference/}. The original point estimates are retained unchanged. The memo uses only the selected full neural specification.
+
+\begin{thebibliography}{9}
+\bibitem{immigration}
+Ajzenman, N., P. Dom\'{i}nguez, and R. Undurraga (2023).
+``Immigration, Crime, and Crime (Mis)Perceptions.''
+\emph{American Economic Journal: Applied Economics}, 15(4), 142--176.
+\href{https://doi.org/10.1257/app.20210156}{doi:10.1257/app.20210156}.
+
+\bibitem{deepiv}
+Hartford, J., G. Lewis, K. Leyton-Brown, and M. Taddy (2017).
+``Deep IV: A Flexible Approach for Counterfactual Prediction.''
+\emph{Proceedings of Machine Learning Research}, 70, 1414--1423.
+\href{https://proceedings.mlr.press/v70/hartford17a.html}{Paper and supplement}.
+Local paper: \path{ref/hartford17a.pdf}.
+
+\bibitem{neweypowell}
+Newey, W. K., and J. L. Powell (2003).
+``Instrumental Variable Estimation of Nonparametric Models.''
+\emph{Econometrica}, 71(5), 1565--1578.
+\href{https://doi.org/10.1111/1468-0262.00459}{doi:10.1111/1468-0262.00459}.
+The supplied file \path{ref/og_npiv.pdf} is the manuscript dated 1988, revised January 2002; references in this memo to its arguments concern that version.
+\end{thebibliography}
+% END FULL NEURAL MEMO

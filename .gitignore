@@ -14,9 +14,9 @@ __pycache__/
 *.synctex.gz
 
 # Temporary memo review files; retain its editable body and inference checks.
-npiv/kernel/full_neural/memo_work/*
-!npiv/kernel/full_neural/memo_work/memo_body.tex
-!npiv/kernel/full_neural/memo_work/NPIV.before_full_neural.tex
-!npiv/kernel/full_neural/memo_work/render_pdf.swift
-npiv/kernel/full_neural/inference/*_draft.pdf
-npiv/kernel/full_neural/inference/*_draft.png
+npiv/neural/full_neural/memo_work/*
+!npiv/neural/full_neural/memo_work/memo_body.tex
+!npiv/neural/full_neural/memo_work/model_exposition.tex
+!npiv/neural/full_neural/memo_work/render_pdf.swift
+npiv/neural/full_neural/inference/*_draft.pdf
+npiv/neural/full_neural/inference/*_draft.png

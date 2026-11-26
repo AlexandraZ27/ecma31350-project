@@ -4,41 +4,44 @@ Paper: "Immigration, Crime, and Crime (Mis)Perceptions", AEJ: Applied 15(4), 202
 
 ## Start here — handoff for project partner's Claude
 
-This file is the persistent project memory; the prior chat and the original machine's temporary environment are not required. All paths and commands below are relative to the Git repository root (called `project/` on the original machine). The repository is `AlexandraZ27/ecma31350-project`, branch `main`. Commit `495d0c3` (`Finished NPIV implementation`) contains the completed full neural analysis and memo; this handoff expands the instructions for the next researcher.
+This file is the persistent project memory; the prior chat and the original machine's temporary environment are not required. All paths and commands below are relative to the Git repository root (called `project/` on the original machine). The repository is `AlexandraZ27/ecma31350-project`, branch `main`. Commit `495d0c3` contains the original completed full neural analysis and memo. The user's subsequent cleanup request removed all other NPIV implementations and results; the standalone retained implementation now lives in `npiv/neural/`.
 
 - **Completed:** both neural stages, held-out diagnostics, analytic treatment derivatives, common-profile year curves, and 399 commune-bootstrap draws per outcome. The selected specification and numerical results are recorded below. `NPIV.tex` / `NPIV.pdf` contain the memo in the requested order: specification, fit settings, first-stage diagnostics, results and inference. The user's original model exposition and LaTeX template are preserved.
 - **Next requested research extension:** heterogeneous average marginal treatment effects by commune average age, commune education, and year. The section **Heterogeneous average marginal treatment effects: age, education, and year** is an implementation roadmap, not completed education results. Begin with the education-code audit in subsection 1; do not launch a new neural fit before validating the moderator. The current response already allows age/time interactions, but education is absent and age/education subgroup inference has not been run.
 - **Decisions to retain:** commune-year observations; eleven raw origin shares as instruments; flexible neural density and response; separate additive commune/year nuisance effects plus year inputs in the response; exact integrated second-stage loss; no explicit L2 penalty. The latest implemented specification supersedes earlier requests to put commune indicators inside the neural function. Use the current specification below, not the legacy notes, when extending it.
-- **Inputs outside Git:** the raw replication package and the external `adenc.sty` LaTeX style. Obtain the package using the instructions in root `requirements.txt`; confirm `rep_data/Replication/data/analysis/IV_panel.dta` exists. That root file is a data-download note, **not** a pip requirements file. Python dependencies are in `npiv/kernel/requirements-neural.txt`. The committed PDF can be read without installing TeX or obtaining the style.
-- **Git hygiene:** run `git status --short --branch` before editing. The original workspace contains unrelated, untracked historical experiments; a fresh clone will not contain all of them. Do not delete or stage them indiscriminately. Preserve the tracked historical manifests/profile files used by the current runner, even though their estimator results are superseded. Keep `full_neural/` as the reference and write new-model results separately.
+- **Inputs outside Git:** the raw replication package and the external `adenc.sty` LaTeX style. Obtain the package using the instructions in root `requirements.txt`; confirm `rep_data/Replication/data/analysis/IV_panel.dta` exists. That root file is a data-download note, **not** a pip requirements file. Python dependencies are in `npiv/neural/requirements-neural.txt`. The committed PDF can be read without installing TeX or obtaining the style.
+- **Git hygiene and current scope:** run `git status --short --branch` before editing. The user explicitly requested removal of all other NPIV methods, including `results_series*`. Only `npiv/neural/` should remain under `npiv/`; do not restore kernel, forest, series, mixed-method comparison, or seed-experiment directories. Paper replication outside `npiv/` and reference papers are separate project materials. Keep `full_neural/` as the selected reference result and write future neural extensions separately.
 
 Read `NPIV.pdf`, this file's current-specification section, and the following saved artifacts before changing code:
 
 | Artifact | Purpose |
 | --- | --- |
-| `npiv/kernel/full_neural/results.json` | Sample/source hashes, folds, selected settings, point estimates and environment provenance |
-| `npiv/kernel/full_neural/<outcome>/first_stage_diagnostics.json` | Held-out density loss with and without instruments; outcomes are `pc_19`, `pc_20`, `vict_agreg` |
-| `npiv/kernel/full_neural/inference/summary.csv` | Overall estimates, bootstrap SEs, p-values and intervals; use the centered-bootstrap/symmetric columns for the memo |
-| `npiv/kernel/full_neural/inference/time_inference.csv` and `time_endpoint_contrasts.csv` | Year curves and paired 2017-minus-2008 tests |
-| `npiv/kernel/full_neural/validation.json` and `inference/validation.json` | Saved verification of the estimator and inference outputs |
+| `npiv/neural/full_neural/results.json` | Sample/source hashes, folds, selected settings, point estimates and environment provenance |
+| `npiv/neural/full_neural/<outcome>/first_stage_diagnostics.json` | Held-out density loss with and without instruments; outcomes are `pc_19`, `pc_20`, `vict_agreg` |
+| `npiv/neural/full_neural/inference/summary.csv` | Overall estimates, bootstrap SEs, p-values and intervals; use the centered-bootstrap/symmetric columns for the memo |
+| `npiv/neural/full_neural/inference/time_inference.csv` and `time_endpoint_contrasts.csv` | Year curves and paired 2017-minus-2008 tests |
+| `npiv/neural/full_neural/validation.json` and `inference/validation.json` | Saved verification of the estimator and inference outputs |
 
 Outstanding substantive choices are annual versus 2008 baseline moderators and the harmonized education definition. Recommendations below are not already fitted choices. Audit the available data/dictionaries first; if the education mapping or intended target remains unresolved, explain the specific missing information before proceeding. Do not interpret a failure to reject zero as proof that immigration has no effect.
 
 ## Layout
-- `rep_scripts/replicate.py`: Python re-implementation of Tables 1-4 and 6-9 (no Stata available). Output: `rep_results/replication_output.txt`.
-- `npiv/npiv.py` + `npiv/make_tex.py`: NPIV on six summary outcomes (kernel-density first stage, honest forest f). Output: `npiv/results/`.
-- `npiv/npiv9.py` + `npiv/make_tex9.py` + `npiv/reading9.tex`: 3x3 grid of first-stage class (kernel / forest / net) x f class (kernel / forest / net) for `del_problema3`. Outputs: `npiv/results9/` (cross-section), `npiv/results9p/` (panel), seed reruns in `npiv/seeds/` (5, cross-section) and `npiv/seedsp/` (3, panel). `npiv/test*/` are smoke tests and known-truth simulations (`npiv/test/sim_check.py`).
-- `NPIV.tex`: the original NPIV exposition and template, followed by the selected full neural panel memo between `% BEGIN/END FULL NEURAL MEMO`. The older result sections were removed at the user's request. Regenerate the current memo with `python3 npiv/kernel/write_full_neural_memo.py` after the inference outputs exist; edit its body in `npiv/kernel/full_neural/memo_work/memo_body.tex`. Do not use the legacy `make_tex.py` / `make_tex9.py` to restore superseded sections. `specifications.tex` lists the paper's regression specifications. Other files in `rep_results/` and `rep_scripts/` (`dantzig_iv*`) are not from this work.
-- `npiv/kernel/full_neural/`: selected full neural specification, with a Gaussian-mixture density network and a tanh outcome network, raw origin shares and year inputs, and additive commune/year nuisance effects. `bootstrap_full_neural.py` refits both stages under commune resampling, holding selected fitting settings fixed; results in `full_neural/inference/` are conditional bootstrap approximations, not a proved weak-identification-robust inference procedure.
-- Compile with `latexmk -lualatex NPIV.tex` (`adenc.sty` is in `coursework/`, loaded as `../../../adenc`).
+
+- `npiv/neural/run_full_neural.py`: the only retained NPIV estimator; mixture-density first stage and tanh response network.
+- `npiv/neural/panel.py` and `outcome_network.py`: standalone data/fold/fixed-effect utilities and neural-response helpers. No imports from deleted estimators.
+- `npiv/neural/reference_design.json` and `reference_profiles/`: the selected sample hash, fold assignments and fixed time-comparison profiles; these contain no other-method estimates.
+- `npiv/neural/full_neural/`: saved networks, diagnostics, derivatives and 399-draw inference. `bootstrap_full_neural.py` refits both neural stages under commune resampling with selected settings fixed.
+- `npiv/neural/verify_full_neural.py`: independent reconstruction of saved predictions, CV losses, derivatives and fixed effects; `full_neural/refactor_validation.json` records cleanup verification.
+- `NPIV.tex` / `NPIV.pdf`: preserved original exposition/template followed by the full neural memo. Edit memo prose in `npiv/neural/full_neural/memo_work/memo_body.tex` and regenerate with `npiv/neural/write_full_neural_memo.py`. The exact original exposition is stored separately in `memo_work/model_exposition.tex`, without archived superseded result sections.
+- `rep_scripts/replicate.py` and `rep_results/`: the original paper replication, outside the NPIV cleanup. `specifications.tex` records the paper's regression specifications.
+- Compile with `latexmk -lualatex NPIV.tex`; the template loads the external course style `../../../adenc.sty`.
 
 ## Environment
 
-The recorded neural environment used Python 3.9.6 and the versions in `npiv/kernel/requirements-neural.txt`; its header refers to the earlier neural experiment, but the full neural run uses the same dependency file. Create a local environment rather than relying on the absolute temporary interpreter path saved in the manifest:
+The recorded neural environment used Python 3.9.6 and the versions in `npiv/neural/requirements-neural.txt`. Create a local environment rather than relying on the absolute temporary interpreter path saved in the manifest:
 
 ```sh
 python3 -m venv .venv
-.venv/bin/python -m pip install -r npiv/kernel/requirements-neural.txt
+.venv/bin/python -m pip install -r npiv/neural/requirements-neural.txt
 ```
 
 Record the actual Python/package versions if the partner's platform requires changes, and run the numerical preflight below before fitting. These commands do not reproduce the original Python version automatically. The original machine had no Stata; the separate legacy paper replication also used `statsmodels`, `scikit-learn`, and `joblib`. Read `.dta` with `pd.read_stata(..., convert_categoricals=False)`; `cod_com` can load as a category, so cast to float. Do not use pooled education value labels without the year-specific validation described below.
@@ -49,12 +52,12 @@ Record the actual Python/package versions if the partner's platform requires cha
 - The completed paper replication used `data/analysis` and `code/`. One raw `.xls` with a non-ASCII filename failed to unzip; later raw files may be truncated. Those files were not needed for that replication, but the proposed education harmonization may require original annual files/dictionaries; do not assume the local raw-data extraction is complete.
 - Run (from `project/`): `python -I rep_scripts/replicate.py rep_data/Replication/data/analysis rep_results`.
 
-## Instruments (shipped in the data, not rebuilt)
+## Paper replication instruments (separate from neural NPIV)
 Shift-share (Bartik): sum over 11 origin countries of (2008 municipal share of nationality n) x (log change / log level of nationality-n migrants in destinations other than Chile, UN data). Cross-section: `deltaimm_instr` for treatment `deltaimm` (`enusc_IV.dta`). Panel: `imm_instr` for `lnrate_stock_imm` (`IV_panel.dta`). Not re-derived from raw UN data.
 
 ## Current full neural specification — session record (2026-11-26)
 
-This is the user's selected primary specification. Earlier kernel, kernel-with-indicators, no-penalty density/basis, and KDE-plus-neural experiments are superseded. Their result sections were removed from `NPIV.tex`; the original model exposition and LaTeX preamble were preserved exactly. Do not restore those sections or describe a historical comparison as the current specification.
+This is the user's selected and only retained NPIV implementation. All other NPIV implementations and output directories were deleted at the user's request, including series methods. The original model exposition and LaTeX preamble were preserved exactly. Neural weights, cell derivatives, bootstrap draws and inferential estimates are unchanged by the cleanup. Original fit hashes are retained as provenance in `results.json`; `refactor_compatibility` separately records the extracted code and reference-design hashes. Original source files are available in Git history, not runtime dependencies.
 
 - **Sample and outcomes:** 101 communes × 10 years (2008–2017), 1,010 equally weighted commune-year cells. Outcomes are complete-case cell means of `pc_19` (crime concerns), `pc_20` (preventive behavior), and `vict_agreg` (victimization), each multiplied by 100. Eligible respondent counts are 180,039 / 243,096 / 244,115. Controls are mean `edad` and mean `ismale` within the same outcome-specific cells; year is categorical.
 - **Treatment units:** `A = lnrate_stock_imm = log(1 + rate_stock_imm)`, where the rate is immigrant stock per 10,000 residents. Verified numerically in `IV_panel.dta`; it is not simply log(rate). Derivatives are per unit of A. For a raw-rate derivative, multiply each cell's derivative by `1/(1+r)`; for a local 1% raw-rate increase, average `0.01*r/(1+r)*derivative`, not merely `0.01*average_derivative`.
@@ -76,44 +79,27 @@ Run from the repository root with the environment above. Choose the relevant ope
 **Numerical preflight without fitting the panel or changing the reference results:**
 
 ```sh
-.venv/bin/python npiv/kernel/run_full_neural.py --check-only --output /tmp/ecma31350-neural-preflight
+.venv/bin/python npiv/neural/run_full_neural.py --check-only --output /tmp/ecma31350-neural-preflight
 ```
 
-**Verify the saved full fit:** `.venv/bin/python npiv/kernel/verify_full_neural.py`. This requires the original raw data with the recorded source hash; it reconstructs saved predictions/derivatives and refreshes verification outputs, without retuning the model. Review the resulting Git diff.
+**Verify the saved full fit:** `.venv/bin/python npiv/neural/verify_full_neural.py`. This requires the original raw data with the recorded source hash; it reconstructs saved predictions/derivatives and refreshes verification outputs, without retuning the model. Review the resulting Git diff.
 
 **Rebuild only the memo from saved estimates and inference:**
 
 ```sh
-.venv/bin/python npiv/kernel/write_full_neural_memo.py
+.venv/bin/python npiv/neural/write_full_neural_memo.py
 latexmk -lualatex NPIV.tex
 ```
 
-Edit memo prose in `npiv/kernel/full_neural/memo_work/memo_body.tex`; the generator inserts tables/figures and replaces only the full-neural block. `memo_work/NPIV.before_full_neural.tex` is the preservation backup, not the current report. The template loads `../../../adenc.sty`, outside this repository. Supply the original style from the course workspace when compiling; retain the user's template. If restricted caches prevent compilation, create a writable directory under `/tmp` and set `TEXMFVAR` and `TEXMFCACHE` to it; likewise use a writable `MPLCONFIGDIR` for figures.
+Edit memo prose in `npiv/neural/full_neural/memo_work/memo_body.tex`; the generator inserts tables/figures and replaces only the full-neural block. `memo_work/model_exposition.tex` is the exact preserved exposition/template prefix, not the current report. The template loads `../../../adenc.sty`, outside this repository. Supply the original style from the course workspace when compiling; retain the user's template. If restricted caches prevent compilation, create a writable directory under `/tmp` and set `TEXMFVAR` and `TEXMFCACHE` to it; likewise use a writable `MPLCONFIGDIR` for figures.
 
-**Refit only when intended:** `.venv/bin/python npiv/kernel/run_full_neural.py --output npiv/kernel/full_neural_rerun` fits the existing specification in a fresh directory. It reads the tracked historical `neural_outcome/results.json` manifest for sample/fold provenance and `no_penalty/<outcome>/common_time_profiles.csv` for matched time profiles; preserve these dependencies. `--reuse-density` can reuse compatible saved density checkpoints in the chosen output directory, but still retunes/refits the outcome stage and is not needed for the memo. A fresh directory alone does not add education to the feature construction.
+**Refit only when intended:** `.venv/bin/python npiv/neural/run_full_neural.py --output npiv/neural/full_neural_rerun` fits the existing specification in a fresh directory. It reads `reference_design.json` for the original source hash/fold design and `reference_profiles/<outcome>.csv` for fixed time profiles. These are neural-only design inputs. `--reuse-density` can reuse compatible saved density checkpoints in the chosen output directory, but still retunes/refits the outcome stage and is not needed for the memo. A fresh directory alone does not add education to the feature construction.
 
-**Bootstrap only when intended:** `.venv/bin/python npiv/kernel/bootstrap_full_neural.py --replicates 399 --workers 4` uses the existing baseline model and resumes its saved draws. For a new model, first change the source-directory handling as described in heterogeneity subsection 5. Its `--output` option changes only the inference destination, not the model being read. Never mix checkpoint draws after changing features, sample, tuning, or evaluation targets; use fresh directories and verify hashes. `memo_quadrature_check.py` performs additional numerical integration checks, not a new model selection. Existing completed results do not require rerunning fits or bootstrap for review.
-
-## Legacy NPIV experiments (superseded by the full neural specification)
-
-These are historical results, not instructions for the current estimator. In particular, do not apply their demeaning, finite differences, or optimizer choices to the current neural fit.
-- Conventions: `p-hat(a|z,x)` is the first stage (the user's notation; avoid calling it g); f is the structural function. Tune per `../ECMA31350-Notes.tex` (honest forest: half-samples without replacement, random covariate subset, deep trees, leaf share alpha by CV; kernel bandwidths by leave-one-out CV; nets by normalised-gradient descent with momentum and early stopping).
-- Samples: cross-section (101 communes, Tables 6-9 spec) and panel (1,010 commune-year cell means, two-way FE removed; analogue of Table A.4 Panel B, not respondent-level).
-- Stage 2 minimises the exact loss in NPIV.tex. Do not fit Y on draws directly: it attenuates the slope (about 1.8 vs a true 10 in simulation).
-- Finite-difference step 0.5 sd(A), trimmed 5%-95%; small leaves bias the derivative downward.
-- `npiv9.py` first stages regress A on (z, x), cross-fitted, then resample out-of-fold residuals (location-model assumption, ours). Run: `python -I npiv/npiv9.py rep_data/Replication/data/analysis <outdir> <B_boot> <B_perm> [cross|panel|both]`; env var `NPIV_SEED` changes the seed. Full run takes about 7 minutes.
-- Findings: cross-section NPIV estimates are unstable across seeds (e.g. 0.02 to 26.3 for one cell) and should not be interpreted. Panel: random-forest f gives 0.7-2.1 everywhere (shrinkage); kernel f with forest or net first stage gives 7.3-10.1 vs linear 2SLS 12.34 (4.35). First-stage out-of-fold R^2 is 0.01-0.10 (cross-section) and 0.14-0.16 (panel), gains all permutation p = 0.02 (min attainable with 50 draws).
-- Paper's `del_problema3` estimates: TWFE 2.00 (1.49), OLS 4.08 (1.68), 2SLS 18.61 (6.79); the largest coefficient in Tables 6-9.
-
-## Legacy experiment caveats
-- Bootstrap intervals hold tuning parameters and folds fixed; they do not cover seed variation or selection (some percentile intervals exclude their own point estimate).
-- Tuning and fit reporting use the same folds (mildly optimistic first-stage fit).
-- The paper's design is a continuous-treatment difference-in-differences (TWFE, and the 2008-2017 long difference); it has no spillover analysis and no modern heterogeneity-robust DiD estimators. Heterogeneity appears only as subgroup splits (Tables 11-13, Appendix Table A.16, Figure A.6).
-- The old `.gitignore` conflict markers were resolved in the November 26 session, retaining exclusions for replication data, archives, environments, and build intermediates.
+**Bootstrap only when intended:** `.venv/bin/python npiv/neural/bootstrap_full_neural.py --replicates 399 --workers 4` uses the existing baseline model and resumes its saved draws. For a new model, first change the source-directory handling as described in heterogeneity subsection 5. Its `--output` option changes only the inference destination, not the model being read. Never mix checkpoint draws after changing features, sample, tuning, or evaluation targets; use fresh directories and verify hashes. `memo_quadrature_check.py` performs additional numerical integration checks, not a new model selection. Existing completed results do not require rerunning fits or bootstrap for review.
 
 ## Heterogeneous average marginal treatment effects: age, education, and year
 
-This section is the requested implementation roadmap. The education extension and age/education subgroup inference have **not** been fitted in this session. Preserve `full_neural/` as the reference result; write the extension to a new `npiv/kernel/full_neural_heterogeneity/` directory.
+This section is the requested implementation roadmap. The education extension and age/education subgroup inference have **not** been fitted in this session. Preserve `full_neural/` as the reference result; write the extension to a new `npiv/neural/full_neural_heterogeneity/` directory.
 
 ### 1. Define and validate the commune characteristics
 
@@ -126,7 +112,7 @@ This section is the requested implementation roadmap. The education extension an
 
 Use the shared response `Y_mt = alpha_m + b_t + g(A_mt, age_mt, educ_mt, male_share_mt, year indicators) + u_mt`, adding baseline moderators explicitly if that is the chosen target. Put the same exogenous features in the MDN with the eleven raw shares; retain commune-clustered folds, additive nuisance effects, and nonlinear year interactions. Education must enter the network if education-dependent response slopes are the target. Grouping the old fitted derivatives by a new education variable only summarizes composition; it does not estimate an education interaction absent from the fitted function.
 
-Refactor the hard-coded feature slices in `run_kernel.py::inputs`, `run_full_neural.py::continuous_inputs` / density scaling, and `run_density_neural.py::scaling`, `context`, and `evaluate`. Current code assumes continuous response inputs `[A, age, male_share]`; appending a CSV column alone will silently fail to add education. Use a named feature-order manifest, training-only scales, analytic differentiation with respect to **A**, and an expanded common-profile schema. Retune both stages with the existing nested commune-fold loss criteria; use the current grids/seeds as the starting design, without assuming the same architectures or 50-step stopping point remain optimal. Check held-out MDN loss with/without shares for the expanded model and report support and sample changes.
+Refactor the hard-coded feature slices in `panel.py::inputs`, `run_full_neural.py::continuous_inputs` / density scaling, and `outcome_network.py::scaling`, `context`, and `evaluate`. Current code assumes continuous response inputs `[A, age, male_share]`; appending a CSV column alone will silently fail to add education. Use a named feature-order manifest, training-only scales, analytic differentiation with respect to **A**, and an expanded common-profile schema. Retune both stages with the existing nested commune-fold loss criteria; use the current grids/seeds as the starting design, without assuming the same architectures or 50-step stopping point remain optimal. Check held-out MDN loss with/without shares for the expanded model and report support and sample changes.
 
 ### 3. Define the averages before inspecting their results
 
@@ -147,13 +133,13 @@ Deliver an education codebook/crosswalk, cell-level moderator file, named model-
 
 ### 5. Implementation map and checkpoint safety
 
-The current module chain is `run_full_neural.py` → `run_density_neural.py` → `run_density_no_penalty.py` → `run_kernel.py`. The helper filenames reflect development history; the selected first stage is an MDN, not a kernel density estimator. Inspect all shared feature constructors before modifying one caller.
+The current runner imports only `panel.py` and `outcome_network.py`. The first stage is an MDN. Inspect both shared feature constructors before modifying one caller; the removed methods are not required.
 
-| File under `npiv/kernel/` | Required extension work |
+| File under `npiv/neural/` | Required extension work |
 | --- | --- |
-| `run_kernel.py` (`load_cells`, `inputs`) | Add validated outcome-specific education aggregates and a named feature order; preserve keys, cell weights and explicit raw-share mode. `inputs` defaults to Bartik if `d.attrs['instrument_mode']` is lost, so assert the eleven instrument columns after merges/resampling. |
+| `panel.py` (`load_cells`, `inputs`) | Add validated outcome-specific education aggregates and a named feature order; preserve keys, cell weights and explicit raw-share mode. `inputs` always uses the eleven raw shares and rejects a different instrument mode. Keep this invariant after merges/resampling; the loader retains original replication-data checks only to preserve the exact sample. |
 | `run_full_neural.py` (`continuous_inputs`, density scaling, outcome packing/integration) | Extend both stages, remove fixed positional slices, and save feature/data hashes with every fit. For one added annual education scalar, input counts become 24 with shares, 13 without shares, and 14 in the response (including ten year indicators). Additional baseline moderators add further inputs. |
-| `run_density_neural.py` (`scaling`, `context`, `evaluate`) | Extend response scaling/context and analytic treatment differentiation; ensure derivative is with respect to original A units, not standardized A. |
+| `outcome_network.py` (`scaling`, `context`, `evaluate`) | Extend response scaling/context and analytic treatment differentiation; ensure derivative is with respect to original A units, not standardized A. |
 | `bootstrap_full_neural.py` | Parameterize model source separately from output; propagate source to worker initialization. Current `SOURCE=HERE/'full_neural'` is hard-coded. Extend `fit_statistic` to return the full AMTE/contrast vector; update fixed three-coordinate profiles and 101-commune/10-year assertions if the validated sample changes. |
 | `verify_full_neural.py` | Parameterize `OUT`, validate the feature manifest and changed input dimensions, and independently reconstruct new predictions and derivatives. It currently reads only `full_neural/` and checks 23/12 density inputs. |
 | `write_full_neural_memo.py` and memo numerical checks | Parameterize their baseline paths or create extension-specific reporting/checking entry points. The current memo generator hard-codes `SOURCE=HERE/'full_neural'`; a new output folder does not redirect it. Preserve the original exposition/template and reference results. |
