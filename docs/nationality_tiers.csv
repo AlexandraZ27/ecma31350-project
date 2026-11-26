@@ -1,0 +1,124 @@
+nationality,count_sample,n_munis_present,primary,broad,slug
+peru,204052,101,True,True,peru
+argentina,61878,101,True,True,argentina
+bolivia,26592,100,True,True,bolivia
+ecuador,22451,101,True,True,ecuador
+colombia,19046,101,True,True,colombia
+estados unidos,14926,101,True,True,estados_unidos
+brasil,12347,101,True,True,brasil
+espana,11851,101,True,True,espana
+china,7075,91,True,True,china
+venezuela,6880,99,True,True,venezuela
+alemania,6678,100,True,True,alemania
+uruguay,6474,96,True,True,uruguay
+cuba,5764,95,True,True,cuba
+francia,5140,96,True,True,francia
+italia,4659,99,True,True,italia
+mexico,4409,95,True,True,mexico
+paraguay,3465,97,True,True,paraguay
+canada,2743,92,True,True,canada
+uk,2564,88,True,True,uk
+republica de corea,2442,60,True,True,republica_de_c
+suecia,1506,85,True,True,suecia
+australia,1485,85,True,True,australia
+india,1439,56,True,True,india
+republica dominicana,1328,75,True,True,republica_domi
+japon,1299,76,True,True,japon
+belgica,1142,86,True,True,belgica
+panama,1094,76,True,True,panama
+taiwan china,971,52,True,True,taiwan_china
+federacion de rusia,962,74,True,True,federacion_de
+paises bajos,925,75,True,True,paises_bajos
+palestina,745,73,True,True,palestina
+costa rica,740,72,True,True,costa_rica
+israel,708,64,True,True,israel
+austria,636,71,True,True,austria
+polonia,549,69,True,True,polonia
+guatemala,482,57,False,True,guatemala
+el salvador,480,59,False,True,el_salvador
+noruega,480,66,False,True,noruega
+honduras,471,58,False,True,honduras
+turquia,466,50,False,True,turquia
+rumania,460,54,False,True,rumania
+croacia,452,58,False,True,croacia
+nicaragua,440,62,False,True,nicaragua
+haiti,406,40,False,True,haiti
+yugoslavia,398,64,False,True,yugoslavia
+suiza,382,48,False,True,suiza
+pakistan,366,20,False,True,pakistan
+siria,362,52,False,True,siria
+hungria,354,60,False,True,hungria
+dinamarca,352,58,False,True,dinamarca
+portugal,347,59,False,True,portugal
+libano,340,43,False,True,libano
+finlandia,274,39,False,True,finlandia
+sudafrica republica de,224,29,False,True,sudafrica_repu
+nueva zelandia,223,33,False,True,nueva_zelandia
+grecia,210,57,False,True,grecia
+republica checa,168,37,False,True,republica_chec
+ucrania,126,22,False,True,ucrania
+egipto republica arabe de,111,28,False,True,egipto_republi
+jordania,106,24,False,True,jordania
+filipinas,98,26,False,True,filipinas
+republica popular democratica de corea,85,12,False,True,republica_popu
+indonesia,83,12,False,True,indonesia
+irlanda,78,18,False,True,irlanda
+serbia y montenegro,70,11,False,True,serbia_y_monte
+hong kong,60,21,False,True,hong_kong
+bulgaria,54,14,False,True,bulgaria
+iran,53,14,False,True,iran
+tailandia,48,13,False,False,tailandia
+marruecos,47,22,False,False,marruecos
+argelia,45,21,False,False,argelia
+trinidad y tobago,40,9,False,False,trinidad_y_tob
+congo republica democratica,29,7,False,False,congo_republic
+republica de bielorrusia,28,13,False,False,republica_de_b
+singapur,28,7,False,False,singapur
+moldova,24,7,False,False,moldova
+camerun,22,6,False,False,camerun
+nepal,21,8,False,False,nepal
+malasia,20,5,False,False,malasia
+afganistan,18,8,False,False,afganistan
+irak,17,7,False,False,irak
+islandia,16,9,False,False,islandia
+kenya,15,7,False,False,kenya
+bosnia y herzegovina,15,6,False,False,bosnia_y_herze
+sierra leona,14,4,False,False,sierra_leona
+costa de marfil,14,9,False,False,costa_de_marfi
+mozambique,12,5,False,False,mozambique
+san vicente y las granadinas,11,3,False,False,san_vicente_y
+sri lanka,11,3,False,False,sri_lanka
+belice,11,4,False,False,belice
+jamaica,11,6,False,False,jamaica
+lituania,11,8,False,False,lituania
+tunez,10,4,False,False,tunez
+macedonia fyrom,10,4,False,False,macedonia_fyro
+angola,10,7,False,False,angola
+uzbekistan,9,5,False,False,uzbekistan
+republica de guyana,9,4,False,False,republica_de_g
+nigeria,8,4,False,False,nigeria
+eslovaquia,8,5,False,False,eslovaquia
+albania,6,4,False,False,albania
+ghana,6,2,False,False,ghana
+mauricio,5,4,False,False,mauricio
+andorra,5,3,False,False,andorra
+kirguistan,5,2,False,False,kirguistan
+tanzania republica unida,5,3,False,False,tanzania_repub
+bangladesh,4,4,False,False,bangladesh
+guinea,4,1,False,False,guinea
+armenia,4,2,False,False,armenia
+bahamas,4,3,False,False,bahamas
+vietnam,4,2,False,False,vietnam
+benin,3,2,False,False,benin
+letonia,3,2,False,False,letonia
+luxemburgo,3,3,False,False,luxemburgo
+estonia,3,3,False,False,estonia
+togo,2,1,False,False,togo
+eslovenia,2,2,False,False,eslovenia
+malta,2,2,False,False,malta
+namibia,2,2,False,False,namibia
+georgia,2,1,False,False,georgia
+etiopia,2,2,False,False,etiopia
+madagascar,1,1,False,False,madagascar
+mali,1,1,False,False,mali
+kazajstan republica,1,1,False,False,kazajstan_repu

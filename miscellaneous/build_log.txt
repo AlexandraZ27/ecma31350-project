@@ -1,0 +1,118 @@
+Dataset build: Ajzenman, Dominguez & Undurraga (2023) extension
+Replication data: rep_data/Replication/data
+
+=== Loading inputs
+  enusc_IV.dta: 101 municipalities (the sample)
+  reading analysis/IV_panel.dta (individual level, ~220 MB)...
+  reading raw/immigration_Correciones.dta (~680 MB)...
+
+=== Municipality codes
+  5106/5801: sample: new, permits: new, census: old, CASEN06: new, IV_panel(muni): new
+  5505/5802: sample: new, permits: new, census: old, CASEN06: new, IV_panel(muni): new
+  5507/5803: permits: new, census: old, CASEN06: new, IV_panel(muni): new
+  5108/5804: sample: new, permits: new, census: old, CASEN06: new, IV_panel(muni): new
+  individual panel municipalities: 101; not in sample: []; sample not in panel: []
+
+=== Check 1: rebuild the paper's 2008 shares from the raw data
+  overall max |rebuilt - paper| = 2.97e-08  (exact)
+
+=== Expanded shares (all nationalities)
+  census names matched to permit names other than exactly:
+  census residents with an unnamed country code: 4,153 of 184,271 (kept in denominators only)
+  Check 2: census counts of the 11 countries vs CensoInmigr2002: max |diff| = 0 residents
+  nationalities with 2008 immigrants in the sample: 123
+  tier 'broad' (>= 10 munis, >= 50): 68;  tier 'primary' (>= 25 munis, >= 500): 35
+  nationality                  slug                count  munis tier
+  peru                         peru              204,052    101 primary
+  argentina                    argentina          61,878    101 primary
+  bolivia                      bolivia            26,592    100 primary
+  ecuador                      ecuador            22,451    101 primary
+  colombia                     colombia           19,046    101 primary
+  estados unidos               estados_unidos     14,926    101 primary
+  brasil                       brasil             12,347    101 primary
+  espana                       espana             11,851    101 primary
+  china                        china               7,075     91 primary
+  venezuela                    venezuela           6,880     99 primary
+  alemania                     alemania            6,678    100 primary
+  uruguay                      uruguay             6,474     96 primary
+  cuba                         cuba                5,764     95 primary
+  francia                      francia             5,140     96 primary
+  italia                       italia              4,659     99 primary
+  mexico                       mexico              4,409     95 primary
+  paraguay                     paraguay            3,465     97 primary
+  canada                       canada              2,743     92 primary
+  uk                           uk                  2,564     88 primary
+  republica de corea           republica_de_c      2,442     60 primary
+  suecia                       suecia              1,506     85 primary
+  australia                    australia           1,485     85 primary
+  india                        india               1,439     56 primary
+  republica dominicana         republica_domi      1,328     75 primary
+  japon                        japon               1,299     76 primary
+  belgica                      belgica             1,142     86 primary
+  panama                       panama              1,094     76 primary
+  taiwan china                 taiwan_china          971     52 primary
+  federacion de rusia          federacion_de         962     74 primary
+  paises bajos                 paises_bajos          925     75 primary
+  palestina                    palestina             745     73 primary
+  costa rica                   costa_rica            740     72 primary
+  israel                       israel                708     64 primary
+  austria                      austria               636     71 primary
+  polonia                      polonia               549     69 primary
+  guatemala                    guatemala             482     57 broad
+  el salvador                  el_salvador           480     59 broad
+  noruega                      noruega               480     66 broad
+  honduras                     honduras              471     58 broad
+  turquia                      turquia               466     50 broad
+  rumania                      rumania               460     54 broad
+  croacia                      croacia               452     58 broad
+  nicaragua                    nicaragua             440     62 broad
+  haiti                        haiti                 406     40 broad
+  yugoslavia                   yugoslavia            398     64 broad
+  suiza                        suiza                 382     48 broad
+  pakistan                     pakistan              366     20 broad
+  siria                        siria                 362     52 broad
+  hungria                      hungria               354     60 broad
+  dinamarca                    dinamarca             352     58 broad
+  portugal                     portugal              347     59 broad
+  libano                       libano                340     43 broad
+  finlandia                    finlandia             274     39 broad
+  sudafrica republica de       sudafrica_repu        224     29 broad
+  nueva zelandia               nueva_zelandia        223     33 broad
+  grecia                       grecia                210     57 broad
+  republica checa              republica_chec        168     37 broad
+  ucrania                      ucrania               126     22 broad
+  egipto republica arabe de    egipto_republi        111     28 broad
+  jordania                     jordania              106     24 broad
+  filipinas                    filipinas              98     26 broad
+  republica popular democratic republica_popu         85     12 broad
+  indonesia                    indonesia              83     12 broad
+  irlanda                      irlanda                78     18 broad
+  serbia y montenegro          serbia_y_monte         70     11 broad
+  hong kong                    hong_kong              60     21 broad
+  bulgaria                     bulgaria               54     14 broad
+  iran                         iran                   53     14 broad
+  tailandia                    tailandia              48     13 
+  marruecos                    marruecos              47     22 
+  Check 3: expanded vs paper 2008 shares for the 11 countries: correlation min 0.940, mean 0.984 (differ by design: all-nationality census base)
+
+=== Collapsing the individual panel to municipality x year
+  1010 municipality-years; cells without respondents: 0; respondents per cell: min 50, median 244
+
+=== Cross-section
+  media: matched 99 of 101 municipalities by name
+  101 rows x 317 columns
+  Check 4: 2SLS del_problema3 on deltaimm = 18.61 (6.79); paper 18.61 (6.79)
+
+=== Panel
+  Check 5: lnrate_stock_imm, individual panel vs municipality panel: max |diff| 0.00e+00; within-cell variation 0.00e+00
+  Check 6: lag built from stock - flow vs previous year's value: max |diff| 4.69e-07
+  Check 7: panel (2017 - 2008) vs cross-section outcome, max |diff| (x100 scale):
+    del_problema3=3.70e-06  del_afecta3=3.10e-06  del_calvida3=7.39e-06  del_inseg5=3.22e-06
+    del_vict=4.41e-06  pc_19=5.88e-01  del_tend_barrio=3.34e-06  del_tend_com=6.68e-06
+    del_tend_pais=6.91e-06  Index_Vivienda=5.25e-06  Index_Vecinos=3.87e-06  del_arma=9.54e-07
+    pc_20=1.46e+00  vict_hurto=1.37e-06  vict_robosorpr=1.01e-06  vict_robovehi=3.20e-07
+    vict_roboviv=5.66e-07  vict_lesiones=5.07e-07  vict_roboviolent=8.05e-07  vict_agreg=2.66e-06
+    (pc_19 and pc_20 are expected to differ: the paper normalizes the PCA scores over 2008 and 2017 in the cross-section and over 2008-2017 in the panel)
+  1010 rows x 1062 columns
+
+Wrote data/cross_section.*, data/panel.*, docs/data_dictionary.csv, docs/variable_groups.json, docs/nationality_tiers.csv

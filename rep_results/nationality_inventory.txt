@@ -1,0 +1,102 @@
+Nationality inventory of the residence-permit data
+Searching: rep_data/Replication/data
+
+File scan (nat = nationality, muni = municipality, year/date = time column):
+  USE   raw/immigration_Correciones.dta
+          nat  : pais_origen
+          muni : comuna   (IV matches: comuna=101, cod_com=101)
+          year : year
+          note: ['country_id'] may be a count column. If rows are aggregated counts rather than permits, rerun with --count-col.
+
+Loaded raw/immigration_Correciones.dta: 2,389,905 rows; years 2005-2018; 193 distinct nationality values; 0 rows without a year; 0 without a municipality
+
+=== Distinct nationalities (all years, all municipalities) ===
+  distinct raw values:                       193
+  after normalization and merging aliases:   193
+  of which non-country codes:                1  (223 rows/permits)
+  Chile listed as nationality:               691 rows/permits (excluded)
+  countries:                                 191
+  non-country codes found: APATRIDA
+  Possible duplicate spellings (same first 5 letters; review, then merge with --aliases):
+    ['AUSTRALIA', 'AUSTRIA']
+    ['CONGO REPUBLICA DEMOCRATICA', 'CONGO BRAZZAVILLE']
+    ['COSTA RICA', 'COSTA DE MARFIL']
+    ['ESLOVAQUIA', 'ESLOVENIA']
+    ['GUINEA', 'GUINEA ECUATORIAL', 'GUINEA BISSAU']
+    ['ISLAS TURCAS Y CAICOS', 'ISLAS SALOMON', 'ISLAS BERMUDAS', 'ISLAS COMORAS']
+    ['MAURICIO', 'MAURITANIA']
+    ['NIGERIA', 'NIGER']
+    ['REPUBLICA DOMINICANA', 'REPUBLICA DE COREA', 'REPUBLICA POPULAR DEMOCRATICA DE COREA', 'REPUBLICA DE BIELORRUSIA', 'REPUBLICA CHECA', 'REPUBLICA DE SERBIA', 'REPUBLICA DE GUYANA', 'REPUBLICA CENTROAFRICANA', 'REPUBLICA DE YIBUTI DJIBOUTI']
+
+  Share of permits from the paper's 11 countries (all municipalities):
+    2008:  88.2%   (paper: 87%)
+    2017:  94.5%   (paper: 94%)
+
+=== Validation against enusc_IV.dta ===
+  municipality id: comuna; matched 101 of 101 municipalities
+  sum of the 11 paper shares per municipality: min 0.716, median 0.900, max 0.991
+  definition                          mean corr  min corr  max |diff|
+  flow 2008-2008, denom all              0.7274    0.5129    5.85e-01
+  flow 2008-2008, denom 11 only          0.7261    0.5444    5.33e-01
+  stock 2005-2008, denom all             0.8286    0.5828    5.66e-01
+  stock 2005-2008, denom 11 only         0.8242    0.5908    5.03e-01
+  best match: stock, denominator all
+  WARNING: no definition reproduces the paper's shares closely. They may be built from a different file (e.g. visas only), different years, or different municipality assignments. Interpret the counts below with care.
+
+=== Base-year composition: definition 'stock' (years 2005-2008), the 101 ENUSC municipalities ===
+  countries with any base-year immigrants: 154 nationally, 154 in the 101 ENUSC municipalities
+
+  Nationalities with a positive share in at least k municipalities:
+         k=1     k=2     k=5    k=10    k=25    k=50   k=101
+         154     123      89      68      46      23       3
+
+  Nationalities with at least c base-year immigrants in the sample:
+         c=1    c=10    c=50   c=100   c=500  c=1000
+         154      94      62      52      25      20
+
+  Nationalities needed to cover the base-year immigrant population of the sample:
+    90%: 11
+    95%: 18
+    99%: 43
+
+  Candidate instruments (>= 10 municipalities and >= 50 immigrants): 62   (paper: 11; N = 101)
+    of which among the paper's 11: 11
+
+  Top 30 nationalities by base-year count in the sample:
+    nationality                  paper     count  munis  mean sh   sd sh  top muni  cand
+    PERU                           per   167,171    101   0.3947  0.2389      0.23   yes
+    ARGENTINA                      arg    21,607    101   0.1229  0.0863      0.16   yes
+    BOLIVIA                        bol    16,672     92   0.0395  0.0806      0.23   yes
+    COLOMBIA                       col    15,106    100   0.0848  0.0617      0.16   yes
+    ECUADOR                        ecu    13,660    101   0.0891  0.0696      0.15   yes
+    ESTADOS UNIDOS                eeuu     7,701     95   0.0500  0.0569      0.19   yes
+    BRASIL                         bra     5,824     92   0.0262  0.0271      0.18   yes
+    CHINA                          chi     5,448     85   0.0157  0.0158      0.30   yes
+    URUGUAY                                4,355     90   0.0221  0.0203      0.14   yes
+    ESPANA                         esp     3,365     94   0.0181  0.0255      0.28   yes
+    MEXICO                                 2,822     88   0.0125  0.0128      0.22   yes
+    VENEZUELA                      ven     2,717     82   0.0099  0.0111      0.23   yes
+    CUBA                                   2,689     84   0.0115  0.0126      0.23   yes
+    PARAGUAY                               2,349     91   0.0132  0.0136      0.10   yes
+    FRANCIA                                2,337     77   0.0103  0.0146      0.17   yes
+    ALEMANIA                               1,949     79   0.0105  0.0169      0.16   yes
+    REPUBLICA DE COREA                     1,333     37   0.0024  0.0077      0.39   yes
+    REPUBLICA DOMINICANA                   1,069     67   0.0054  0.0101      0.14   yes
+    ITALIA                                 1,007     77   0.0046  0.0054      0.26   yes
+    CANADA                                 1,004     75   0.0054  0.0101      0.25   yes
+    INDIA                                    917     41   0.0012  0.0027      0.29   yes
+    REINO UNIDO                              850     64   0.0035  0.0068      0.19   yes
+    PANAMA                                   616     53   0.0032  0.0069      0.27   yes
+    AUSTRALIA                                592     55   0.0028  0.0103      0.25   yes
+    JAPON                                    571     45   0.0019  0.0055      0.33   yes
+    HOLANDA PAISES BAJOS                     412     52   0.0026  0.0058      0.20   yes
+    FEDERACION DE RUSIA                      391     43   0.0016  0.0039      0.14   yes
+    SUIZA                                    382     48   0.0027  0.0061      0.21   yes
+    PAKISTAN                                 366     20   0.0005  0.0020      0.75   yes
+    HAITI                          hai       357     35   0.0012  0.0052      0.39   yes
+
+Notes:
+  - 'top muni' is the fraction of a nationality's sample immigrants living in its largest municipality. Values near 1 mean the share is close to a dummy for one municipality: a high-leverage instrument identified by a single observation.
+  - The thresholds (--min-munis, --min-count) are placeholders. Pre-register them.
+  - Shares over all nationalities sum to one in each municipality. If every nationality enters, one is collinear with the intercept (dantzig_iv.py drops it automatically in the all-shares 2SLS).
+  - Every candidate needs the paper's exogeneity argument to hold for its 2008 share, not only Peru's.

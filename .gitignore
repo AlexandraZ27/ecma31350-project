@@ -4,6 +4,7 @@
 .DS_Store
 __pycache__/
 *.py[cod]
+/data/
 
 # LaTeX build intermediates; keep the final NPIV.pdf report.
 *.aux
